@@ -1,0 +1,371 @@
+﻿<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ספרים | הרב מאיר אליהו</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --navy:#0C1B33; --navy-mid:#162444; --gold:#C8A84B;
+      --gold-light:#E8D49A; --cream:#F5F2EB; --white:#FFFFFF; --text-muted:#6B7280;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Heebo',sans-serif;background:var(--cream);color:var(--navy);direction:rtl;overflow-x:hidden;}
+    h1,h2,h3,h4{font-family:'Frank Ruhl Libre',serif;letter-spacing:-0.02em;}
+    ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--cream);} ::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+
+    nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(12,27,51,0.97);backdrop-filter:blur(14px);box-shadow:0 2px 24px rgba(12,27,51,0.3);}
+    .nav-link{color:rgba(255,255,255,0.78);text-decoration:none;font-size:0.88rem;font-weight:500;transition:color 0.2s;}
+    .nav-link:hover{color:var(--gold-light);}
+
+    .btn-gold{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#C8A84B,#E8C96B,#C8A84B);color:var(--navy);font-family:'Heebo',sans-serif;font-weight:700;font-size:0.92rem;padding:12px 28px;border-radius:4px;border:none;cursor:pointer;text-decoration:none;white-space:nowrap;box-shadow:0 4px 18px rgba(200,168,75,0.32);transition:transform 0.2s,box-shadow 0.2s;}
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,168,75,0.48);}
+    .btn-gold:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+    .btn-navy{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:var(--gold-light);font-family:'Heebo',sans-serif;font-weight:600;font-size:0.92rem;padding:12px 28px;border-radius:4px;border:1.5px solid rgba(200,168,75,0.28);cursor:pointer;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(12,27,51,0.18);transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;}
+    .btn-navy:hover{transform:translateY(-2px);border-color:var(--gold);}
+    .btn-navy:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+    .section-tag{display:inline-block;font-size:0.67rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);background:rgba(200,168,75,0.08);border:1px solid rgba(200,168,75,0.22);padding:4px 12px;border-radius:2px;margin-bottom:12px;}
+    .gold-divider{width:56px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:14px 0;}
+    .gold-divider.center{margin:14px auto;background:linear-gradient(90deg,transparent,var(--gold),transparent);width:80px;}
+
+    .filter-btn{padding:8px 20px;border-radius:50px;border:1.5px solid rgba(12,27,51,0.14);background:var(--white);color:var(--navy);font-family:'Heebo',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .filter-btn.active,.filter-btn:hover{background:var(--navy);color:var(--gold-light);border-color:var(--navy);}
+    .filter-btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+    .book-card{background:var(--white);border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(12,27,51,0.07),0 1px 4px rgba(12,27,51,0.04);border:1px solid rgba(12,27,51,0.06);transition:transform 0.35s,box-shadow 0.35s;}
+    .book-card:hover{transform:translateY(-10px);box-shadow:0 28px 60px rgba(12,27,51,0.16),0 6px 18px rgba(12,27,51,0.08);}
+
+    .reveal{opacity:0;transform:translateY(24px);}
+    .reveal-left{opacity:0;transform:translateX(-28px);}
+    .reveal-right{opacity:0;transform:translateX(28px);}
+
+    /* Book modal */
+    .modal-overlay{position:fixed;inset:0;background:rgba(12,27,51,0.75);backdrop-filter:blur(6px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+    .modal-overlay.active{opacity:1;pointer-events:all;}
+    .modal-box{background:var(--white);border-radius:16px;max-width:740px;width:93%;max-height:90vh;overflow-y:auto;position:relative;transform:translateY(20px) scale(0.97);transition:transform 0.3s;box-shadow:0 48px 96px rgba(12,27,51,0.35);}
+    .modal-overlay.active .modal-box{transform:translateY(0) scale(1);}
+
+    @media(max-width:1024px){.nav-desktop{display:none!important;}.hamburger-btn{display:flex!important;}.books-main-grid{grid-template-columns:repeat(2,1fr)!important;}.hero-pub-grid{grid-template-columns:1fr!important;}}
+    @media(max-width:640px){.books-main-grid{grid-template-columns:1fr!important;}}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:64px;">
+    <a href="index.html" style="text-decoration:none;display:flex;flex-direction:column;line-height:1.1;">
+      <span style="font-family:'Frank Ruhl Libre',serif;font-size:1.2rem;font-weight:700;color:var(--gold-light);">הרב מאיר אליהו</span>
+      <span style="font-size:0.58rem;letter-spacing:0.13em;color:rgba(255,255,255,0.38);">לב מאיר ישראל</span>
+    </a>
+    <div class="nav-desktop" style="display:flex;gap:26px;">
+      <a href="index.html" class="nav-link">דף הבית</a>
+      <a href="lessons.html" class="nav-link">שיעורים</a>
+      <a href="books.html" class="nav-link" style="color:var(--gold-light);">ספרים</a>
+      <a href="events.html" class="nav-link">הרצאות</a>
+    </div>
+    <div class="nav-desktop" style="display:flex;gap:10px;">
+      <a href="dedication.html" class="btn-gold" style="padding:9px 16px;font-size:0.82rem;">הקדשה</a>
+      <a href="index.html#partnership" style="padding:9px 16px;font-size:0.82rem;color:var(--gold-light);text-decoration:none;border:1.5px solid rgba(200,168,75,0.3);border-radius:4px;font-weight:600;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(200,168,75,0.3)'">שותפות</a>
+    </div>
+    <button class="hamburger-btn" onclick="window.location='index.html'" style="display:none;background:none;border:none;cursor:pointer;color:white;font-size:1.5rem;padding:6px;">☰</button>
+  </div>
+</nav>
+
+<!-- HERO / PUBLISHING HEADER -->
+<section style="padding:120px 0 80px;background:linear-gradient(155deg,#060f20,#0C1B33 45%,#162444 75%,#0f2240);position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 60% 55%,rgba(200,168,75,0.07),transparent 65%);"></div>
+  <div class="hero-pub-grid" style="max-width:1200px;margin:0 auto;padding:0 28px;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;position:relative;z-index:1;">
+    <div>
+      <div class="section-tag" style="color:var(--gold-light);border-color:rgba(200,168,75,0.28);">מכון ההוצאה לאור</div>
+      <h1 style="font-size:clamp(2.2rem,5vw,3.6rem);font-weight:900;color:white;margin-top:12px;line-height:1.15;">
+        ספרי הרב<br /><span style="color:var(--gold-light);">מאיר אליהו</span>
+      </h1>
+      <div style="width:60px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:20px 0;"></div>
+      <p style="color:rgba(255,255,255,0.64);font-size:1rem;line-height:1.85;max-width:460px;">
+        מכון ההוצאה לאור של הרב מאיר אליהו הוציא לאור למעלה מ-18 ספרים בתחומי הלכה, אמונה ופרשת השבוע — תורה חיה ורלוונטית לכל יהודי.
+      </p>
+      <div style="display:flex;gap:14px;margin-top:28px;flex-wrap:wrap;">
+        <a href="dedication.html" class="btn-gold">✦ הקדש ספר</a>
+        <a href="#catalog" style="display:inline-flex;align-items:center;gap:8px;color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.9rem;font-weight:500;padding:12px 0;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">לקטלוג ←</a>
+      </div>
+    </div>
+    <!-- Floating book stack visual -->
+    <div style="position:relative;display:flex;justify-content:center;align-items:center;">
+      <div style="position:relative;width:100%;max-width:380px;margin:0 auto;">
+        <!-- Stack of 3 books -->
+        <div style="position:absolute;top:20px;right:-16px;width:78%;transform:rotate(5deg);border-radius:8px;overflow:hidden;box-shadow:0 20px 50px rgba(6,15,32,0.5);">
+          <img src="https://placehold.co/300x400/0f2240/C8A84B" style="width:100%;display:block;" />
+        </div>
+        <div style="position:absolute;top:10px;left:-16px;width:78%;transform:rotate(-4deg);border-radius:8px;overflow:hidden;box-shadow:0 20px 50px rgba(6,15,32,0.5);">
+          <img src="https://placehold.co/300x400/162444/E8D49A" style="width:100%;display:block;" />
+        </div>
+        <div style="position:relative;width:80%;margin:0 auto;border-radius:10px;overflow:hidden;box-shadow:0 32px 72px rgba(6,15,32,0.6);">
+          <img src="https://placehold.co/300x400/0C1B33/C8A84B" style="width:100%;display:block;" />
+          <div style="position:absolute;inset:0;border:1.5px solid rgba(200,168,75,0.2);border-radius:10px;pointer-events:none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER + CATALOG -->
+<section id="catalog" style="padding:80px 0 120px;background:var(--cream);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;">
+
+    <!-- Filters -->
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:56px;align-items:center;" class="reveal">
+      <span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);margin-left:8px;">סינון:</span>
+      <button class="filter-btn active" onclick="filterBooks('all',this)">הכל</button>
+      <button class="filter-btn" onclick="filterBooks('halacha',this)">הלכה</button>
+      <button class="filter-btn" onclick="filterBooks('emunah',this)">אמונה</button>
+      <button class="filter-btn" onclick="filterBooks('parasha',this)">פרשת השבוע</button>
+      <button class="filter-btn" onclick="filterBooks('tefila',this)">תפילה</button>
+    </div>
+
+    <!-- Book grid -->
+    <div class="books-main-grid" id="booksGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;">
+
+      <!-- 6 book cards -->
+      <div class="book-card reveal" data-category="halacha">
+        <div style="position:relative;overflow:hidden;height:280px;">
+          <img src="https://placehold.co/400x450/0C1B33/C8A84B" class="book-img" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(12,27,51,0.75),transparent 55%);"></div>
+          <div style="position:absolute;bottom:14px;right:14px;background:var(--gold);color:var(--navy);font-size:0.63rem;font-weight:800;padding:3px 9px;border-radius:2px;letter-spacing:0.05em;">הלכה</div>
+          <div style="position:absolute;top:14px;left:14px;background:rgba(12,27,51,0.8);color:var(--gold-light);font-size:0.65rem;padding:3px 8px;border-radius:2px;">מהדורה שלישית</div>
+        </div>
+        <div style="padding:22px 22px 24px;">
+          <h3 style="font-size:1.15rem;font-weight:700;color:var(--navy);">מנוחה ושמחה</h3>
+          <div style="width:32px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:10px 0;"></div>
+          <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.7;margin-bottom:14px;">הלכות שבת ומועד — מהדין ועד הרוח. מאות הלכות מסודרות עם ביאורים רוחניים עמוקים.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span style="font-family:'Frank Ruhl Libre',serif;font-size:1.3rem;font-weight:700;color:var(--navy);">₪68</span>
+            <button onclick="openModal('מנוחה ושמחה','הלכה','₪68','הלכות שבת ומועד — מהדין ועד הרוח. מאות הלכות מסודרות עם ביאורים רוחניים עמוקים. הספר מלווה אלפי משפחות בבניית שבת קודש אמיתי.')" style="background:none;border:none;cursor:pointer;color:var(--gold);font-size:0.8rem;font-weight:600;text-decoration:underline;font-family:'Heebo',sans-serif;transition:color 0.2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'">תצוגה מקדימה</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <a href="#" class="btn-navy" style="justify-content:center;padding:9px 8px;font-size:0.8rem;">לרכישה</a>
+            <a href="dedication.html" class="btn-gold" style="justify-content:center;padding:9px 8px;font-size:0.8rem;">הקדשה</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card reveal" data-category="emunah">
+        <div style="position:relative;overflow:hidden;height:280px;">
+          <img src="https://placehold.co/400x450/0C1B33/C8A84B" class="book-img" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(12,27,51,0.75),transparent 55%);"></div>
+          <div style="position:absolute;bottom:14px;right:14px;background:var(--gold);color:var(--navy);font-size:0.63rem;font-weight:800;padding:3px 9px;border-radius:2px;">אמונה</div>
+          <div style="position:absolute;top:14px;left:14px;background:rgba(12,27,51,0.8);color:var(--gold-light);font-size:0.65rem;padding:3px 8px;border-radius:2px;">רב מכר</div>
+        </div>
+        <div style="padding:22px 22px 24px;">
+          <h3 style="font-size:1.15rem;font-weight:700;color:var(--navy);">אמת לאמיתה</h3>
+          <div style="width:32px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:10px 0;"></div>
+          <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.7;margin-bottom:14px;">עיונים עמוקים באמונה ושורשי הנפש היהודית — תשובות לשאלות היסוד של הקיום.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span style="font-family:'Frank Ruhl Libre',serif;font-size:1.3rem;font-weight:700;color:var(--navy);">₪72</span>
+            <button onclick="openModal('אמת לאמיתה','אמונה','₪72','עיונים עמוקים באמונה ושורשי הנפש היהודית — תשובות לשאלות היסוד של הקיום. כיצד מאמינים בעולם מודרני? מה מחזיק את עם ישראל?')" style="background:none;border:none;cursor:pointer;color:var(--gold);font-size:0.8rem;font-weight:600;text-decoration:underline;font-family:'Heebo',sans-serif;transition:color 0.2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'">תצוגה מקדימה</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <a href="#" class="btn-navy" style="justify-content:center;padding:9px 8px;font-size:0.8rem;">לרכישה</a>
+            <a href="dedication.html" class="btn-gold" style="justify-content:center;padding:9px 8px;font-size:0.8rem;">הקדשה</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card reveal" data-category="parasha">
+        <div style="position:relative;overflow:hidden;height:280px;">
+          <img src="https://placehold.co/400x450/0C1B33/C8A84B" class="book-img" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(12,27,51,0.75),transparent 55%);"></div>
+          <div style="position:absolute;bottom:14px;right:14px;background:var(--gold);color:var(--navy);font-size:0.63rem;font-weight:800;padding:3px 9px;border-radius:2px;">פרשת השבוע</div>
+        </div>
+        <div style="padding:22px 22px 24px;">
+          <h3 style="font-size:1.15rem;font-weight:700;color:var(--navy);">אור לנתיב</h3>
+          <div style="width:32px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:10px 0;"></div>
+          <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.7;margin-bottom:14px;">ביאורים חיים לפרשת השבוע — בין עולם התורה לאתגרי חיינו המודרניים. 54 פרשיות + חגים.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span style="font-family:'Frank Ruhl Libre',serif;font-size:1.3rem;font-weight:700;color:var(--navy);">₪65</span>
+            <button onclick="openModal('אור לנתיב','פרשת השבוע','₪65','ביאורים חיים לפרשת השבוע — בין עולם התורה לאתגרי חיינו המודרניים. 54 פרשיות + חגים. שיחות שולחן שבת לכל המשפחה.')" style="background:none;border:none;cursor:pointer;color:var(--gold);font-size:0.8rem;font-weight:600;text-decoration:underline;font-family:'Heebo',sans-serif;transition:color 0.2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'">תצוגה מקדימה</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <a href="#" class="btn-navy" style="justify-content:center;padding:9px 8px;font-size:0.8rem;">לרכישה</a>
+            <a href="dedication.html" class="btn-gold" style="justify-content:center;padding:9px 8px;font-size:0.8rem;">הקדשה</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card reveal" data-category="tefila">
+        <div style="position:relative;overflow:hidden;height:280px;">
+          <img src="https://placehold.co/400x450/0C1B33/C8A84B" class="book-img" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(12,27,51,0.75),transparent 55%);"></div>
+          <div style="position:absolute;bottom:14px;right:14px;background:var(--gold);color:var(--navy);font-size:0.63rem;font-weight:800;padding:3px 9px;border-radius:2px;">תפילה</div>
+        </div>
+        <div style="padding:22px 22px 24px;">
+          <h3 style="font-size:1.15rem;font-weight:700;color:var(--navy);">לפני מי אתה עומד</h3>
+          <div style="width:32px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:10px 0;"></div>
+          <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.7;margin-bottom:14px;">הגות ופרשנות על עולם התפילה — כיצד להפוך תפילה לשיחה אמיתית עם הבורא.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span style="font-family:'Frank Ruhl Libre',serif;font-size:1.3rem;font-weight:700;color:var(--navy);">₪70</span>
+            <button onclick="openModal('לפני מי אתה עומד','תפילה','₪70','הגות ופרשנות על עולם התפילה — כיצד להפוך תפילה לשיחה אמיתית עם הבורא. פסוקי תפילה מבוארים, כוונות ומשמעויות.')" style="background:none;border:none;cursor:pointer;color:var(--gold);font-size:0.8rem;font-weight:600;text-decoration:underline;font-family:'Heebo',sans-serif;transition:color 0.2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'">תצוגה מקדימה</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <a href="#" class="btn-navy" style="justify-content:center;padding:9px 8px;font-size:0.8rem;">לרכישה</a>
+            <a href="dedication.html" class="btn-gold" style="justify-content:center;padding:9px 8px;font-size:0.8rem;">הקדשה</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card reveal" data-category="halacha">
+        <div style="position:relative;overflow:hidden;height:280px;">
+          <img src="https://placehold.co/400x450/0C1B33/C8A84B" class="book-img" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(12,27,51,0.75),transparent 55%);"></div>
+          <div style="position:absolute;bottom:14px;right:14px;background:var(--gold);color:var(--navy);font-size:0.63rem;font-weight:800;padding:3px 9px;border-radius:2px;">הלכה</div>
+        </div>
+        <div style="padding:22px 22px 24px;">
+          <h3 style="font-size:1.15rem;font-weight:700;color:var(--navy);">בית ישראל</h3>
+          <div style="width:32px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:10px 0;"></div>
+          <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.7;margin-bottom:14px;">הלכות בית יהודי — מזוזות, ספרי קודש, קדושת הבית ושמירתו. מדריך מקיף לכל משפחה.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span style="font-family:'Frank Ruhl Libre',serif;font-size:1.3rem;font-weight:700;color:var(--navy);">₪60</span>
+            <button onclick="openModal('בית ישראל','הלכה','₪60','הלכות בית יהודי — מזוזות, ספרי קודש, קדושת הבית ושמירתו. מדריך מקיף לכל משפחה מתחדשת.')" style="background:none;border:none;cursor:pointer;color:var(--gold);font-size:0.8rem;font-weight:600;text-decoration:underline;font-family:'Heebo',sans-serif;transition:color 0.2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'">תצוגה מקדימה</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <a href="#" class="btn-navy" style="justify-content:center;padding:9px 8px;font-size:0.8rem;">לרכישה</a>
+            <a href="dedication.html" class="btn-gold" style="justify-content:center;padding:9px 8px;font-size:0.8rem;">הקדשה</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card reveal" data-category="emunah">
+        <div style="position:relative;overflow:hidden;height:280px;">
+          <img src="https://placehold.co/400x450/0C1B33/C8A84B" class="book-img" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s;" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(12,27,51,0.75),transparent 55%);"></div>
+          <div style="position:absolute;bottom:14px;right:14px;background:var(--gold);color:var(--navy);font-size:0.63rem;font-weight:800;padding:3px 9px;border-radius:2px;">אמונה</div>
+          <div style="position:absolute;top:14px;left:14px;background:rgba(12,27,51,0.8);color:var(--gold-light);font-size:0.65rem;padding:3px 8px;border-radius:2px;">חדש</div>
+        </div>
+        <div style="padding:22px 22px 24px;">
+          <h3 style="font-size:1.15rem;font-weight:700;color:var(--navy);">נפש חיה</h3>
+          <div style="width:32px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:10px 0;"></div>
+          <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.7;margin-bottom:14px;">על כוח הנשמה, זהות יהודית ומציאת משמעות בעולם מודרני. חידוש עמוק של הרב מאיר אליהו.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <span style="font-family:'Frank Ruhl Libre',serif;font-size:1.3rem;font-weight:700;color:var(--navy);">₪75</span>
+            <button onclick="openModal('נפש חיה','אמונה','₪75','על כוח הנשמה, זהות יהודית ומציאת משמעות בעולם מודרני. חידוש עמוק של הרב מאיר אליהו — ספרו החדש ביותר.')" style="background:none;border:none;cursor:pointer;color:var(--gold);font-size:0.8rem;font-weight:600;text-decoration:underline;font-family:'Heebo',sans-serif;transition:color 0.2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'">תצוגה מקדימה</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <a href="#" class="btn-navy" style="justify-content:center;padding:9px 8px;font-size:0.8rem;">לרכישה</a>
+            <a href="dedication.html" class="btn-gold" style="justify-content:center;padding:9px 8px;font-size:0.8rem;">הקדשה</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /books grid -->
+
+    <!-- CTA Strip -->
+    <div style="margin-top:72px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:14px;padding:44px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;position:relative;overflow:hidden;" class="reveal">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 80% 50%,rgba(200,168,75,0.07),transparent);"></div>
+      <div style="position:relative;z-index:1;">
+        <h3 style="font-size:1.5rem;font-weight:700;color:white;">הקדש ספר לזכרם</h3>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-top:6px;">שם יקיריך יופיע בכל ספר שנדפס — לנצח</p>
+      </div>
+      <a href="dedication.html" class="btn-gold" style="position:relative;z-index:1;padding:14px 36px;">✦ לדף ההקדשות</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="bookModal">
+  <div class="modal-box">
+    <button onclick="closeModal()" style="position:absolute;top:14px;left:14px;background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--text-muted);padding:6px;z-index:2;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--text-muted)'">✕</button>
+    <div style="display:grid;grid-template-columns:1fr 1.4fr;min-height:400px;">
+      <div style="background:linear-gradient(135deg,var(--navy),var(--navy-mid));display:flex;align-items:center;justify-content:center;padding:32px;border-radius:16px 0 0 16px;">
+        <img id="modalImg" src="https://placehold.co/240x320/162444/C8A84B" style="max-height:320px;border-radius:8px;box-shadow:0 20px 48px rgba(6,15,32,0.5);" />
+      </div>
+      <div style="padding:40px 36px 36px;">
+        <div id="modalTag" class="section-tag">הלכה</div>
+        <h2 id="modalTitle" style="font-size:1.7rem;font-weight:900;color:var(--navy);margin-top:10px;">שם הספר</h2>
+        <div style="width:40px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:14px 0;"></div>
+        <p id="modalDesc" style="color:var(--text-muted);font-size:0.9rem;line-height:1.8;"></p>
+        <div style="margin-top:20px;padding:16px;background:var(--cream);border-radius:8px;">
+          <p style="font-size:0.8rem;color:var(--text-muted);">תוכן הספר כולל:</p>
+          <ul style="list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:5px;">
+            <li style="font-size:0.82rem;color:var(--navy);display:flex;gap:7px;align-items:start;"><span style="color:var(--gold);">✦</span>עיונים ומקורות</li>
+            <li style="font-size:0.82rem;color:var(--navy);display:flex;gap:7px;align-items:start;"><span style="color:var(--gold);">✦</span>שאלות ותשובות</li>
+            <li style="font-size:0.82rem;color:var(--navy);display:flex;gap:7px;align-items:start;"><span style="color:var(--gold);">✦</span>סיכומי שיעורים</li>
+          </ul>
+        </div>
+        <div id="modalPrice" style="font-family:'Frank Ruhl Libre',serif;font-size:1.8rem;font-weight:900;color:var(--navy);margin-top:20px;"></div>
+        <div style="display:flex;gap:10px;margin-top:16px;">
+          <a href="#" class="btn-navy" style="flex:1;justify-content:center;">לרכישה</a>
+          <a href="dedication.html" class="btn-gold" style="flex:1;justify-content:center;">הקדשה</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#050d19;padding:40px 0 24px;color:rgba(255,255,255,0.45);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+    <div>
+      <div style="font-family:'Frank Ruhl Libre',serif;font-size:1rem;font-weight:700;color:var(--gold-light);">הרב מאיר אליהו</div>
+      <p style="font-size:0.73rem;margin-top:4px;">© 2025 לב מאיר ישראל. כל הזכויות שמורות.</p>
+    </div>
+    <div style="display:flex;gap:20px;">
+      <a href="index.html" style="color:rgba(255,255,255,0.4);font-size:0.78rem;text-decoration:none;">דף הבית</a>
+      <a href="dedication.html" style="color:rgba(255,255,255,0.4);font-size:0.78rem;text-decoration:none;">הקדשה</a>
+      <a href="lessons.html" style="color:rgba(255,255,255,0.4);font-size:0.78rem;text-decoration:none;">שיעורים</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => {
+    ScrollTrigger.create({
+      trigger: el, start: 'top 88%', once: true,
+      onEnter: () => gsap.to(el, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power3.out' })
+    });
+  });
+  gsap.from('.reveal', { opacity: 0, y: 24, stagger: 0.08, duration: 0.9, ease: 'power3.out', delay: 0.2 });
+
+  // Book hover zoom
+  document.querySelectorAll('.book-img').forEach(img => {
+    const card = img.closest('.book-card');
+    card.addEventListener('mouseenter', () => gsap.to(img, { scale: 1.06, duration: 0.5, ease: 'power2.out' }));
+    card.addEventListener('mouseleave', () => gsap.to(img, { scale: 1, duration: 0.5, ease: 'power2.out' }));
+  });
+
+  // Filter
+  function filterBooks(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.book-card').forEach(card => {
+      const show = cat === 'all' || card.dataset.category === cat;
+      gsap.to(card, { opacity: show ? 1 : 0.25, scale: show ? 1 : 0.95, duration: 0.3, ease: 'power2.out' });
+      card.style.pointerEvents = show ? '' : 'none';
+    });
+  }
+
+  // Modal
+  function openModal(title, tag, price, desc) {
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalTag').textContent = tag;
+    document.getElementById('modalPrice').textContent = price;
+    document.getElementById('modalDesc').textContent = desc;
+    document.getElementById('bookModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('bookModal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('bookModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+</script>
+</body>
+</html>

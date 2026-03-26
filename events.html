@@ -1,0 +1,377 @@
+﻿<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הרצאות ואירועים | הרב מאיר אליהו</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root{--navy:#0C1B33;--navy-mid:#162444;--gold:#C8A84B;--gold-light:#E8D49A;--cream:#F5F2EB;--white:#FFFFFF;--text-muted:#6B7280;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Heebo',sans-serif;background:var(--cream);color:var(--navy);direction:rtl;overflow-x:hidden;}
+    h1,h2,h3,h4{font-family:'Frank Ruhl Libre',serif;letter-spacing:-0.02em;}
+    ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--cream);} ::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+
+    nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(12,27,51,0.97);backdrop-filter:blur(14px);box-shadow:0 2px 24px rgba(12,27,51,0.3);}
+    .nav-link{color:rgba(255,255,255,0.78);text-decoration:none;font-size:0.88rem;font-weight:500;transition:color 0.2s;}
+    .nav-link:hover{color:var(--gold-light);}
+
+    .btn-gold{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#C8A84B,#E8C96B,#C8A84B);color:var(--navy);font-family:'Heebo',sans-serif;font-weight:700;font-size:0.92rem;padding:12px 28px;border-radius:4px;border:none;cursor:pointer;text-decoration:none;white-space:nowrap;box-shadow:0 4px 18px rgba(200,168,75,0.32);transition:transform 0.2s,box-shadow 0.2s;}
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,168,75,0.48);}
+    .btn-gold:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+    .btn-navy{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:var(--gold-light);font-family:'Heebo',sans-serif;font-weight:600;font-size:0.92rem;padding:12px 28px;border-radius:4px;border:1.5px solid rgba(200,168,75,0.28);cursor:pointer;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(12,27,51,0.18);transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;}
+    .btn-navy:hover{transform:translateY(-2px);border-color:var(--gold);}
+    .btn-navy:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+    .section-tag{display:inline-block;font-size:0.67rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);background:rgba(200,168,75,0.08);border:1px solid rgba(200,168,75,0.22);padding:4px 12px;border-radius:2px;margin-bottom:12px;}
+    .gold-divider{width:56px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:14px 0;}
+    .gold-divider.center{margin:14px auto;background:linear-gradient(90deg,transparent,var(--gold),transparent);width:80px;}
+
+    .event-row{display:grid;grid-template-columns:100px 1fr auto;gap:24px;align-items:center;padding:28px 32px;background:var(--white);border-radius:12px;border:1px solid rgba(12,27,51,0.06);box-shadow:0 3px 16px rgba(12,27,51,0.06);transition:transform 0.25s,box-shadow 0.25s,border-color 0.25s;position:relative;overflow:hidden;}
+    .event-row::before{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:var(--gold);opacity:0;transition:opacity 0.25s;}
+    .event-row:hover{transform:translateX(-4px);box-shadow:0 10px 32px rgba(12,27,51,0.12);border-color:rgba(200,168,75,0.25);}
+    .event-row:hover::before{opacity:1;}
+
+    .date-box{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:10px;padding:14px 10px;text-align:center;color:white;box-shadow:0 4px 16px rgba(12,27,51,0.25);}
+
+    .form-input{width:100%;padding:13px 17px;border:1.5px solid rgba(12,27,51,0.13);border-radius:6px;font-family:'Heebo',sans-serif;font-size:0.92rem;color:var(--navy);background:var(--white);direction:rtl;transition:border-color 0.2s,box-shadow 0.2s;}
+    .form-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,168,75,0.14);}
+    .form-input::placeholder{color:rgba(12,27,51,0.32);}
+    .form-label{display:block;font-size:0.82rem;font-weight:600;color:var(--navy);margin-bottom:5px;}
+
+    /* Registration modal */
+    .modal-overlay{position:fixed;inset:0;background:rgba(12,27,51,0.75);backdrop-filter:blur(6px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+    .modal-overlay.active{opacity:1;pointer-events:all;}
+    .modal-box{background:var(--white);border-radius:16px;padding:48px 44px;max-width:500px;width:93%;position:relative;transform:translateY(20px) scale(0.97);transition:transform 0.3s;box-shadow:0 48px 96px rgba(12,27,51,0.3);}
+    .modal-overlay.active .modal-box{transform:translateY(0) scale(1);}
+
+    .reveal{opacity:0;transform:translateY(24px);}
+    .reveal-left{opacity:0;transform:translateX(-28px);}
+    .reveal-right{opacity:0;transform:translateX(28px);}
+
+    @media(max-width:1024px){.nav-desktop{display:none!important;}.hamburger-btn{display:flex!important;}.events-layout{grid-template-columns:1fr!important;}}
+    @media(max-width:640px){.event-row{grid-template-columns:1fr!important;gap:16px;}.date-box{width:fit-content;padding:10px 14px;}.event-row>*:last-child{width:100%;}}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:64px;">
+    <a href="index.html" style="text-decoration:none;display:flex;flex-direction:column;line-height:1.1;">
+      <span style="font-family:'Frank Ruhl Libre',serif;font-size:1.2rem;font-weight:700;color:var(--gold-light);">הרב מאיר אליהו</span>
+      <span style="font-size:0.58rem;letter-spacing:0.13em;color:rgba(255,255,255,0.38);">לב מאיר ישראל</span>
+    </a>
+    <div class="nav-desktop" style="display:flex;gap:26px;">
+      <a href="index.html" class="nav-link">דף הבית</a>
+      <a href="lessons.html" class="nav-link">שיעורים</a>
+      <a href="books.html" class="nav-link">ספרים</a>
+      <a href="events.html" class="nav-link" style="color:var(--gold-light);">הרצאות</a>
+    </div>
+    <div class="nav-desktop" style="display:flex;gap:10px;">
+      <a href="dedication.html" class="btn-gold" style="padding:9px 16px;font-size:0.82rem;">הקדשה</a>
+    </div>
+    <button class="hamburger-btn" onclick="window.location='index.html'" style="display:none;background:none;border:none;cursor:pointer;color:white;font-size:1.5rem;padding:6px;">☰</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="padding:120px 0 70px;background:linear-gradient(155deg,#060f20,#0C1B33 45%,#162444 75%,#0f2240);position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 50% 55%,rgba(200,168,75,0.06),transparent 65%);"></div>
+  <div style="max-width:860px;margin:0 auto;padding:0 28px;text-align:center;position:relative;z-index:1;">
+    <div class="section-tag" style="color:var(--gold-light);border-color:rgba(200,168,75,0.28);">לוח אירועים</div>
+    <h1 style="font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;color:white;margin-top:12px;line-height:1.15;">
+      הרצאות ואירועים<br /><span style="color:var(--gold-light);">קרובים</span>
+    </h1>
+    <div style="width:80px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:20px auto;"></div>
+    <p style="color:rgba(255,255,255,0.62);font-size:1rem;line-height:1.85;max-width:500px;margin:0 auto;">
+      ערבי עיון, שיעורים ציבוריים וכינוסים — הצטרף לאלפי משתתפים ברחבי הארץ
+    </p>
+  </div>
+</section>
+
+<!-- EVENTS + SIDEBAR -->
+<section style="padding:80px 0 120px;background:var(--cream);">
+  <div style="max-width:1200px;margin:0 auto;padding:0 28px;">
+    <div class="events-layout" style="display:grid;grid-template-columns:1fr 340px;gap:48px;align-items:start;">
+
+      <!-- Events list -->
+      <div>
+        <!-- Month group: ניסן -->
+        <div class="reveal" style="margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="font-family:'Frank Ruhl Libre',serif;font-size:1rem;font-weight:700;color:var(--navy);">ניסן תשפ״ה</span>
+            <div style="flex:1;height:1px;background:rgba(12,27,51,0.1);"></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:40px;">
+
+          <div class="event-row reveal">
+            <div class="date-box">
+              <div style="font-size:1.5rem;font-weight:900;font-family:'Frank Ruhl Libre',serif;color:var(--gold-light);line-height:1;">כ׳</div>
+              <div style="font-size:0.62rem;letter-spacing:0.06em;color:rgba(255,255,255,0.55);margin-top:2px;">ניסן</div>
+            </div>
+            <div>
+              <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+                <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:2px 8px;border-radius:2px;font-size:0.65rem;font-weight:700;">ערב עיון</span>
+                <span style="font-size:0.72rem;color:var(--text-muted);">19:30</span>
+              </div>
+              <h3 style="font-size:1.08rem;font-weight:700;color:var(--navy);">שורשי הנשמה — מי אני?</h3>
+              <p style="font-size:0.82rem;color:var(--text-muted);margin-top:4px;">📍 בית ספר מוריה, רחוב יפו 40, ירושלים</p>
+              <p style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">כניסה חופשית | מקומות מוגבלים</p>
+            </div>
+            <button onclick="openReg('שורשי הנשמה — מי אני?','כ׳ ניסן תשפ״ה','בית ספר מוריה, ירושלים','19:30')" class="btn-gold" style="padding:11px 20px;font-size:0.85rem;white-space:nowrap;">הרשמה</button>
+          </div>
+
+          <div class="event-row reveal">
+            <div class="date-box">
+              <div style="font-size:1.5rem;font-weight:900;font-family:'Frank Ruhl Libre',serif;color:var(--gold-light);line-height:1;">כ״ה</div>
+              <div style="font-size:0.62rem;letter-spacing:0.06em;color:rgba(255,255,255,0.55);margin-top:2px;">ניסן</div>
+            </div>
+            <div>
+              <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+                <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:2px 8px;border-radius:2px;font-size:0.65rem;font-weight:700;">שיעור שבועי</span>
+                <span style="font-size:0.72rem;color:var(--text-muted);">09:00</span>
+              </div>
+              <h3 style="font-size:1.08rem;font-weight:700;color:var(--navy);">פרשת תזריע — שפת הקדושה</h3>
+              <p style="font-size:0.82rem;color:var(--text-muted);margin-top:4px;">📍 בית כנסת עדת ישראל, שדרות רוטשילד 88, תל אביב</p>
+              <p style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">כניסה חופשית</p>
+            </div>
+            <button onclick="openReg('פרשת תזריע','כ״ה ניסן תשפ״ה','בית כנסת עדת ישראל, תל אביב','09:00')" class="btn-gold" style="padding:11px 20px;font-size:0.85rem;white-space:nowrap;">הרשמה</button>
+          </div>
+
+          <div class="event-row reveal">
+            <div class="date-box">
+              <div style="font-size:1.5rem;font-weight:900;font-family:'Frank Ruhl Libre',serif;color:var(--gold-light);line-height:1;">כ״ז</div>
+              <div style="font-size:0.62rem;letter-spacing:0.06em;color:rgba(255,255,255,0.55);margin-top:2px;">ניסן</div>
+            </div>
+            <div>
+              <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+                <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:2px 8px;border-radius:2px;font-size:0.65rem;font-weight:700;">כינוס קהילתי</span>
+                <span style="font-size:0.72rem;color:var(--text-muted);">20:00</span>
+              </div>
+              <h3 style="font-size:1.08rem;font-weight:700;color:var(--navy);">יום העצמאות — אור לגויים</h3>
+              <p style="font-size:0.82rem;color:var(--text-muted);margin-top:4px;">📍 אולם המשכן, רחוב ביאליק 14, בני ברק</p>
+              <p style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">כרטיסים: ₪25 | ילדים חינם</p>
+            </div>
+            <button onclick="openReg('יום העצמאות — אור לגויים','כ״ז ניסן תשפ״ה','אולם המשכן, בני ברק','20:00')" class="btn-gold" style="padding:11px 20px;font-size:0.85rem;white-space:nowrap;">הרשמה</button>
+          </div>
+
+        </div>
+
+        <!-- Month group: אייר -->
+        <div class="reveal" style="margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <span style="font-family:'Frank Ruhl Libre',serif;font-size:1rem;font-weight:700;color:var(--navy);">אייר תשפ״ה</span>
+            <div style="flex:1;height:1px;background:rgba(12,27,51,0.1);"></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:40px;">
+
+          <div class="event-row reveal">
+            <div class="date-box">
+              <div style="font-size:1.5rem;font-weight:900;font-family:'Frank Ruhl Libre',serif;color:var(--gold-light);line-height:1;">ה׳</div>
+              <div style="font-size:0.62rem;letter-spacing:0.06em;color:rgba(255,255,255,0.55);margin-top:2px;">אייר</div>
+            </div>
+            <div>
+              <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+                <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:2px 8px;border-radius:2px;font-size:0.65rem;font-weight:700;">יום הזיכרון</span>
+                <span style="font-size:0.72rem;color:var(--text-muted);">19:00</span>
+              </div>
+              <h3 style="font-size:1.08rem;font-weight:700;color:var(--navy);">לזכרם — שיעור מיוחד ליום הזיכרון</h3>
+              <p style="font-size:0.82rem;color:var(--text-muted);margin-top:4px;">📍 בית הכנסת הגדול, רחוב הרב קוק, חיפה</p>
+              <p style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">כניסה חופשית</p>
+            </div>
+            <button onclick="openReg('שיעור יום הזיכרון','ה׳ אייר תשפ״ה','בית הכנסת הגדול, חיפה','19:00')" class="btn-gold" style="padding:11px 20px;font-size:0.85rem;white-space:nowrap;">הרשמה</button>
+          </div>
+
+          <div class="event-row reveal">
+            <div class="date-box">
+              <div style="font-size:1.5rem;font-weight:900;font-family:'Frank Ruhl Libre',serif;color:var(--gold-light);line-height:1;">י״ח</div>
+              <div style="font-size:0.62rem;letter-spacing:0.06em;color:rgba(255,255,255,0.55);margin-top:2px;">אייר</div>
+            </div>
+            <div>
+              <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+                <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:2px 8px;border-radius:2px;font-size:0.65rem;font-weight:700;">לג בעומר</span>
+                <span style="font-size:0.72rem;color:var(--text-muted);">21:00</span>
+              </div>
+              <h3 style="font-size:1.08rem;font-weight:700;color:var(--navy);">רשבי — אור שאינו כבה</h3>
+              <p style="font-size:0.82rem;color:var(--text-muted);margin-top:4px;">📍 ישיבת נהרות, רמת גן</p>
+              <p style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">כניסה חופשית | מדורה לאחר השיעור</p>
+            </div>
+            <button onclick="openReg('רשבי — אור שאינו כבה','י״ח אייר תשפ״ה','ישיבת נהרות, רמת גן','21:00')" class="btn-gold" style="padding:11px 20px;font-size:0.85rem;white-space:nowrap;">הרשמה</button>
+          </div>
+
+        </div>
+
+        <!-- Ongoing lectures series -->
+        <div style="background:white;border-radius:14px;padding:32px;border:1px solid rgba(12,27,51,0.07);box-shadow:0 4px 18px rgba(12,27,51,0.06);" class="reveal">
+          <div class="section-tag">סדרה שוטפת</div>
+          <h3 style="font-size:1.25rem;font-weight:700;color:var(--navy);margin-top:8px;">שיעור שבועי קבוע</h3>
+          <div style="width:36px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:12px 0;"></div>
+          <p style="font-size:0.88rem;color:var(--text-muted);line-height:1.7;margin-bottom:16px;">
+            כל שבוע ו׳ בבוקר — שיעור בפרשת השבוע בהשתתפות הרב מאיר אליהו.<br />
+            שידור חי ב-YouTube ו-WhatsApp.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <div style="background:var(--cream);border-radius:6px;padding:8px 14px;font-size:0.82rem;color:var(--navy);font-weight:600;">📅 כל יום שישי</div>
+            <div style="background:var(--cream);border-radius:6px;padding:8px 14px;font-size:0.82rem;color:var(--navy);font-weight:600;">⏰ 09:00–10:30</div>
+            <div style="background:var(--cream);border-radius:6px;padding:8px 14px;font-size:0.82rem;color:var(--navy);font-weight:600;">📍 שידור חי + בנוכחות</div>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
+            <button onclick="openReg('שיעור שבועי קבוע','כל שישי','שידור חי + נוכחות','09:00')" class="btn-gold" style="padding:11px 24px;">הרשמה לסדרה</button>
+            <a href="lessons.html" class="btn-navy" style="padding:11px 24px;">ארכיון שיעורים</a>
+          </div>
+        </div>
+      </div><!-- /events list -->
+
+      <!-- Sidebar: quick registration -->
+      <div style="position:sticky;top:84px;">
+        <div style="background:var(--navy);border-radius:14px;padding:32px 28px;box-shadow:0 16px 48px rgba(12,27,51,0.3);position:relative;overflow:hidden;" class="reveal-right">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(200,168,75,0.08),transparent 60%);"></div>
+          <div style="position:relative;z-index:1;">
+            <div class="section-tag" style="color:var(--gold-light);border-color:rgba(200,168,75,0.28);">הרשמה מהירה</div>
+            <h3 style="font-size:1.25rem;font-weight:700;color:white;margin-top:8px;">קבל עדכוני<br />הרצאות</h3>
+            <div style="width:36px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:12px 0;"></div>
+            <p style="color:rgba(255,255,255,0.58);font-size:0.84rem;line-height:1.7;margin-bottom:20px;">השאר פרטים וקבל הודעה לפני כל הרצאה באזורך</p>
+
+            <form onsubmit="submitQuickReg(event)">
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div>
+                  <label class="form-label" style="color:rgba(255,255,255,0.7);font-size:0.78rem;">שם</label>
+                  <input type="text" class="form-input" placeholder="ישראל ישראלי" required style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12);color:white;" />
+                </div>
+                <div>
+                  <label class="form-label" style="color:rgba(255,255,255,0.7);font-size:0.78rem;">טלפון</label>
+                  <input type="tel" class="form-input" placeholder="050-0000000" required style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12);color:white;" />
+                </div>
+                <div>
+                  <label class="form-label" style="color:rgba(255,255,255,0.7);font-size:0.78rem;">עיר</label>
+                  <input type="text" class="form-input" placeholder="ירושלים" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12);color:white;" />
+                </div>
+              </div>
+              <button type="submit" class="btn-gold" style="width:100%;justify-content:center;margin-top:18px;padding:13px;">שלח ← קבל עדכונים</button>
+              <div id="quickRegSuccess" style="display:none;text-align:center;padding:12px;background:rgba(200,168,75,0.12);border:1px solid rgba(200,168,75,0.28);border-radius:6px;margin-top:12px;color:var(--gold-light);font-size:0.85rem;font-weight:600;">✓ נרשמת!</div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Partner card -->
+        <div style="background:linear-gradient(135deg,var(--gold),#E8C96B);border-radius:14px;padding:28px;margin-top:20px;text-align:center;" class="reveal-right">
+          <div style="font-size:1.6rem;margin-bottom:10px;">✦</div>
+          <h3 style="font-family:'Frank Ruhl Libre',serif;font-size:1.1rem;font-weight:700;color:var(--navy);">הקדש הרצאה</h3>
+          <p style="font-size:0.8rem;color:rgba(12,27,51,0.7);margin-top:6px;line-height:1.6;">ניתן להקדיש כל הרצאה לזכר יקיריך</p>
+          <a href="dedication.html" class="btn-navy" style="margin-top:16px;display:inline-flex;padding:10px 20px;font-size:0.83rem;">להקדשה</a>
+        </div>
+      </div>
+
+    </div><!-- /events-layout -->
+  </div>
+</section>
+
+<!-- REGISTRATION MODAL -->
+<div class="modal-overlay" id="regModal">
+  <div class="modal-box">
+    <button onclick="closeReg()" style="position:absolute;top:14px;left:14px;background:none;border:none;cursor:pointer;font-size:1rem;color:var(--text-muted);padding:6px;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--text-muted)'">✕</button>
+
+    <div style="margin-bottom:28px;">
+      <div class="section-tag">הרשמה לאירוע</div>
+      <h3 style="font-family:'Frank Ruhl Libre',serif;font-size:1.5rem;font-weight:900;color:var(--navy);margin-top:8px;" id="regEventName">שם האירוע</h3>
+      <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;" id="regEventDetails">
+        <span style="background:var(--cream);border-radius:4px;padding:4px 10px;font-size:0.75rem;color:var(--navy);font-weight:600;" id="regDate">—</span>
+        <span style="background:var(--cream);border-radius:4px;padding:4px 10px;font-size:0.75rem;color:var(--navy);font-weight:600;" id="regLocation">—</span>
+        <span style="background:var(--cream);border-radius:4px;padding:4px 10px;font-size:0.75rem;color:var(--navy);font-weight:600;" id="regTime">—</span>
+      </div>
+    </div>
+
+    <form onsubmit="submitReg(event)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div>
+          <label class="form-label">שם מלא *</label>
+          <input type="text" class="form-input" placeholder="ישראל ישראלי" required />
+        </div>
+        <div>
+          <label class="form-label">טלפון *</label>
+          <input type="tel" class="form-input" placeholder="050-0000000" required />
+        </div>
+        <div>
+          <label class="form-label">דוא״ל</label>
+          <input type="email" class="form-input" placeholder="israel@example.com" />
+        </div>
+        <div>
+          <label class="form-label">מספר משתתפים</label>
+          <select class="form-input">
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;align-items:start;gap:10px;">
+        <input type="checkbox" required style="margin-top:3px;accent-color:var(--gold);" />
+        <label style="font-size:0.78rem;color:var(--text-muted);line-height:1.6;">אני מסכים לקבל תזכורת לפני האירוע</label>
+      </div>
+      <button type="submit" class="btn-gold" style="width:100%;justify-content:center;margin-top:22px;padding:14px;">אשר הרשמה ←</button>
+      <div id="regSuccess" style="display:none;text-align:center;padding:14px;background:rgba(200,168,75,0.09);border:1px solid rgba(200,168,75,0.28);border-radius:6px;margin-top:12px;color:var(--navy);font-weight:600;">
+        ✓ נרשמת! נשלח תזכורת לפני האירוע.
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#050d19;padding:40px 0 24px;color:rgba(255,255,255,0.45);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+    <div>
+      <div style="font-family:'Frank Ruhl Libre',serif;font-size:1rem;font-weight:700;color:var(--gold-light);">הרב מאיר אליהו</div>
+      <p style="font-size:0.73rem;margin-top:4px;">© 2025 לב מאיר ישראל. כל הזכויות שמורות.</p>
+    </div>
+    <div style="display:flex;gap:20px;">
+      <a href="index.html" style="color:rgba(255,255,255,0.4);font-size:0.78rem;text-decoration:none;">דף הבית</a>
+      <a href="lessons.html" style="color:rgba(255,255,255,0.4);font-size:0.78rem;text-decoration:none;">שיעורים</a>
+      <a href="dedication.html" style="color:rgba(255,255,255,0.4);font-size:0.78rem;text-decoration:none;">הקדשה</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => {
+    ScrollTrigger.create({
+      trigger: el, start: 'top 88%', once: true,
+      onEnter: () => gsap.to(el, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power3.out' })
+    });
+  });
+  gsap.from('.reveal', { opacity: 0, y: 24, stagger: 0.07, duration: 0.9, ease: 'power3.out', delay: 0.2 });
+
+  function openReg(name, date, location, time) {
+    document.getElementById('regEventName').textContent = name;
+    document.getElementById('regDate').textContent = '📅 ' + date;
+    document.getElementById('regLocation').textContent = '📍 ' + location;
+    document.getElementById('regTime').textContent = '⏰ ' + time;
+    document.getElementById('regSuccess').style.display = 'none';
+    document.getElementById('regModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeReg() {
+    document.getElementById('regModal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('regModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeReg(); });
+
+  function submitReg(e) {
+    e.preventDefault();
+    document.getElementById('regSuccess').style.display = 'block';
+    setTimeout(closeReg, 2200);
+  }
+  function submitQuickReg(e) {
+    e.preventDefault();
+    document.getElementById('quickRegSuccess').style.display = 'block';
+    e.target.reset();
+  }
+</script>
+</body>
+</html>

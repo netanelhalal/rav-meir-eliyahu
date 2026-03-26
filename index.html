@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הרב מאיר אליהו | לב מאיר ישראל</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root{--navy:#0C1B33;--navy-mid:#162444;--gold:#C8A84B;--gold-light:#E8D49A;--cream:#F5F2EB;--white:#FFFFFF;--text-muted:#6B7280;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Heebo',sans-serif;background:var(--cream);color:var(--navy);direction:rtl;overflow-x:hidden;}
+    h1,h2,h3,h4{font-family:'Frank Ruhl Libre',serif;letter-spacing:-0.02em;}
+    ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--cream);} ::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+
+    /* NAV */
+    nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(12,27,51,0.97);backdrop-filter:blur(14px);box-shadow:0 2px 24px rgba(12,27,51,0.3);transition:background 0.3s;}
+    .nav-link{color:rgba(255,255,255,0.78);text-decoration:none;font-size:0.88rem;font-weight:500;transition:color 0.2s;}
+    .nav-link:hover{color:var(--gold-light);}
+
+    /* BUTTONS */
+    .btn-gold{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#C8A84B,#E8C96B,#C8A84B);color:var(--navy);font-family:'Heebo',sans-serif;font-weight:700;font-size:0.95rem;padding:14px 32px;border-radius:4px;border:none;cursor:pointer;text-decoration:none;white-space:nowrap;box-shadow:0 4px 20px rgba(200,168,75,0.35);transition:transform 0.2s,box-shadow 0.2s;}
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(200,168,75,0.5);}
+    .btn-gold:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+    .btn-navy{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:var(--gold-light);font-family:'Heebo',sans-serif;font-weight:600;font-size:0.95rem;padding:14px 32px;border-radius:4px;border:1.5px solid rgba(200,168,75,0.3);cursor:pointer;text-decoration:none;white-space:nowrap;box-shadow:0 4px 16px rgba(12,27,51,0.2);transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;}
+    .btn-navy:hover{transform:translateY(-2px);border-color:var(--gold);}
+    .btn-outline-light{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--gold-light);font-family:'Heebo',sans-serif;font-weight:600;font-size:0.95rem;padding:13px 30px;border-radius:4px;border:1.5px solid rgba(200,168,75,0.4);cursor:pointer;text-decoration:none;transition:border-color 0.2s,background 0.2s;}
+    .btn-outline-light:hover{border-color:var(--gold);background:rgba(200,168,75,0.08);}
+
+    /* UTILITY */
+    .section-tag{display:inline-block;font-size:0.67rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);background:rgba(200,168,75,0.08);border:1px solid rgba(200,168,75,0.22);padding:4px 12px;border-radius:2px;margin-bottom:12px;}
+    .section-tag-light{display:inline-block;font-size:0.67rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-light);background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.28);padding:4px 12px;border-radius:2px;margin-bottom:12px;}
+    .gold-divider{width:56px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:14px 0;}
+    .gold-divider.center{margin:14px auto;background:linear-gradient(90deg,transparent,var(--gold),transparent);width:80px;}
+
+    /* HERO */
+    .hero-ornament{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+
+    /* STAT CARDS */
+    .stat-card{background:rgba(255,255,255,0.04);border:1px solid rgba(200,168,75,0.18);border-radius:12px;padding:32px 24px;text-align:center;transition:border-color 0.3s,transform 0.3s;}
+    .stat-card:hover{border-color:rgba(200,168,75,0.45);transform:translateY(-4px);}
+
+    /* LESSON CARD */
+    .lesson-card{background:var(--white);border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(12,27,51,0.07),0 1px 4px rgba(12,27,51,0.04);border:1px solid rgba(12,27,51,0.06);transition:transform 0.32s,box-shadow 0.32s;}
+    .lesson-card:hover{transform:translateY(-8px);box-shadow:0 24px 52px rgba(12,27,51,0.14);}
+    .play-btn{width:48px;height:48px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(200,168,75,0.45);transition:transform 0.2s;}
+    .play-btn:hover{transform:scale(1.1);}
+
+    /* BOOK CARD */
+    .book-card-home{background:var(--white);border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(12,27,51,0.07);border:1px solid rgba(12,27,51,0.06);transition:transform 0.32s,box-shadow 0.32s;}
+    .book-card-home:hover{transform:translateY(-8px);box-shadow:0 24px 52px rgba(12,27,51,0.16);}
+
+    /* EVENT ROW */
+    .event-row-home{display:flex;gap:20px;align-items:center;padding:22px 28px;background:var(--white);border-radius:10px;border:1px solid rgba(12,27,51,0.06);box-shadow:0 3px 14px rgba(12,27,51,0.05);transition:transform 0.25s,border-color 0.25s,box-shadow 0.25s;position:relative;overflow:hidden;}
+    .event-row-home::before{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:var(--gold);opacity:0;transition:opacity 0.25s;}
+    .event-row-home:hover{transform:translateX(-4px);border-color:rgba(200,168,75,0.25);box-shadow:0 8px 28px rgba(12,27,51,0.1);}
+    .event-row-home:hover::before{opacity:1;}
+
+    /* PARTNERSHIP */
+    .partner-tier{background:rgba(255,255,255,0.03);border:1.5px solid rgba(200,168,75,0.2);border-radius:14px;padding:36px 28px;text-align:center;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;cursor:pointer;}
+    .partner-tier:hover{border-color:var(--gold);transform:translateY(-6px);box-shadow:0 20px 48px rgba(12,27,51,0.35);}
+    .partner-tier.featured{background:rgba(200,168,75,0.07);border-color:var(--gold);}
+
+    /* ABOUT */
+    .quote-mark{font-family:'Frank Ruhl Libre',serif;font-size:5rem;font-weight:900;color:var(--gold);line-height:0.5;opacity:0.6;}
+
+    /* ANIMATIONS */
+    .reveal{opacity:0;transform:translateY(24px);}
+    .reveal-left{opacity:0;transform:translateX(-28px);}
+    .reveal-right{opacity:0;transform:translateX(28px);}
+
+    /* MOBILE */
+    @media(max-width:1024px){
+      .nav-desktop{display:none!important;}
+      .hamburger-btn{display:flex!important;}
+      .hero-grid{grid-template-columns:1fr!important;}
+      .hero-image-col{display:none!important;}
+      .stats-grid{grid-template-columns:repeat(2,1fr)!important;}
+      .lessons-home-grid{grid-template-columns:repeat(2,1fr)!important;}
+      .about-grid{grid-template-columns:1fr!important;}
+      .books-home-grid{grid-template-columns:repeat(2,1fr)!important;}
+      .partner-grid{grid-template-columns:1fr!important;}
+    }
+    @media(max-width:640px){
+      .stats-grid{grid-template-columns:repeat(2,1fr)!important;}
+      .lessons-home-grid{grid-template-columns:1fr!important;}
+      .books-home-grid{grid-template-columns:1fr!important;}
+      .event-row-home{flex-direction:column;align-items:flex-start;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:64px;">
+    <a href="index.html" style="text-decoration:none;display:flex;flex-direction:column;line-height:1.1;">
+      <span style="font-family:'Frank Ruhl Libre',serif;font-size:1.2rem;font-weight:700;color:var(--gold-light);">הרב מאיר אליהו</span>
+      <span style="font-size:0.58rem;letter-spacing:0.13em;color:rgba(255,255,255,0.38);">לב מאיר ישראל</span>
+    </a>
+    <div class="nav-desktop" style="display:flex;gap:26px;">
+      <a href="index.html" class="nav-link" style="color:var(--gold-light);">דף הבית</a>
+      <a href="lessons.html" class="nav-link">שיעורים</a>
+      <a href="books.html" class="nav-link">ספרים</a>
+      <a href="events.html" class="nav-link">הרצאות</a>
+    </div>
+    <div class="nav-desktop" style="display:flex;gap:10px;align-items:center;">
+      <a href="dedication.html" class="btn-gold" style="padding:9px 18px;font-size:0.84rem;">הקדשה</a>
+      <a href="#partnership" style="padding:9px 18px;font-size:0.84rem;color:var(--gold-light);text-decoration:none;border:1.5px solid rgba(200,168,75,0.3);border-radius:4px;font-weight:600;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(200,168,75,0.3)'">שותפות</a>
+    </div>
+    <button class="hamburger-btn" id="hamburgerBtn" style="display:none;background:none;border:none;cursor:pointer;color:white;font-size:1.5rem;padding:6px;" aria-label="תפריט">☰</button>
+  </div>
+  <!-- Mobile menu -->
+  <div id="mobileMenu" style="display:none;background:rgba(12,27,51,0.98);border-top:1px solid rgba(200,168,75,0.15);">
+    <div style="padding:16px 28px;display:flex;flex-direction:column;gap:4px;">
+      <a href="index.html" style="color:var(--gold-light);text-decoration:none;font-size:0.95rem;font-weight:600;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">דף הבית</a>
+      <a href="lessons.html" style="color:rgba(255,255,255,0.78);text-decoration:none;font-size:0.95rem;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">שיעורים</a>
+      <a href="books.html" style="color:rgba(255,255,255,0.78);text-decoration:none;font-size:0.95rem;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">ספרים</a>
+      <a href="events.html" style="color:rgba(255,255,255,0.78);text-decoration:none;font-size:0.95rem;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">הרצאות</a>
+      <div style="display:flex;gap:10px;margin-top:14px;">
+        <a href="dedication.html" class="btn-gold" style="padding:10px 18px;font-size:0.85rem;flex:1;justify-content:center;">הקדשה</a>
+        <a href="#partnership" class="btn-outline-light" style="padding:10px 18px;font-size:0.85rem;flex:1;justify-content:center;">שותפות</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════ HERO ══ -->
+<section style="min-height:100vh;background:linear-gradient(155deg,#060f20,#0C1B33 40%,#162444 70%,#0e1e3a);position:relative;overflow:hidden;display:flex;align-items:center;">
+
+  <!-- Decorative orbs -->
+  <div class="hero-ornament" style="width:600px;height:600px;background:rgba(200,168,75,0.07);top:-100px;left:-150px;"></div>
+  <div class="hero-ornament" style="width:400px;height:400px;background:rgba(200,168,75,0.04);bottom:-80px;right:-80px;"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 35% 55%,rgba(200,168,75,0.05),transparent 70%);pointer-events:none;"></div>
+
+  <!-- Subtle grid pattern -->
+  <div style="position:absolute;inset:0;opacity:0.03;background-image:linear-gradient(rgba(200,168,75,0.8) 1px,transparent 1px),linear-gradient(90deg,rgba(200,168,75,0.8) 1px,transparent 1px);background-size:64px 64px;"></div>
+
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;width:100%;position:relative;z-index:1;padding-top:100px;padding-bottom:80px;">
+    <div class="hero-grid" style="display:grid;grid-template-columns:1fr 420px;gap:80px;align-items:center;">
+
+      <!-- Text col -->
+      <div>
+        <div id="heroTag" style="opacity:0;display:inline-flex;align-items:center;gap:8px;background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.28);border-radius:2px;padding:5px 14px;margin-bottom:28px;">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;animation:pulse 2s infinite;"></span>
+          <span style="font-size:0.67rem;font-weight:700;letter-spacing:0.16em;color:var(--gold-light);">לב מאיר ישראל</span>
+        </div>
+
+        <h1 id="heroH1" style="opacity:0;font-size:clamp(3rem,6.5vw,5.2rem);font-weight:900;color:white;line-height:1.08;margin-bottom:24px;">
+          הרב<br />
+          <span style="color:var(--gold-light);">מאיר אליהו</span>
+        </h1>
+
+        <div id="heroBar" style="opacity:0;width:72px;height:3px;background:linear-gradient(90deg,var(--gold),transparent);margin-bottom:28px;"></div>
+
+        <p id="heroP" style="opacity:0;color:rgba(255,255,255,0.65);font-size:1.05rem;line-height:1.9;max-width:520px;margin-bottom:36px;">
+          מורה, מחבר ומרצה — מוביל אלפי אנשים בדרך חיים של תורה, אמונה ועומק רוחני.<br />
+          מעל 500 שיעורים, עשרות ספרים, והרצאות בכל הארץ.
+        </p>
+
+        <div id="heroBtns" style="opacity:0;display:flex;flex-wrap:wrap;gap:14px;margin-bottom:52px;">
+          <a href="lessons.html" class="btn-gold">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            לשיעורים
+          </a>
+          <a href="books.html" class="btn-outline-light">הספרים</a>
+          <a href="dedication.html" class="btn-outline-light">הקדשה</a>
+        </div>
+
+        <!-- Quick stats row -->
+        <div id="heroStats" style="opacity:0;display:flex;flex-wrap:wrap;gap:32px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.07);">
+          <div>
+            <div style="font-family:'Frank Ruhl Libre',serif;font-size:2rem;font-weight:900;color:var(--gold-light);">500+</div>
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-top:2px;letter-spacing:0.04em;">שיעורי תורה</div>
+          </div>
+          <div>
+            <div style="font-family:'Frank Ruhl Libre',serif;font-size:2rem;font-weight:900;color:var(--gold-light);">30+</div>
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-top:2px;letter-spacing:0.04em;">ספרים ופרסומים</div>
+          </div>
+          <div>
+            <div style="font-family:'Frank Ruhl Libre',serif;font-size:2rem;font-weight:900;color:var(--gold-light);">20K+</div>
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-top:2px;letter-spacing:0.04em;">עוקבים</div>
+          </div>
+          <div>
+            <div style="font-family:'Frank Ruhl Libre',serif;font-size:2rem;font-weight:900;color:var(--gold-light);">25+</div>
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-top:2px;letter-spacing:0.04em;">שנות הוראה</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image / decorative col -->
+      <div class="hero-image-col" style="position:relative;">
+        <div style="position:relative;z-index:1;">
+          <!-- Portrait placeholder frame -->
+          <div style="width:100%;aspect-ratio:4/5;border-radius:20px;background:linear-gradient(155deg,var(--navy-mid),rgba(22,36,68,0.8));border:1.5px solid rgba(200,168,75,0.22);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;position:relative;box-shadow:0 40px 80px rgba(0,0,0,0.5);">
+            <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(200,168,75,0.06),transparent 65%);"></div>
+            <!-- Ornamental Hebrew letter -->
+            <div style="font-family:'Frank Ruhl Libre',serif;font-size:14rem;font-weight:900;color:rgba(200,168,75,0.08);line-height:1;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);user-select:none;">מ</div>
+            <div style="position:relative;z-index:1;text-align:center;padding:32px;">
+              <div style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));margin:0 auto 20px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(200,168,75,0.4);">
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="var(--navy)"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+              </div>
+              <div style="font-family:'Frank Ruhl Libre',serif;font-size:1.6rem;font-weight:900;color:var(--gold-light);">הרב מאיר אליהו</div>
+              <div style="font-size:0.75rem;letter-spacing:0.12em;color:rgba(255,255,255,0.4);margin-top:6px;">מורה ומחבר</div>
+            </div>
+            <!-- Corner ornaments -->
+            <div style="position:absolute;top:16px;right:16px;width:28px;height:28px;border-top:2px solid var(--gold);border-right:2px solid var(--gold);opacity:0.5;border-radius:0 4px 0 0;"></div>
+            <div style="position:absolute;top:16px;left:16px;width:28px;height:28px;border-top:2px solid var(--gold);border-left:2px solid var(--gold);opacity:0.5;border-radius:4px 0 0 0;"></div>
+            <div style="position:absolute;bottom:16px;right:16px;width:28px;height:28px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold);opacity:0.5;border-radius:0 0 4px 0;"></div>
+            <div style="position:absolute;bottom:16px;left:16px;width:28px;height:28px;border-bottom:2px solid var(--gold);border-left:2px solid var(--gold);opacity:0.5;border-radius:0 0 0 4px;"></div>
+          </div>
+        </div>
+        <!-- Floating badge -->
+        <div style="position:absolute;bottom:-20px;right:-20px;background:var(--gold);color:var(--navy);border-radius:12px;padding:16px 20px;box-shadow:0 12px 36px rgba(200,168,75,0.45);font-family:'Frank Ruhl Libre',serif;font-weight:900;font-size:0.9rem;line-height:1.3;z-index:2;">
+          שיעור חדש<br /><span style="font-size:0.72rem;font-weight:400;font-family:'Heebo',sans-serif;opacity:0.8;">כל שבוע</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div style="position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0.4;">
+    <span style="font-size:0.65rem;letter-spacing:0.12em;color:white;">גלול למטה</span>
+    <div style="width:1px;height:32px;background:linear-gradient(to bottom,rgba(200,168,75,0.8),transparent);animation:scrollLine 1.8s ease-in-out infinite;"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ ABOUT ══ -->
+<section style="padding:100px 0;background:var(--cream);overflow:hidden;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 28px;">
+    <div class="about-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
+
+      <div class="reveal-left">
+        <div class="section-tag">אודות הרב</div>
+        <h2 style="font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;color:var(--navy);line-height:1.2;margin-bottom:16px;">
+          מסלול חיים של<br /><span style="color:var(--gold);">תורה ומסירות</span>
+        </h2>
+        <div class="gold-divider"></div>
+        <p style="color:var(--text-muted);font-size:0.97rem;line-height:1.95;margin-top:16px;margin-bottom:20px;">
+          הרב מאיר אליהו הוא דמות מרכזית בעולם הרוחני הישראלי — מחבר, מרצה ומחנך שהקדיש את חייו להפצת תורה ואמונה. בשיעוריו הוא משלב עומק הלכתי עם חכמת החיים, ומוביל אנשים מכל שכבות החברה אל קשר אמיתי עם המסורת היהודית.
+        </p>
+        <p style="color:var(--text-muted);font-size:0.97rem;line-height:1.95;margin-bottom:28px;">
+          מחבר מעל 30 ספרים בנושאי הלכה, אמונה ומחשבה, ופועל זה למעלה מ-25 שנה בהוראה, הרצאות ופרסום תורני ברחבי הארץ.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;">
+          <a href="lessons.html" class="btn-gold" style="padding:12px 24px;font-size:0.9rem;">לשיעורים</a>
+          <a href="books.html" class="btn-navy" style="padding:12px 24px;font-size:0.9rem;">לספרים</a>
+        </div>
+      </div>
+
+      <div class="reveal-right">
+        <!-- Quote card -->
+        <div style="background:var(--navy);border-radius:20px;padding:48px 40px;position:relative;box-shadow:0 24px 64px rgba(12,27,51,0.2);">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(200,168,75,0.05),transparent 70%);border-radius:20px;"></div>
+          <div class="quote-mark" style="position:relative;z-index:1;">״</div>
+          <blockquote style="font-family:'Frank Ruhl Libre',serif;font-size:1.25rem;font-weight:500;color:var(--gold-light);line-height:1.7;margin:12px 0 24px;position:relative;z-index:1;">
+            תורה היא לא רק ידע — היא אורח חיים, קשר עם הבורא, ואהבה שאין לה גבולות.
+          </blockquote>
+          <div style="display:flex;align-items:center;gap:12px;position:relative;z-index:1;">
+            <div style="width:36px;height:2px;background:var(--gold);"></div>
+            <span style="font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.5);letter-spacing:0.06em;">הרב מאיר אליהו</span>
+          </div>
+
+          <!-- Decorative elements -->
+          <div style="position:absolute;top:24px;left:24px;width:20px;height:20px;border-top:2px solid rgba(200,168,75,0.25);border-left:2px solid rgba(200,168,75,0.25);"></div>
+          <div style="position:absolute;bottom:24px;right:24px;width:20px;height:20px;border-bottom:2px solid rgba(200,168,75,0.25);border-right:2px solid rgba(200,168,75,0.25);"></div>
+        </div>
+
+        <!-- Sub-stats -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;">
+          <div style="background:var(--white);border-radius:12px;padding:22px 20px;border:1px solid rgba(12,27,51,0.06);box-shadow:0 3px 12px rgba(12,27,51,0.05);text-align:center;">
+            <div style="font-family:'Frank Ruhl Libre',serif;font-size:2rem;font-weight:900;color:var(--gold);">30+</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">ספרים ופרסומים</div>
+          </div>
+          <div style="background:var(--white);border-radius:12px;padding:22px 20px;border:1px solid rgba(12,27,51,0.06);box-shadow:0 3px 12px rgba(12,27,51,0.05);text-align:center;">
+            <div style="font-family:'Frank Ruhl Libre',serif;font-size:2rem;font-weight:900;color:var(--gold);">25+</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">שנות הוראה</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ FEATURED LESSON ══ -->
+<section style="padding:100px 0;background:var(--navy);position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 55% 50% at 40% 50%,rgba(200,168,75,0.05),transparent 65%);pointer-events:none;"></div>
+  <div style="max-width:1200px;margin:0 auto;padding:0 28px;position:relative;z-index:1;">
+
+    <div style="text-align:center;margin-bottom:56px;" class="reveal">
+      <div class="section-tag-light">שיעור השבוע</div>
+      <h2 style="font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:900;color:white;margin-top:8px;">
+        שיעורי תורה <span style="color:var(--gold-light);">מדי שבוע</span>
+      </h2>
+      <div class="gold-divider center"></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:center;" class="featured-layout">
+
+      <div class="reveal-left" style="position:relative;">
+        <div style="border-radius:16px;overflow:hidden;box-shadow:0 32px 72px rgba(0,0,0,0.5);border:1px solid rgba(200,168,75,0.15);">
+          <iframe src="https://www.youtube.com/embed/J-__8TMDBEM" title="שיעור מרכזי" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="width:100%;aspect-ratio:16/9;display:block;"></iframe>
+        </div>
+      </div>
+
+      <div class="reveal-right">
+        <div class="section-tag" style="color:var(--gold);">פרשת השבוע</div>
+        <h3 style="font-size:clamp(1.4rem,2.8vw,2rem);font-weight:900;color:white;margin-top:10px;line-height:1.25;">
+          פרשת תזריע —<br /><span style="color:var(--gold-light);">טהרה פנימית</span>
+        </h3>
+        <div class="gold-divider"></div>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.95rem;line-height:1.85;margin-top:12px;margin-bottom:20px;">
+          הרב מאיר אליהו מסביר את עומקה של פרשת תזריע — מה מלמדת אותנו הצרעת על השפה, על הלב, ועל יחסי האדם עם חברו ועם הבורא.
+        </p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+          <span style="background:rgba(200,168,75,0.12);border:1px solid rgba(200,168,75,0.25);color:var(--gold-light);padding:4px 12px;border-radius:2px;font-size:0.74rem;font-weight:600;">פרשת השבוע</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.55);padding:4px 12px;border-radius:2px;font-size:0.74rem;">52 דקות</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.55);padding:4px 12px;border-radius:2px;font-size:0.74rem;">ניסן תשפ״ה</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:28px;">
+          <a href="#" class="btn-gold" style="padding:11px 22px;font-size:0.88rem;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            הורד PDF
+          </a>
+          <a href="dedication.html" class="btn-navy" style="padding:11px 22px;font-size:0.88rem;border-color:rgba(200,168,75,0.3);color:var(--gold-light);">הקדש שיעור זה</a>
+        </div>
+        <a href="lessons.html" style="color:var(--gold);font-size:0.88rem;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:gap 0.2s;" onmouseover="this.style.gap='10px'" onmouseout="this.style.gap='6px'">
+          לכל הארכיון
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.58L10.83 12l4.58-4.59L14 6l-6 6 6 6z" transform="rotate(180 12 12)"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ LESSONS GRID ══ -->
+<section style="padding:100px 0;background:var(--cream);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;">
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:16px;" class="reveal">
+      <div>
+        <div class="section-tag">ארכיון שיעורים</div>
+        <h2 style="font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;color:var(--navy);margin-top:8px;">שיעורים <span style="color:var(--gold);">אחרונים</span></h2>
+      </div>
+      <a href="lessons.html" class="btn-navy" style="padding:11px 22px;font-size:0.88rem;">לכל השיעורים →</a>
+    </div>
+
+    <div class="lessons-home-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+
+      <!-- Card 1 -->
+      <div class="lesson-card reveal">
+        <div style="position:relative;overflow:hidden;">
+          <iframe src="https://www.youtube.com/embed/J-__8TMDBEM" style="width:100%;aspect-ratio:16/9;display:block;pointer-events:none;" frameborder="0"></iframe>
+          <div style="position:absolute;inset:0;background:rgba(12,27,51,0.28);display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="this.parentElement.querySelector('iframe').style.pointerEvents='all';this.style.display='none'">
+            <button class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--navy)"><path d="M8 5v14l11-7z"/></svg></button>
+          </div>
+        </div>
+        <div style="padding:18px 20px 22px;">
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:3px 9px;border-radius:2px;font-size:0.68rem;font-weight:700;">פרשת השבוע</span>
+            <span style="background:rgba(12,27,51,0.05);color:var(--text-muted);padding:3px 9px;border-radius:2px;font-size:0.68rem;">48 דקות</span>
+          </div>
+          <h3 style="font-size:1rem;font-weight:700;color:var(--navy);line-height:1.4;">פרשת בראשית — בתחילת הכל</h3>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;line-height:1.6;">מה מלמד אותנו סיפור הבריאה על ייעוד האדם?</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(12,27,51,0.06);">
+            <span style="font-size:0.72rem;color:var(--text-muted);">תשרי תשפ״ה</span>
+            <a href="dedication.html" style="font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;">✦ הקדשה</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="lesson-card reveal" style="transition-delay:0.1s;">
+        <div style="position:relative;overflow:hidden;">
+          <iframe src="https://www.youtube.com/embed/J-__8TMDBEM" style="width:100%;aspect-ratio:16/9;display:block;pointer-events:none;" frameborder="0"></iframe>
+          <div style="position:absolute;inset:0;background:rgba(12,27,51,0.28);display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="this.parentElement.querySelector('iframe').style.pointerEvents='all';this.style.display='none'">
+            <button class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--navy)"><path d="M8 5v14l11-7z"/></svg></button>
+          </div>
+        </div>
+        <div style="padding:18px 20px 22px;">
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:3px 9px;border-radius:2px;font-size:0.68rem;font-weight:700;">חגים</span>
+            <span style="background:rgba(12,27,51,0.05);color:var(--text-muted);padding:3px 9px;border-radius:2px;font-size:0.68rem;">62 דקות</span>
+          </div>
+          <h3 style="font-size:1rem;font-weight:700;color:var(--navy);line-height:1.4;">פסח — חירות אמיתית</h3>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;line-height:1.6;">מה משמעות החירות ביום שבו יצאנו ממצרים?</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(12,27,51,0.06);">
+            <span style="font-size:0.72rem;color:var(--text-muted);">ניסן תשפ״ה</span>
+            <a href="dedication.html" style="font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;">✦ הקדשה</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="lesson-card reveal" style="transition-delay:0.2s;">
+        <div style="position:relative;overflow:hidden;">
+          <iframe src="https://www.youtube.com/embed/J-__8TMDBEM" style="width:100%;aspect-ratio:16/9;display:block;pointer-events:none;" frameborder="0"></iframe>
+          <div style="position:absolute;inset:0;background:rgba(12,27,51,0.28);display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="this.parentElement.querySelector('iframe').style.pointerEvents='all';this.style.display='none'">
+            <button class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--navy)"><path d="M8 5v14l11-7z"/></svg></button>
+          </div>
+        </div>
+        <div style="padding:18px 20px 22px;">
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:3px 9px;border-radius:2px;font-size:0.68rem;font-weight:700;">אמונה</span>
+            <span style="background:rgba(12,27,51,0.05);color:var(--text-muted);padding:3px 9px;border-radius:2px;font-size:0.68rem;">55 דקות</span>
+          </div>
+          <h3 style="font-size:1rem;font-weight:700;color:var(--navy);line-height:1.4;">אמונה בשעת משבר</h3>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;line-height:1.6;">כיצד שומרים על אמונה בתוך קשיי החיים?</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(12,27,51,0.06);">
+            <span style="font-size:0.72rem;color:var(--text-muted);">אדר תשפ״ה</span>
+            <a href="dedication.html" style="font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;">✦ הקדשה</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ BOOKS ══ -->
+<section style="padding:100px 0;background:linear-gradient(180deg,#f0ece3,var(--cream));overflow:hidden;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;">
+
+    <div style="text-align:center;margin-bottom:56px;" class="reveal">
+      <div class="section-tag">פרסומים</div>
+      <h2 style="font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:900;color:var(--navy);margin-top:8px;">
+        ספרים ו<span style="color:var(--gold);">פרסומים</span>
+      </h2>
+      <div class="gold-divider center"></div>
+      <p style="color:var(--text-muted);font-size:0.95rem;max-width:480px;margin:0 auto;line-height:1.85;">מעל 30 ספרים בנושאי הלכה, אמונה, מחשבת ישראל וחגים</p>
+    </div>
+
+    <div class="books-home-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:40px;">
+
+      <!-- Book 1 -->
+      <div class="book-card-home reveal">
+        <div style="aspect-ratio:2/3;background:linear-gradient(155deg,#1a2f55,#0C1B33);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 40%,rgba(200,168,75,0.1),transparent 70%);"></div>
+          <div style="text-align:center;padding:24px;position:relative;z-index:1;">
+            <div style="font-size:2.8rem;margin-bottom:12px;">📖</div>
+            <div style="font-family:'Frank Ruhl Libre',serif;font-size:1rem;font-weight:700;color:var(--gold-light);line-height:1.3;">אורחות חיים</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:6px;">הלכה ואמונה</div>
+          </div>
+        </div>
+        <div style="padding:16px 18px 18px;">
+          <h4 style="font-size:0.92rem;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:6px;">אורחות חיים</h4>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.6;">מדריך הלכתי מקיף לחיי היום יום</p>
+          <a href="books.html" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;margin-top:10px;transition:gap 0.2s;" onmouseover="this.style.gap='8px'" onmouseout="this.style.gap='4px'">
+            פרטים נוספים →
+          </a>
+        </div>
+      </div>
+
+      <!-- Book 2 -->
+      <div class="book-card-home reveal" style="transition-delay:0.08s;">
+        <div style="aspect-ratio:2/3;background:linear-gradient(155deg,#2a1a0a,#3d2510);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 40%,rgba(200,168,75,0.12),transparent 70%);"></div>
+          <div style="text-align:center;padding:24px;position:relative;z-index:1;">
+            <div style="font-size:2.8rem;margin-bottom:12px;">✡️</div>
+            <div style="font-family:'Frank Ruhl Libre',serif;font-size:1rem;font-weight:700;color:var(--gold-light);line-height:1.3;">אמונת ישראל</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:6px;">מחשבת ישראל</div>
+          </div>
+        </div>
+        <div style="padding:16px 18px 18px;">
+          <h4 style="font-size:0.92rem;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:6px;">אמונת ישראל</h4>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.6;">יסודות האמונה בעולם המודרני</p>
+          <a href="books.html" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;margin-top:10px;transition:gap 0.2s;" onmouseover="this.style.gap='8px'" onmouseout="this.style.gap='4px'">
+            פרטים נוספים →
+          </a>
+        </div>
+      </div>
+
+      <!-- Book 3 -->
+      <div class="book-card-home reveal" style="transition-delay:0.16s;">
+        <div style="aspect-ratio:2/3;background:linear-gradient(155deg,#0a2020,#0d2e2e);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 40%,rgba(200,168,75,0.1),transparent 70%);"></div>
+          <div style="text-align:center;padding:24px;position:relative;z-index:1;">
+            <div style="font-size:2.8rem;margin-bottom:12px;">🕯️</div>
+            <div style="font-family:'Frank Ruhl Libre',serif;font-size:1rem;font-weight:700;color:var(--gold-light);line-height:1.3;">שבת ומועד</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:6px;">חגים ומועדים</div>
+          </div>
+        </div>
+        <div style="padding:16px 18px 18px;">
+          <h4 style="font-size:0.92rem;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:6px;">שבת ומועד</h4>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.6;">הלכות ומשמעויות השבת והחגים</p>
+          <a href="books.html" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;margin-top:10px;transition:gap 0.2s;" onmouseover="this.style.gap='8px'" onmouseout="this.style.gap='4px'">
+            פרטים נוספים →
+          </a>
+        </div>
+      </div>
+
+      <!-- Book 4 -->
+      <div class="book-card-home reveal" style="transition-delay:0.24s;">
+        <div style="aspect-ratio:2/3;background:linear-gradient(155deg,#1e0a2e,#2d1045);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 40%,rgba(200,168,75,0.1),transparent 70%);"></div>
+          <div style="text-align:center;padding:24px;position:relative;z-index:1;">
+            <div style="font-size:2.8rem;margin-bottom:12px;">📜</div>
+            <div style="font-family:'Frank Ruhl Libre',serif;font-size:1rem;font-weight:700;color:var(--gold-light);line-height:1.3;">פרשה לחיים</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:6px;">פרשת השבוע</div>
+          </div>
+        </div>
+        <div style="padding:16px 18px 18px;">
+          <h4 style="font-size:0.92rem;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:6px;">פרשה לחיים</h4>
+          <p style="font-size:0.75rem;color:var(--text-muted);line-height:1.6;">לקחים מפרשת השבוע לחיי היום יום</p>
+          <a href="books.html" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;margin-top:10px;transition:gap 0.2s;" onmouseover="this.style.gap='8px'" onmouseout="this.style.gap='4px'">
+            פרטים נוספים →
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;" class="reveal">
+      <a href="books.html" class="btn-navy">לכל הספרים</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ EVENTS ══ -->
+<section style="padding:100px 0;background:var(--cream);">
+  <div style="max-width:1000px;margin:0 auto;padding:0 28px;">
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:16px;" class="reveal">
+      <div>
+        <div class="section-tag">לוח הרצאות</div>
+        <h2 style="font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;color:var(--navy);margin-top:8px;">
+          הרצאות <span style="color:var(--gold);">קרובות</span>
+        </h2>
+      </div>
+      <a href="events.html" class="btn-navy" style="padding:11px 22px;font-size:0.88rem;">לכל האירועים →</a>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+
+      <!-- Event 1 -->
+      <div class="event-row-home reveal">
+        <div style="min-width:80px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:10px;padding:12px 10px;text-align:center;color:white;box-shadow:0 4px 14px rgba(12,27,51,0.22);">
+          <div style="font-size:1.6rem;font-weight:900;font-family:'Frank Ruhl Libre',serif;line-height:1;">14</div>
+          <div style="font-size:0.65rem;letter-spacing:0.08em;color:var(--gold-light);margin-top:3px;">אפריל</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <h4 style="font-size:0.98rem;font-weight:700;color:var(--navy);line-height:1.3;">שיעור חודשי — פרשת אחרי מות</h4>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:3px;">בית כנסת המרכזי, ירושלים · 20:00</p>
+        </div>
+        <a href="events.html" class="btn-gold" style="padding:9px 18px;font-size:0.82rem;white-space:nowrap;flex-shrink:0;">להרשמה</a>
+      </div>
+
+      <!-- Event 2 -->
+      <div class="event-row-home reveal" style="transition-delay:0.08s;">
+        <div style="min-width:80px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:10px;padding:12px 10px;text-align:center;color:white;box-shadow:0 4px 14px rgba(12,27,51,0.22);">
+          <div style="font-size:1.6rem;font-weight:900;font-family:'Frank Ruhl Libre',serif;line-height:1;">22</div>
+          <div style="font-size:0.65rem;letter-spacing:0.08em;color:var(--gold-light);margin-top:3px;">אפריל</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <h4 style="font-size:0.98rem;font-weight:700;color:var(--navy);line-height:1.3;">הרצאה ציבורית — אמונה בעולם המודרני</h4>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:3px;">אולם אביב, תל אביב · 19:30</p>
+        </div>
+        <a href="events.html" class="btn-gold" style="padding:9px 18px;font-size:0.82rem;white-space:nowrap;flex-shrink:0;">להרשמה</a>
+      </div>
+
+      <!-- Event 3 -->
+      <div class="event-row-home reveal" style="transition-delay:0.16s;">
+        <div style="min-width:80px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:10px;padding:12px 10px;text-align:center;color:white;box-shadow:0 4px 14px rgba(12,27,51,0.22);">
+          <div style="font-size:1.6rem;font-weight:900;font-family:'Frank Ruhl Libre',serif;line-height:1;">2</div>
+          <div style="font-size:0.65rem;letter-spacing:0.08em;color:var(--gold-light);margin-top:3px;">מאי</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <h4 style="font-size:0.98rem;font-weight:700;color:var(--navy);line-height:1.3;">כנס חג השבועות — קבלת התורה</h4>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:3px;">אולם ישיבת הכותל, ירושלים · כל הלילה</p>
+        </div>
+        <a href="events.html" class="btn-gold" style="padding:9px 18px;font-size:0.82rem;white-space:nowrap;flex-shrink:0;">להרשמה</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ PARTNERSHIP ══ -->
+<section id="partnership" style="padding:100px 0;background:linear-gradient(155deg,#060f20,#0C1B33 45%,#162444 75%,#0f2240);position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 55%,rgba(200,168,75,0.06),transparent 65%);pointer-events:none;"></div>
+  <div style="position:absolute;inset:0;opacity:0.025;background-image:linear-gradient(rgba(200,168,75,1) 1px,transparent 1px),linear-gradient(90deg,rgba(200,168,75,1) 1px,transparent 1px);background-size:48px 48px;"></div>
+
+  <div style="max-width:1100px;margin:0 auto;padding:0 28px;position:relative;z-index:1;">
+
+    <div style="text-align:center;margin-bottom:64px;" class="reveal">
+      <div class="section-tag-light">שותפות בתורה</div>
+      <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:900;color:white;margin-top:10px;line-height:1.15;">
+        הצטרפו ל<span style="color:var(--gold-light);">שותפות תורנית</span>
+      </h2>
+      <div class="gold-divider center"></div>
+      <p style="color:rgba(255,255,255,0.55);font-size:0.97rem;line-height:1.85;max-width:540px;margin:0 auto;">
+        תמכו בהפצת תורה, שיעורים ופרסומים. כל תרומה מאפשרת להגיע לאנשים נוספים.
+      </p>
+    </div>
+
+    <div class="partner-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px;">
+
+      <!-- Tier 1 -->
+      <div class="partner-tier reveal">
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.16em;color:rgba(255,255,255,0.4);margin-bottom:16px;">תורם</div>
+        <div style="font-family:'Frank Ruhl Libre',serif;font-size:2.4rem;font-weight:900;color:var(--gold-light);line-height:1;">₪180</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.35);margin-bottom:20px;">לחודש</div>
+        <div style="width:40px;height:1px;background:rgba(200,168,75,0.3);margin:0 auto 20px;"></div>
+        <ul style="list-style:none;padding:0;margin-bottom:28px;display:flex;flex-direction:column;gap:10px;">
+          <li style="font-size:0.84rem;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:8px;"><span style="color:var(--gold);">✓</span>גישה לכל השיעורים</li>
+          <li style="font-size:0.84rem;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:8px;"><span style="color:var(--gold);">✓</span>עלון שבועי</li>
+          <li style="font-size:0.84rem;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:8px;"><span style="color:var(--gold);">✓</span>הנחה על ספרים</li>
+        </ul>
+        <a href="dedication.html" class="btn-outline-light" style="width:100%;justify-content:center;">הצטרף</a>
+      </div>
+
+      <!-- Tier 2 — Featured -->
+      <div class="partner-tier featured reveal" style="transform:scale(1.04);transition-delay:0.08s;">
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.16em;color:var(--gold);margin-bottom:16px;">פטרון ✦</div>
+        <div style="font-family:'Frank Ruhl Libre',serif;font-size:2.4rem;font-weight:900;color:var(--gold-light);line-height:1;">₪500</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.35);margin-bottom:20px;">לחודש</div>
+        <div style="width:40px;height:1px;background:rgba(200,168,75,0.5);margin:0 auto 20px;"></div>
+        <ul style="list-style:none;padding:0;margin-bottom:28px;display:flex;flex-direction:column;gap:10px;">
+          <li style="font-size:0.84rem;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:8px;"><span style="color:var(--gold);">✓</span>כל הטבות התורם</li>
+          <li style="font-size:0.84rem;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:8px;"><span style="color:var(--gold);">✓</span>שיעור חודשי ייחודי</li>
+          <li style="font-size:0.84rem;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:8px;"><span style="color:var(--gold);">✓</span>ספר מתנה בשנה</li>
+          <li style="font-size:0.84rem;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:8px;"><span style="color:var(--gold);">✓</span>הקדשה בשמך</li>
+        </ul>
+        <a href="dedication.html" class="btn-gold" style="width:100%;justify-content:center;">הצטרף עכשיו</a>
+      </div>
+
+      <!-- Tier 3 -->
+      <div class="partner-tier reveal" style="transition-delay:0.16s;">
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.16em;color:rgba(255,255,255,0.4);margin-bottom:16px;">מייסד</div>
+        <div style="font-family:'Frank Ruhl Libre',serif;font-size:2.4rem;font-weight:900;color:var(--gold-light);line-height:1;">₪1,800</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.35);margin-bottom:20px;">לחודש</div>
+        <div style="width:40px;height:1px;background:rgba(200,168,75,0.3);margin:0 auto 20px;"></div>
+        <ul style="list-style:none;padding:0;margin-bottom:28px;display:flex;flex-direction:column;gap:10px;">
+          <li style="font-size:0.84rem;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:8px;"><span style="color:var(--gold);">✓</span>כל הטבות הפטרון</li>
+          <li style="font-size:0.84rem;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:8px;"><span style="color:var(--gold);">✓</span>פגישה אישית שנתית</li>
+          <li style="font-size:0.84rem;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:8px;"><span style="color:var(--gold);">✓</span>הכרה מיוחדת בפרסומים</li>
+          <li style="font-size:0.84rem;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:8px;"><span style="color:var(--gold);">✓</span>הזמנות לאירועים סגורים</li>
+        </ul>
+        <a href="dedication.html" class="btn-outline-light" style="width:100%;justify-content:center;">הצטרף</a>
+      </div>
+
+    </div>
+
+    <!-- One-time donation -->
+    <div style="text-align:center;padding:36px;background:rgba(255,255,255,0.03);border:1px solid rgba(200,168,75,0.15);border-radius:12px;" class="reveal">
+      <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:16px;">מעדיפים תרומה חד-פעמית?</p>
+      <a href="dedication.html" class="btn-gold">לתרומה ולהקדשה</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ CTA STRIP ══ -->
+<section style="padding:80px 0;background:var(--gold);position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;opacity:0.06;background-image:linear-gradient(rgba(12,27,51,1) 1px,transparent 1px),linear-gradient(90deg,rgba(12,27,51,1) 1px,transparent 1px);background-size:32px 32px;"></div>
+  <div style="max-width:800px;margin:0 auto;padding:0 28px;text-align:center;position:relative;z-index:1;">
+    <h2 style="font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;color:var(--navy);margin-bottom:16px;line-height:1.2;" class="reveal">
+      הקדישו שיעור לזכות יקיריכם
+    </h2>
+    <p style="color:rgba(12,27,51,0.65);font-size:1rem;line-height:1.8;margin-bottom:32px;max-width:520px;margin-left:auto;margin-right:auto;" class="reveal">
+      הקדשת שיעור היא מעשה של אהבה ועידוד תורה. כל הקדשה מגיעה עם תעודה מהודרת.
+    </p>
+    <div class="reveal" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+      <a href="dedication.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:var(--gold-light);font-family:'Heebo',sans-serif;font-weight:700;font-size:1rem;padding:16px 36px;border-radius:4px;text-decoration:none;box-shadow:0 6px 24px rgba(12,27,51,0.3);transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 36px rgba(12,27,51,0.4)'" onmouseout="this.style.transform='';this.style.boxShadow='0 6px 24px rgba(12,27,51,0.3)'">
+        הקדישו שיעור
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ FOOTER ══ -->
+<footer style="background:linear-gradient(180deg,#060f20,#040c18);padding:64px 0 32px;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 28px;">
+
+    <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:52px;flex-wrap:wrap;" class="footer-grid">
+
+      <!-- Brand -->
+      <div>
+        <div style="font-family:'Frank Ruhl Libre',serif;font-size:1.3rem;font-weight:700;color:var(--gold-light);margin-bottom:6px;">הרב מאיר אליהו</div>
+        <div style="font-size:0.62rem;letter-spacing:0.14em;color:rgba(255,255,255,0.25);margin-bottom:18px;">לב מאיר ישראל</div>
+        <p style="color:rgba(255,255,255,0.38);font-size:0.82rem;line-height:1.8;max-width:220px;">
+          מורה, מחבר ומרצה — מוביל אלפים בדרך חיים של תורה ואמונה.
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;color:rgba(255,255,255,0.25);margin-bottom:16px;">ניווט</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="index.html" style="color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.87rem;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">דף הבית</a>
+          <a href="lessons.html" style="color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.87rem;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">שיעורים</a>
+          <a href="books.html" style="color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.87rem;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">ספרים</a>
+          <a href="events.html" style="color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.87rem;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">הרצאות</a>
+        </div>
+      </div>
+
+      <!-- More links -->
+      <div>
+        <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;color:rgba(255,255,255,0.25);margin-bottom:16px;">נוסף</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="dedication.html" style="color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.87rem;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">הקדשה</a>
+          <a href="#partnership" style="color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.87rem;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">שותפות</a>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;color:rgba(255,255,255,0.25);margin-bottom:16px;">יצירת קשר</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <span style="color:rgba(255,255,255,0.45);font-size:0.84rem;">info@ravmeir.co.il</span>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <!-- WhatsApp -->
+            <a href="#" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(200,168,75,0.15)';this.style.borderColor='rgba(200,168,75,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.borderColor='rgba(255,255,255,0.1)'" title="WhatsApp">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </a>
+            <!-- YouTube -->
+            <a href="#" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(200,168,75,0.15)';this.style.borderColor='rgba(200,168,75,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.borderColor='rgba(255,255,255,0.1)'" title="YouTube">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+            </a>
+            <!-- Facebook -->
+            <a href="#" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(200,168,75,0.15)';this.style.borderColor='rgba(200,168,75,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.borderColor='rgba(255,255,255,0.1)'" title="Facebook">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="border-top:1px solid rgba(255,255,255,0.07);padding-top:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <span style="font-size:0.78rem;color:rgba(255,255,255,0.22);">© 2025 הרב מאיר אליהו — לב מאיר ישראל. כל הזכויות שמורות.</span>
+      <span style="font-size:0.72rem;color:rgba(255,255,255,0.18);">בנוי באהבה לתורה ולישראל</span>
+    </div>
+
+  </div>
+</footer>
+
+<style>
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+  @keyframes scrollLine{0%{opacity:0;transform:scaleY(0);transform-origin:top;}50%{opacity:1;transform:scaleY(1);}100%{opacity:0;transform:scaleY(1);transform-origin:bottom;}}
+  @media(max-width:1024px){.footer-grid{grid-template-columns:1fr 1fr!important;}.featured-layout{grid-template-columns:1fr!important;}}
+  @media(max-width:640px){.footer-grid{grid-template-columns:1fr!important;}.partner-grid{grid-template-columns:1fr!important;}}
+</style>
+
+<script>
+  // Mobile menu
+  const btn = document.getElementById('hamburgerBtn');
+  const menu = document.getElementById('mobileMenu');
+  btn.addEventListener('click', () => {
+    const open = menu.style.display === 'block';
+    menu.style.display = open ? 'none' : 'block';
+    btn.textContent = open ? '☰' : '✕';
+  });
+
+  // Hero entrance
+  gsap.registerPlugin(ScrollTrigger);
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  tl.to('#heroTag',   { opacity:1, y:0, duration:0.7, delay:0.3 })
+    .to('#heroH1',    { opacity:1, y:0, duration:0.8 }, '-=0.4')
+    .to('#heroBar',   { opacity:1, duration:0.5 }, '-=0.5')
+    .to('#heroP',     { opacity:1, y:0, duration:0.8 }, '-=0.4')
+    .to('#heroBtns',  { opacity:1, y:0, duration:0.7 }, '-=0.5')
+    .to('#heroStats', { opacity:1, y:0, duration:0.7 }, '-=0.4');
+
+  // Scroll reveals
+  gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.to(el, {
+      opacity:1, y:0, duration:0.75, ease:'power3.out',
+      scrollTrigger:{ trigger:el, start:'top 86%', toggleActions:'play none none none' }
+    });
+  });
+  gsap.utils.toArray('.reveal-left').forEach(el => {
+    gsap.to(el, {
+      opacity:1, x:0, duration:0.8, ease:'power3.out',
+      scrollTrigger:{ trigger:el, start:'top 85%', toggleActions:'play none none none' }
+    });
+  });
+  gsap.utils.toArray('.reveal-right').forEach(el => {
+    gsap.to(el, {
+      opacity:1, x:0, duration:0.8, ease:'power3.out',
+      scrollTrigger:{ trigger:el, start:'top 85%', toggleActions:'play none none none' }
+    });
+  });
+
+  // Featured layout responsive
+  function updateFeaturedLayout() {
+    const fl = document.querySelector('.featured-layout');
+    if(!fl) return;
+    if(window.innerWidth < 1024) {
+      fl.style.gridTemplateColumns = '1fr';
+    } else {
+      fl.style.gridTemplateColumns = '1.1fr 1fr';
+    }
+  }
+  updateFeaturedLayout();
+  window.addEventListener('resize', updateFeaturedLayout);
+</script>
+</body>
+</html>

@@ -1,0 +1,354 @@
+﻿<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>שיעורים | הרב מאיר אליהו</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root{--navy:#0C1B33;--navy-mid:#162444;--gold:#C8A84B;--gold-light:#E8D49A;--cream:#F5F2EB;--white:#FFFFFF;--text-muted:#6B7280;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Heebo',sans-serif;background:var(--cream);color:var(--navy);direction:rtl;overflow-x:hidden;}
+    h1,h2,h3,h4{font-family:'Frank Ruhl Libre',serif;letter-spacing:-0.02em;}
+    ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--cream);} ::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px;}
+
+    nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(12,27,51,0.97);backdrop-filter:blur(14px);box-shadow:0 2px 24px rgba(12,27,51,0.3);}
+    .nav-link{color:rgba(255,255,255,0.78);text-decoration:none;font-size:0.88rem;font-weight:500;transition:color 0.2s;}
+    .nav-link:hover{color:var(--gold-light);}
+
+    .btn-gold{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#C8A84B,#E8C96B,#C8A84B);color:var(--navy);font-family:'Heebo',sans-serif;font-weight:700;font-size:0.92rem;padding:12px 28px;border-radius:4px;border:none;cursor:pointer;text-decoration:none;white-space:nowrap;box-shadow:0 4px 18px rgba(200,168,75,0.32);transition:transform 0.2s,box-shadow 0.2s;}
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,168,75,0.48);}
+    .btn-gold:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+    .btn-navy{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:var(--gold-light);font-family:'Heebo',sans-serif;font-weight:600;font-size:0.92rem;padding:12px 28px;border-radius:4px;border:1.5px solid rgba(200,168,75,0.28);cursor:pointer;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(12,27,51,0.18);transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;}
+    .btn-navy:hover{transform:translateY(-2px);border-color:var(--gold);}
+    .btn-navy:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+    .section-tag{display:inline-block;font-size:0.67rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);background:rgba(200,168,75,0.08);border:1px solid rgba(200,168,75,0.22);padding:4px 12px;border-radius:2px;margin-bottom:12px;}
+    .gold-divider{width:56px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:14px 0;}
+    .gold-divider.center{margin:14px auto;background:linear-gradient(90deg,transparent,var(--gold),transparent);width:80px;}
+
+    .filter-btn{padding:8px 20px;border-radius:50px;border:1.5px solid rgba(12,27,51,0.13);background:var(--white);color:var(--navy);font-family:'Heebo',sans-serif;font-size:0.84rem;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+    .filter-btn.active,.filter-btn:hover{background:var(--navy);color:var(--gold-light);border-color:var(--navy);}
+    .filter-btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+    .lesson-card{background:var(--white);border-radius:12px;overflow:hidden;box-shadow:0 4px 18px rgba(12,27,51,0.07),0 1px 4px rgba(12,27,51,0.04);border:1px solid rgba(12,27,51,0.06);transition:transform 0.3s,box-shadow 0.3s;}
+    .lesson-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(12,27,51,0.14),0 4px 14px rgba(12,27,51,0.07);}
+
+    .play-btn{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#C8A84B,#E8C96B);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 20px rgba(200,168,75,0.45);transition:transform 0.2s,box-shadow 0.2s;border:none;}
+    .play-btn:hover{transform:scale(1.1);box-shadow:0 10px 28px rgba(200,168,75,0.6);}
+    .play-btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+    /* Featured lesson video */
+    .featured-video-wrap{position:relative;border-radius:14px;overflow:hidden;box-shadow:0 32px 72px rgba(6,15,32,0.55),0 8px 24px rgba(12,27,51,0.3);}
+
+    .reveal{opacity:0;transform:translateY(24px);}
+    .reveal-left{opacity:0;transform:translateX(-28px);}
+    .reveal-right{opacity:0;transform:translateX(28px);}
+
+    @media(max-width:1024px){.nav-desktop{display:none!important;}.hamburger-btn{display:flex!important;}.featured-grid{grid-template-columns:1fr!important;}.lessons-grid{grid-template-columns:repeat(2,1fr)!important;}}
+    @media(max-width:640px){.lessons-grid{grid-template-columns:1fr!important;}.filters-row{overflow-x:auto;padding-bottom:8px;flex-wrap:nowrap!important;-webkit-overflow-scrolling:touch;}}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:64px;">
+    <a href="index.html" style="text-decoration:none;display:flex;flex-direction:column;line-height:1.1;">
+      <span style="font-family:'Frank Ruhl Libre',serif;font-size:1.2rem;font-weight:700;color:var(--gold-light);">הרב מאיר אליהו</span>
+      <span style="font-size:0.58rem;letter-spacing:0.13em;color:rgba(255,255,255,0.38);">לב מאיר ישראל</span>
+    </a>
+    <div class="nav-desktop" style="display:flex;gap:26px;">
+      <a href="index.html" class="nav-link">דף הבית</a>
+      <a href="lessons.html" class="nav-link" style="color:var(--gold-light);">שיעורים</a>
+      <a href="books.html" class="nav-link">ספרים</a>
+      <a href="events.html" class="nav-link">הרצאות</a>
+    </div>
+    <div class="nav-desktop" style="display:flex;gap:10px;">
+      <a href="dedication.html" class="btn-gold" style="padding:9px 16px;font-size:0.82rem;">הקדשת שיעור</a>
+    </div>
+    <button class="hamburger-btn" onclick="window.location='index.html'" style="display:none;background:none;border:none;cursor:pointer;color:white;font-size:1.5rem;padding:6px;">☰</button>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section style="padding:120px 0 70px;background:linear-gradient(155deg,#060f20,#0C1B33 45%,#162444 75%,#0f2240);position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 55% 50% at 50% 60%,rgba(200,168,75,0.06),transparent 65%);"></div>
+  <div style="max-width:900px;margin:0 auto;padding:0 28px;text-align:center;position:relative;z-index:1;">
+    <div class="section-tag" style="color:var(--gold-light);border-color:rgba(200,168,75,0.28);">ארכיון שיעורים</div>
+    <h1 style="font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;color:white;margin-top:12px;line-height:1.15;">
+      שיעורי תורה<br /><span style="color:var(--gold-light);">מהרב מאיר אליהו</span>
+    </h1>
+    <div style="width:80px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:20px auto;"></div>
+    <p style="color:rgba(255,255,255,0.62);font-size:1rem;line-height:1.85;max-width:540px;margin:0 auto;">
+      מעל 500 שיעורים בפרשת השבוע, הלכה, אמונה ומועדים — לכל רמה, בכל זמן ובכל מקום
+    </p>
+  </div>
+</section>
+
+<!-- FEATURED LESSON -->
+<section style="padding:80px 0;background:var(--navy);position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 40% 50%,rgba(200,168,75,0.05),transparent 65%);"></div>
+  <div style="max-width:1200px;margin:0 auto;padding:0 28px;position:relative;z-index:1;">
+    <div class="featured-grid" style="display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center;">
+
+      <div class="featured-video-wrap">
+        <iframe src="https://www.youtube.com/embed/J-__8TMDBEM" title="שיעור מרכזי" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="width:100%;aspect-ratio:16/9;display:block;"></iframe>
+      </div>
+
+      <div>
+        <div class="section-tag" style="color:var(--gold);">שיעור השבוע</div>
+        <h2 style="font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:900;color:white;margin-top:12px;line-height:1.2;">
+          פרשת תזריע —<br /><span style="color:var(--gold-light);">טהרה פנימית</span>
+        </h2>
+        <div class="gold-divider"></div>
+        <p style="color:rgba(255,255,255,0.62);font-size:0.95rem;line-height:1.85;margin-top:12px;">
+          הרב מאיר אליהו מסביר את עומקה של פרשת תזריע — מה מלמדת אותנו הצרעת על השפה, על הלב, ועל יחסי האדם עם חברו ועם ה'.
+        </p>
+        <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;">
+          <span style="background:rgba(200,168,75,0.12);border:1px solid rgba(200,168,75,0.25);color:var(--gold-light);padding:4px 12px;border-radius:2px;font-size:0.75rem;font-weight:600;">פרשת השבוע</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.6);padding:4px 12px;border-radius:2px;font-size:0.75rem;">52 דקות</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.6);padding:4px 12px;border-radius:2px;font-size:0.75rem;">ניסן תשפ״ה</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;">
+          <a href="#" class="btn-gold">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            הורד PDF
+          </a>
+          <a href="dedication.html" class="btn-navy" style="border-color:rgba(200,168,75,0.3);color:var(--gold-light);">הקדש שיעור זה</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALL LESSONS -->
+<section id="allLessons" style="padding:80px 0 120px;background:var(--cream);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;">
+
+    <!-- Filters row -->
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:48px;align-items:center;" class="filters-row reveal">
+      <span style="font-size:0.8rem;font-weight:600;color:var(--text-muted);margin-left:4px;white-space:nowrap;">נושא:</span>
+      <button class="filter-btn active" onclick="filterLessons('all',this)">הכל</button>
+      <button class="filter-btn" onclick="filterLessons('parasha',this)">פרשת השבוע</button>
+      <button class="filter-btn" onclick="filterLessons('hagim',this)">חגים ומועדים</button>
+      <button class="filter-btn" onclick="filterLessons('halacha',this)">הלכה</button>
+      <button class="filter-btn" onclick="filterLessons('emunah',this)">אמונה</button>
+    </div>
+
+    <!-- Lessons grid -->
+    <div class="lessons-grid" id="lessonsGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px;">
+
+      <!-- 9 lesson cards -->
+      <div class="lesson-card reveal" data-cat="parasha">
+        <div style="position:relative;overflow:hidden;">
+          <iframe src="https://www.youtube.com/embed/J-__8TMDBEM" style="width:100%;aspect-ratio:16/9;display:block;pointer-events:none;" frameborder="0"></iframe>
+          <div style="position:absolute;inset:0;background:rgba(12,27,51,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="this.parentElement.querySelector('iframe').style.pointerEvents='all';this.style.display='none'">
+            <button class="play-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--navy)"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div style="padding:18px 20px 20px;">
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:3px 9px;border-radius:2px;font-size:0.68rem;font-weight:700;">פרשת השבוע</span>
+            <span style="background:rgba(12,27,51,0.05);color:var(--text-muted);padding:3px 9px;border-radius:2px;font-size:0.68rem;">48 דקות</span>
+          </div>
+          <h3 style="font-size:1.02rem;font-weight:700;color:var(--navy);line-height:1.4;">פרשת בראשית — בתחילת הכל</h3>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;line-height:1.6;">מה מלמד אותנו סיפור הבריאה על ייעוד האדם?</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(12,27,51,0.06);">
+            <span style="font-size:0.75rem;color:var(--text-muted);">תשרי תשפ״ה</span>
+            <div style="display:flex;gap:8px;">
+              <a href="#" style="font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:4px;transition:color 0.2s;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>PDF
+              </a>
+              <a href="dedication.html" style="font-size:0.78rem;color:var(--navy);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:4px;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--navy)'">✦ הקדשה</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card reveal" data-cat="hagim">
+        <div style="position:relative;overflow:hidden;">
+          <iframe src="https://www.youtube.com/embed/J-__8TMDBEM" style="width:100%;aspect-ratio:16/9;display:block;pointer-events:none;" frameborder="0"></iframe>
+          <div style="position:absolute;inset:0;background:rgba(12,27,51,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="this.parentElement.querySelector('iframe').style.pointerEvents='all';this.style.display='none'">
+            <button class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--navy)"><path d="M8 5v14l11-7z"/></svg></button>
+          </div>
+        </div>
+        <div style="padding:18px 20px 20px;">
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:3px 9px;border-radius:2px;font-size:0.68rem;font-weight:700;">חגים</span>
+            <span style="background:rgba(12,27,51,0.05);color:var(--text-muted);padding:3px 9px;border-radius:2px;font-size:0.68rem;">62 דקות</span>
+          </div>
+          <h3 style="font-size:1.02rem;font-weight:700;color:var(--navy);line-height:1.4;">פסח — חירות אמיתית</h3>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;line-height:1.6;">מה משמעות החירות ביום שבו יצאנו ממצרים?</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(12,27,51,0.06);">
+            <span style="font-size:0.75rem;color:var(--text-muted);">ניסן תשפ״ה</span>
+            <div style="display:flex;gap:8px;">
+              <a href="#" style="font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:4px;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>PDF</a>
+              <a href="dedication.html" style="font-size:0.78rem;color:var(--navy);font-weight:600;text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--navy)'">✦ הקדשה</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card reveal" data-cat="emunah">
+        <div style="position:relative;overflow:hidden;">
+          <iframe src="https://www.youtube.com/embed/J-__8TMDBEM" style="width:100%;aspect-ratio:16/9;display:block;pointer-events:none;" frameborder="0"></iframe>
+          <div style="position:absolute;inset:0;background:rgba(12,27,51,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="this.parentElement.querySelector('iframe').style.pointerEvents='all';this.style.display='none'">
+            <button class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--navy)"><path d="M8 5v14l11-7z"/></svg></button>
+          </div>
+        </div>
+        <div style="padding:18px 20px 20px;">
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:3px 9px;border-radius:2px;font-size:0.68rem;font-weight:700;">אמונה</span>
+            <span style="background:rgba(12,27,51,0.05);color:var(--text-muted);padding:3px 9px;border-radius:2px;font-size:0.68rem;">38 דקות</span>
+          </div>
+          <h3 style="font-size:1.02rem;font-weight:700;color:var(--navy);line-height:1.4;">למה קשה לי להאמין?</h3>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;line-height:1.6;">שאלות יסוד באמונה — ושיחה כנה על הספקות</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(12,27,51,0.06);">
+            <span style="font-size:0.75rem;color:var(--text-muted);">שבט תשפ״ה</span>
+            <div style="display:flex;gap:8px;">
+              <a href="#" style="font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:4px;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>PDF</a>
+              <a href="dedication.html" style="font-size:0.78rem;color:var(--navy);font-weight:600;text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--navy)'">✦ הקדשה</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card reveal" data-cat="parasha">
+        <div style="position:relative;overflow:hidden;">
+          <iframe src="https://www.youtube.com/embed/J-__8TMDBEM" style="width:100%;aspect-ratio:16/9;display:block;pointer-events:none;" frameborder="0"></iframe>
+          <div style="position:absolute;inset:0;background:rgba(12,27,51,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="this.parentElement.querySelector('iframe').style.pointerEvents='all';this.style.display='none'">
+            <button class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--navy)"><path d="M8 5v14l11-7z"/></svg></button>
+          </div>
+        </div>
+        <div style="padding:18px 20px 20px;">
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:3px 9px;border-radius:2px;font-size:0.68rem;font-weight:700;">פרשת השבוע</span>
+            <span style="background:rgba(12,27,51,0.05);color:var(--text-muted);padding:3px 9px;border-radius:2px;font-size:0.68rem;">45 דקות</span>
+          </div>
+          <h3 style="font-size:1.02rem;font-weight:700;color:var(--navy);line-height:1.4;">פרשת נח — בונים עולם</h3>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;line-height:1.6;">מה מלמד נח על אחריות האדם לעולם?</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(12,27,51,0.06);">
+            <span style="font-size:0.75rem;color:var(--text-muted);">מרחשון תשפ״ה</span>
+            <div style="display:flex;gap:8px;">
+              <a href="#" style="font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:4px;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>PDF</a>
+              <a href="dedication.html" style="font-size:0.78rem;color:var(--navy);font-weight:600;text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--navy)'">✦ הקדשה</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card reveal" data-cat="halacha">
+        <div style="position:relative;overflow:hidden;">
+          <iframe src="https://www.youtube.com/embed/J-__8TMDBEM" style="width:100%;aspect-ratio:16/9;display:block;pointer-events:none;" frameborder="0"></iframe>
+          <div style="position:absolute;inset:0;background:rgba(12,27,51,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="this.parentElement.querySelector('iframe').style.pointerEvents='all';this.style.display='none'">
+            <button class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--navy)"><path d="M8 5v14l11-7z"/></svg></button>
+          </div>
+        </div>
+        <div style="padding:18px 20px 20px;">
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:3px 9px;border-radius:2px;font-size:0.68rem;font-weight:700;">הלכה</span>
+            <span style="background:rgba(12,27,51,0.05);color:var(--text-muted);padding:3px 9px;border-radius:2px;font-size:0.68rem;">55 דקות</span>
+          </div>
+          <h3 style="font-size:1.02rem;font-weight:700;color:var(--navy);line-height:1.4;">הלכות שבת — הכנות</h3>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;line-height:1.6;">כל מה שצריך לדעת להכנת שבת כהלכה</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(12,27,51,0.06);">
+            <span style="font-size:0.75rem;color:var(--text-muted);">כסלו תשפ״ה</span>
+            <div style="display:flex;gap:8px;">
+              <a href="#" style="font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:4px;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>PDF</a>
+              <a href="dedication.html" style="font-size:0.78rem;color:var(--navy);font-weight:600;text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--navy)'">✦ הקדשה</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card reveal" data-cat="hagim">
+        <div style="position:relative;overflow:hidden;">
+          <iframe src="https://www.youtube.com/embed/J-__8TMDBEM" style="width:100%;aspect-ratio:16/9;display:block;pointer-events:none;" frameborder="0"></iframe>
+          <div style="position:absolute;inset:0;background:rgba(12,27,51,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="this.parentElement.querySelector('iframe').style.pointerEvents='all';this.style.display='none'">
+            <button class="play-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--navy)"><path d="M8 5v14l11-7z"/></svg></button>
+          </div>
+        </div>
+        <div style="padding:18px 20px 20px;">
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <span style="background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.22);color:var(--gold);padding:3px 9px;border-radius:2px;font-size:0.68rem;font-weight:700;">חגים</span>
+            <span style="background:rgba(12,27,51,0.05);color:var(--text-muted);padding:3px 9px;border-radius:2px;font-size:0.68rem;">70 דקות</span>
+          </div>
+          <h3 style="font-size:1.02rem;font-weight:700;color:var(--navy);line-height:1.4;">ראש השנה — יום הדין</h3>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;line-height:1.6;">מה פירוש "יום הדין" — ומה אנחנו יכולים לעשות?</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(12,27,51,0.06);">
+            <span style="font-size:0.75rem;color:var(--text-muted);">תשרי תשפ״ה</span>
+            <div style="display:flex;gap:8px;">
+              <a href="#" style="font-size:0.78rem;color:var(--gold);font-weight:600;text-decoration:none;display:flex;align-items:center;gap:4px;" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--gold)'"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>PDF</a>
+              <a href="dedication.html" style="font-size:0.78rem;color:var(--navy);font-weight:600;text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--navy)'">✦ הקדשה</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /lessons grid -->
+
+    <!-- Load more -->
+    <div style="text-align:center;margin-top:52px;" class="reveal">
+      <button onclick="this.textContent='טוען...';setTimeout(()=>this.textContent='טען עוד שיעורים',1500)" class="btn-navy" style="padding:14px 40px;">
+        טען עוד שיעורים ↓
+      </button>
+    </div>
+
+    <!-- Dedication Strip -->
+    <div style="margin-top:64px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:14px;padding:40px 44px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;position:relative;overflow:hidden;" class="reveal">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 80% 50%,rgba(200,168,75,0.07),transparent);"></div>
+      <div style="position:relative;z-index:1;">
+        <h3 style="font-size:1.4rem;font-weight:700;color:white;">הקדש שיעור לעילוי נשמה</h3>
+        <p style="color:rgba(255,255,255,0.58);font-size:0.88rem;margin-top:5px;">שמם ייזכר בפי הרב לפני כל המאזינים</p>
+      </div>
+      <a href="dedication.html" class="btn-gold" style="position:relative;z-index:1;padding:13px 32px;">✦ להקדשת שיעור</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#050d19;padding:40px 0 24px;color:rgba(255,255,255,0.45);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+    <div>
+      <div style="font-family:'Frank Ruhl Libre',serif;font-size:1rem;font-weight:700;color:var(--gold-light);">הרב מאיר אליהו</div>
+      <p style="font-size:0.73rem;margin-top:4px;">© 2025 לב מאיר ישראל. כל הזכויות שמורות.</p>
+    </div>
+    <div style="display:flex;gap:20px;">
+      <a href="index.html" style="color:rgba(255,255,255,0.4);font-size:0.78rem;text-decoration:none;">דף הבית</a>
+      <a href="books.html" style="color:rgba(255,255,255,0.4);font-size:0.78rem;text-decoration:none;">ספרים</a>
+      <a href="dedication.html" style="color:rgba(255,255,255,0.4);font-size:0.78rem;text-decoration:none;">הקדשה</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => {
+    ScrollTrigger.create({
+      trigger: el, start: 'top 88%', once: true,
+      onEnter: () => gsap.to(el, { opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'power3.out' })
+    });
+  });
+  gsap.from('.reveal', { opacity: 0, y: 24, stagger: 0.07, duration: 0.9, ease: 'power3.out', delay: 0.2 });
+
+  function filterLessons(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.lesson-card').forEach(card => {
+      const show = cat === 'all' || card.dataset.cat === cat;
+      gsap.to(card, { opacity: show ? 1 : 0.2, scale: show ? 1 : 0.95, duration: 0.3, ease: 'power2.out' });
+      card.style.pointerEvents = show ? '' : 'none';
+    });
+  }
+</script>
+</body>
+</html>
