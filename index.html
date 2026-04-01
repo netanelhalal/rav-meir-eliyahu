@@ -7,768 +7,154 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
-
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --gold:        #c9a84c;
-      --gold-light:  #f0d07a;
-      --gold-glow:   #e8c55a;
-      --deep-blue:   #0a0f1e;
-      --mid-blue:    #0d1730;
-      --navy:        #111d3a;
-      --text-light:  #f0e8d0;
-      --text-muted:  #9fa8b8;
-      --font:        'Heebo', sans-serif;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--font);
-      background: var(--deep-blue);
-      color: var(--text-light);
-      overflow-x: hidden;
-      direction: rtl;
-    }
-
-    /* ─── LOADER ─────────────────────────────────────── */
-    #loader {
-      position: fixed; inset: 0; z-index: 9999;
-      background: var(--deep-blue);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 20px;
-      transition: opacity 0.8s ease, visibility 0.8s ease;
-    }
-    #loader.hidden { opacity: 0; visibility: hidden; }
-
-    .loader-name {
-      font-size: 1.4rem;
-      font-weight: 300;
-      letter-spacing: 0.3em;
-      color: var(--gold);
-      opacity: 0.7;
-    }
-    .loader-bar-wrap {
-      width: 200px; height: 1px;
-      background: rgba(201,168,76,0.15);
-      position: relative; overflow: hidden;
-    }
-    .loader-bar {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, var(--gold), var(--gold-light));
-      transition: width 0.4s ease;
-      box-shadow: 0 0 12px var(--gold-glow);
-    }
-
-    /* ─── NAV ─────────────────────────────────────────── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 24px 48px;
-      display: flex; align-items: center; justify-content: space-between;
-      background: linear-gradient(to bottom, rgba(10,15,30,0.9) 0%, transparent 100%);
-      pointer-events: none;
-    }
-    .nav-logo {
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: var(--gold);
-      pointer-events: all;
-      text-shadow: 0 0 20px rgba(201,168,76,0.4);
-    }
-    .nav-links {
-      display: flex; gap: 36px; list-style: none;
-      pointer-events: all;
-    }
-    .nav-links a {
-      color: rgba(240,232,208,0.7);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 400;
-      letter-spacing: 0.08em;
-      transition: color 0.3s ease;
-    }
-    .nav-links a:hover { color: var(--gold-light); }
-
-    /* ─── HERO ─────────────────────────────────────────── */
-    #hero {
-      position: relative;
-      width: 100%; height: 100vh;
-      overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    #hero-video {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center top;
-    }
-
-    /* layered gradient overlay */
-    .hero-overlay {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 60% 80% at 50% 40%, rgba(10,15,30,0.05) 0%, rgba(10,15,30,0.55) 100%),
-        linear-gradient(to bottom,
-          rgba(10,15,30,0.3) 0%,
-          rgba(10,15,30,0.1) 30%,
-          rgba(10,15,30,0.2) 60%,
-          rgba(10,15,30,0.85) 100%
-        );
-    }
-
-    .hero-content {
-      position: relative; z-index: 2;
-      text-align: center;
-      display: flex; flex-direction: column; align-items: center; gap: 16px;
-    }
-
-    .hero-eyebrow {
-      font-size: 0.85rem;
-      font-weight: 400;
-      letter-spacing: 0.35em;
-      color: var(--gold);
-      opacity: 0;
-      transform: translateY(12px);
-      animation: fadeUp 1.2s ease 1.2s forwards;
-    }
-
-    .hero-title {
-      font-size: clamp(3.5rem, 9vw, 7rem);
-      font-weight: 900;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      color: #fff;
-      text-shadow:
-        0 0 40px rgba(201,168,76,0.5),
-        0 0 80px rgba(201,168,76,0.2),
-        0 2px 4px rgba(0,0,0,0.6);
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 1.4s cubic-bezier(0.16,1,0.3,1) 0.8s forwards;
-    }
-
-    .hero-title span {
-      color: var(--gold-light);
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2vw, 1.25rem);
-      font-weight: 300;
-      color: rgba(240,232,208,0.75);
-      letter-spacing: 0.12em;
-      opacity: 0;
-      transform: translateY(12px);
-      animation: fadeUp 1.2s ease 1.6s forwards;
-    }
-
-    .hero-divider {
-      width: 60px; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      opacity: 0;
-      animation: fadeIn 1s ease 2.2s forwards;
-      box-shadow: 0 0 8px var(--gold-glow);
-    }
-
-    .scroll-hint {
-      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      opacity: 0;
-      animation: fadeIn 1s ease 2.8s forwards;
-      cursor: pointer;
-    }
-    .scroll-hint span {
-      font-size: 0.7rem; letter-spacing: 0.3em; color: var(--gold); opacity: 0.6;
-    }
-    .scroll-arrow {
-      width: 20px; height: 20px;
-      border-right: 1px solid rgba(201,168,76,0.5);
-      border-bottom: 1px solid rgba(201,168,76,0.5);
-      transform: rotate(45deg);
-      animation: bounce 2s ease infinite;
-    }
-
-    /* ─── PARTICLES ─────────────────────────────────────── */
-    #particles-canvas {
-      position: fixed; inset: 0;
-      pointer-events: none; z-index: 1;
-    }
-
-    /* ─── SECTIONS ────────────────────────────────────────── */
-    .section {
-      position: relative;
-      padding: 120px 48px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    /* reveal animation */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.22s; }
-    .reveal-delay-3 { transition-delay: 0.36s; }
-
-    /* ─── ABOUT SECTION ────────────────────────────────────── */
-    #about {
-      padding: 140px 48px 100px;
-    }
-    #about .section-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.3em;
-      color: var(--gold);
-      margin-bottom: 16px;
-      text-transform: uppercase;
-    }
-
-    .section-heading {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      color: #fff;
-      margin-bottom: 24px;
-    }
-
-    .section-body {
-      font-size: 1.05rem;
-      line-height: 1.85;
-      color: rgba(240,232,208,0.7);
-      font-weight: 300;
-    }
-
-    .about-image-wrap {
-      position: relative;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .about-image-wrap img {
-      width: 100%; display: block;
-      filter: brightness(0.9) saturate(1.1);
-    }
-    .about-image-wrap::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .about-image-border {
-      position: absolute; inset: -1px;
-      border-radius: 4px;
-      border: 1px solid rgba(201,168,76,0.15);
-      pointer-events: none;
-    }
-
-    /* ─── STATS ─────────────────────────────────────────── */
-    #stats {
-      background: linear-gradient(180deg, transparent 0%, rgba(13,23,48,0.6) 30%, rgba(13,23,48,0.6) 70%, transparent 100%);
-      padding: 100px 48px;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .stat-card {
-      text-align: center;
-      padding: 48px 32px;
-      border: 1px solid rgba(201,168,76,0.08);
-      background: rgba(10,15,30,0.4);
-      backdrop-filter: blur(10px);
-    }
-    .stat-number {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 900;
-      color: var(--gold-light);
-      display: block;
-      line-height: 1;
-      text-shadow: 0 0 30px rgba(201,168,76,0.3);
-    }
-    .stat-suffix {
-      font-size: 1.3rem;
-      font-weight: 300;
-      color: var(--gold);
-      margin-right: 4px;
-    }
-    .stat-label {
-      display: block;
-      margin-top: 12px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      letter-spacing: 0.15em;
-      font-weight: 400;
-    }
-
-    /* ─── TEACHING SECTION ─────────────────────────────── */
-    #teachings {
-      padding: 120px 48px;
-    }
-    .teachings-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      max-width: 1100px;
-      margin: 48px auto 0;
-    }
-    .teaching-card {
-      padding: 40px 32px;
-      border: 1px solid rgba(201,168,76,0.1);
-      background: rgba(13,23,48,0.5);
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.3s ease, transform 0.3s ease;
-    }
-    .teaching-card:hover {
-      border-color: rgba(201,168,76,0.3);
-      transform: translateY(-4px);
-    }
-    .teaching-card::before {
-      content: '';
-      position: absolute; top: 0; right: 0;
-      width: 60px; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold));
-    }
-    .card-icon {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      display: block;
-    }
-    .card-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 12px;
-    }
-    .card-body {
-      font-size: 0.9rem;
-      line-height: 1.7;
-      color: var(--text-muted);
-      font-weight: 300;
-    }
-
-    /* ─── MARQUEE ──────────────────────────────────────── */
-    .marquee-section {
-      overflow: hidden;
-      padding: 40px 0;
-      border-top: 1px solid rgba(201,168,76,0.08);
-      border-bottom: 1px solid rgba(201,168,76,0.08);
-    }
-    .marquee-track {
-      display: flex;
-      gap: 80px;
-      white-space: nowrap;
-      animation: marquee 25s linear infinite;
-    }
-    .marquee-item {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 900;
-      color: rgba(201,168,76,0.08);
-      letter-spacing: 0.05em;
-      flex-shrink: 0;
-    }
-    .marquee-item.accent { color: rgba(201,168,76,0.18); }
-
-    /* ─── CTA ────────────────────────────────────────────── */
-    #cta {
-      padding: 140px 48px;
-      text-align: center;
-      position: relative;
-    }
-    #cta::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .cta-heading {
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 16px;
-    }
-    .cta-sub {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      margin-bottom: 48px;
-      font-weight: 300;
-    }
-    .btn-gold {
-      display: inline-block;
-      padding: 16px 48px;
-      background: transparent;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      font-family: var(--font);
-      font-size: 0.95rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .btn-gold::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: var(--gold);
-      transform: translateX(100%);
-      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
-    }
-    .btn-gold:hover::before { transform: translateX(0); }
-    .btn-gold:hover { color: var(--deep-blue); box-shadow: 0 0 30px rgba(201,168,76,0.25); }
-    .btn-gold span { position: relative; z-index: 1; }
-
-    /* ─── FOOTER ─────────────────────────────────────────── */
-    footer {
-      padding: 40px 48px;
-      border-top: 1px solid rgba(201,168,76,0.08);
-      text-align: center;
-    }
-    footer p {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      letter-spacing: 0.1em;
-    }
-
-    /* ─── SECTION SEPARATOR ─────────────────────────────── */
-    .sep {
-      display: flex; align-items: center; gap: 20px;
-      max-width: 1100px; margin: 0 auto 60px;
-    }
-    .sep-line { flex: 1; height: 1px; background: rgba(201,168,76,0.1); }
-    .sep-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); opacity: 0.4; }
-
-    /* ─── KEYFRAMES ─────────────────────────────────────── */
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-    @keyframes bounce {
-      0%, 100% { transform: rotate(45deg) translateY(0); }
-      50%       { transform: rotate(45deg) translateY(5px); }
-    }
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-
-    /* ─── PARALLAX WRAPPER ─────────────────────────────── */
-    .parallax-layer { will-change: transform; }
-
-    /* ─── MOBILE ─────────────────────────────────────────── */
-    @media (max-width: 768px) {
-      nav { padding: 20px 24px; }
-      .nav-links { display: none; }
-      #about .section-inner { grid-template-columns: 1fr; gap: 40px; }
-      .stats-grid { grid-template-columns: 1fr; }
-      .teachings-grid { grid-template-columns: 1fr; }
-      .section { padding: 80px 24px; }
-      #about { padding: 100px 24px 60px; }
-      #stats, #teachings, #cta { padding: 80px 24px; }
-      footer { padding: 32px 24px; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-  <!-- LOADER -->
+  <!-- ── LOADER ─────────────────────────────────────── -->
   <div id="loader">
-    <div class="loader-name">הרב מאיר אליהו</div>
+    <div class="loader-brand">הרב מאיר אליהו</div>
     <div class="loader-bar-wrap">
       <div class="loader-bar" id="loader-bar"></div>
     </div>
+    <div class="loader-percent" id="loader-percent">0%</div>
   </div>
 
-  <!-- PARTICLES -->
-  <canvas id="particles-canvas"></canvas>
+  <!-- ── FIXED HEADER ──────────────────────────────── -->
+  <header class="site-header">
+    <nav>
+      <div class="nav-logo">הרב מאיר אליהו</div>
+      <ul class="nav-links">
+        <li><a href="#section-about">אודות</a></li>
+        <li><a href="#section-teachings">תורה</a></li>
+        <li><a href="#section-cta">צור קשר</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">הרב מאיר אליהו</div>
-    <ul class="nav-links">
-      <li><a href="#about">אודות</a></li>
-      <li><a href="#teachings">תורה</a></li>
-      <li><a href="#cta">צור קשר</a></li>
-    </ul>
-  </nav>
-
-  <!-- HERO -->
-  <section id="hero">
-    <video id="hero-video" autoplay muted loop playsinline preload="auto">
-      <source src="rabbi-video.mp4" type="video/mp4" />
-      <source src="rabbi-video2.mp4" type="video/mp4" />
-    </video>
-    <div class="hero-overlay"></div>
-
+  <!-- ── HERO (standalone 100vh) ───────────────────── -->
+  <section class="hero-standalone" id="hero">
+    <div class="hero-bg"></div>
     <div class="hero-content">
-      <p class="hero-eyebrow">ברוכים הבאים</p>
-      <h1 class="hero-title">הרב <span>מאיר</span> אליהו</h1>
+      <span class="section-label hero-label">ברוכים הבאים</span>
+      <h1 class="hero-heading">
+        <span class="word">הרב</span>
+        <span class="word gold">מאיר</span>
+        <span class="word">אליהו</span>
+      </h1>
       <div class="hero-divider"></div>
       <p class="hero-tagline">תורה · אמונה · אור</p>
     </div>
-
-    <div class="scroll-hint" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
+    <div class="scroll-indicator">
       <span>גלול</span>
       <div class="scroll-arrow"></div>
     </div>
   </section>
 
-  <!-- MARQUEE -->
-  <div class="marquee-section">
-    <div class="marquee-track" aria-hidden="true">
-      <span class="marquee-item">תורה</span>
-      <span class="marquee-item accent">✦</span>
-      <span class="marquee-item">אמונה</span>
-      <span class="marquee-item accent">✦</span>
-      <span class="marquee-item">חסד</span>
-      <span class="marquee-item accent">✦</span>
-      <span class="marquee-item">אור</span>
-      <span class="marquee-item accent">✦</span>
-      <span class="marquee-item">שלום</span>
-      <span class="marquee-item accent">✦</span>
-      <span class="marquee-item">תורה</span>
-      <span class="marquee-item accent">✦</span>
-      <span class="marquee-item">אמונה</span>
-      <span class="marquee-item accent">✦</span>
-      <span class="marquee-item">חסד</span>
-      <span class="marquee-item accent">✦</span>
-      <span class="marquee-item">אור</span>
-      <span class="marquee-item accent">✦</span>
-      <span class="marquee-item">שלום</span>
-      <span class="marquee-item accent">✦</span>
+  <!-- ── CANVAS (fixed, full viewport) ─────────────── -->
+  <div class="canvas-wrap" id="canvas-wrap">
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <!-- ── DARK OVERLAY ──────────────────────────────── -->
+  <div id="dark-overlay"></div>
+
+  <!-- ── MARQUEE (fixed) ───────────────────────────── -->
+  <div class="marquee-wrap" id="marquee-wrap" data-scroll-speed="-22">
+    <div class="marquee-text">
+      הרב מאיר אליהו &nbsp;✦&nbsp; תורה &nbsp;✦&nbsp; אמונה &nbsp;✦&nbsp; אור &nbsp;✦&nbsp;
+      הרב מאיר אליהו &nbsp;✦&nbsp; תורה &nbsp;✦&nbsp; אמונה &nbsp;✦&nbsp; אור &nbsp;✦&nbsp;
+      הרב מאיר אליהו &nbsp;✦&nbsp; תורה &nbsp;✦&nbsp; אמונה &nbsp;✦&nbsp; אור &nbsp;✦&nbsp;
     </div>
   </div>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="section-inner">
-      <div class="about-text">
-        <span class="section-label reveal">001 / אודות</span>
-        <h2 class="section-heading reveal reveal-delay-1">
-          מוביל דורות<br/>באור התורה
-        </h2>
-        <p class="section-body reveal reveal-delay-2">
-          הרב מאיר אליהו הוא דמות מרכזית בעולם התורה והרוחניות היהודית.
-          בשיעוריו הנוגעים ללב, הוא מחבר בין עומק הלמדנות לחיי היומיום —
-          ומצליח להדליק ניצוץ של אמונה בכל שומע.
-        </p>
-        <p class="section-body reveal reveal-delay-3" style="margin-top:16px;">
-          מאות אלפי מאזינים ברחבי העולם נהנים מדרשותיו, ספריו ושיעוריו
-          המשודרים בשידור חי — והכל מתוך אהבה עמוקה לעם ישראל ולתורתו.
+  <!-- ── SCROLL CONTAINER (900vh) ──────────────────── -->
+  <div id="scroll-container">
+
+    <!-- 001 About — slide-right, align-right, 20%–38% -->
+    <section id="section-about"
+             class="scroll-section section-content align-right"
+             data-enter="20" data-leave="38" data-animation="slide-right">
+      <div class="section-inner">
+        <span class="section-label">001 / אודות</span>
+        <h2 class="section-heading">מוביל דורות<br/>באור התורה</h2>
+        <p class="section-body">
+          הרב מאיר אליהו הוא דמות מרכזית בעולם התורה.<br/>
+          בשיעוריו הנוגעים ללב הוא מחבר בין עומק הלמדנות<br/>
+          לחיי היומיום — ומדליק ניצוץ אמונה בכל שומע.
         </p>
       </div>
-      <div class="about-image-wrap reveal reveal-delay-1">
-        <img src="rabbi-still.jpg" alt="הרב מאיר אליהו" loading="lazy" />
-        <div class="about-image-border"></div>
+    </section>
+
+    <!-- 002 Teachings — slide-left, align-left, 38%–55% -->
+    <section id="section-teachings"
+             class="scroll-section section-content align-left"
+             data-enter="38" data-leave="55" data-animation="slide-left">
+      <div class="section-inner">
+        <span class="section-label">002 / שיעורים</span>
+        <h2 class="section-heading">שיעורים יומיים<br/>לכל רמה</h2>
+        <p class="section-body">
+          מאות שיעורים בהלכה, פרשת השבוע ומחשבת ישראל.<br/>
+          ברמה עמוקה ובשפה נגישה — לכולם, בכל מקום.
+        </p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- STATS -->
-  <section id="stats">
-    <div class="stats-grid">
-      <div class="stat-card reveal">
-        <span class="stat-number" data-target="500">0</span><span class="stat-suffix">+</span>
-        <span class="stat-label">שיעורים בשנה</span>
+    <!-- 003 Stats — stagger-up, center, dark overlay, 55%–72% -->
+    <section class="scroll-section section-stats"
+             data-enter="55" data-leave="72" data-animation="stagger-up">
+      <div class="stats-grid">
+        <div class="stat">
+          <span class="stat-number" data-value="500" data-decimals="0">0</span>
+          <span class="stat-suffix">+</span>
+          <span class="stat-label">שיעורים בשנה</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" data-value="200" data-decimals="0">0</span>
+          <span class="stat-suffix">K</span>
+          <span class="stat-label">מאזינים קבועים</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" data-value="30" data-decimals="0">0</span>
+          <span class="stat-suffix">+</span>
+          <span class="stat-label">שנות פעילות</span>
+        </div>
       </div>
-      <div class="stat-card reveal reveal-delay-1">
-        <span class="stat-number" data-target="200">0</span><span class="stat-suffix">K</span>
-        <span class="stat-label">מאזינים קבועים</span>
+    </section>
+
+    <!-- 004 Books — rotate-in, align-right, 72%–84% -->
+    <section class="scroll-section section-content align-right"
+             data-enter="72" data-leave="84" data-animation="rotate-in">
+      <div class="section-inner">
+        <span class="section-label">003 / ספרים</span>
+        <h2 class="section-heading">ספרים ומאמרים<br/>לאורך הדרך</h2>
+        <p class="section-body">
+          ספרים רבים בנושאי הלכה, מחשבה ואגדה —<br/>
+          מדריך רוחני לאלפי קוראים ברחבי העולם.
+        </p>
       </div>
-      <div class="stat-card reveal reveal-delay-2">
-        <span class="stat-number" data-target="30">0</span><span class="stat-suffix">+</span>
-        <span class="stat-label">שנות פעילות</span>
+    </section>
+
+    <!-- 005 CTA — fade-up, center, persist, 84%–100% -->
+    <section id="section-cta"
+             class="scroll-section section-cta"
+             data-enter="84" data-leave="100" data-animation="fade-up" data-persist="true">
+      <div class="section-inner cta-inner">
+        <span class="section-label">004 / הצטרף</span>
+        <h2 class="section-heading">רוצה לשמוע שיעורים?</h2>
+        <p class="section-body">הצטרף לרשימת התפוצה וקבל עדכונים על שיעורים, הרצאות ואירועים</p>
+        <a href="mailto:info@ravmeir.co.il" class="cta-button">
+          <span>צור קשר</span>
+        </a>
+        <p class="section-note">© 2026 הרב מאיר אליהו · כל הזכויות שמורות</p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- TEACHINGS -->
-  <section id="teachings">
-    <div style="max-width:1100px; margin:0 auto;">
-      <div class="sep">
-        <div class="sep-line"></div><div class="sep-dot"></div><div class="sep-line"></div>
-      </div>
-      <span class="section-label reveal">002 / תחומי עיסוק</span>
-      <h2 class="section-heading reveal reveal-delay-1">
-        מגוון עולמות של<br/>תורה ורוחניות
-      </h2>
-    </div>
-    <div class="teachings-grid">
-      <div class="teaching-card reveal">
-        <span class="card-icon">📖</span>
-        <h3 class="card-title">שיעורי תורה</h3>
-        <p class="card-body">שיעורים יומיים בהלכה, פרשת השבוע ומחשבת ישראל — ברמה עמוקה ובשפה נגישה לכולם.</p>
-      </div>
-      <div class="teaching-card reveal reveal-delay-1">
-        <span class="card-icon">🕯️</span>
-        <h3 class="card-title">חיזוק האמונה</h3>
-        <p class="card-body">הרצאות מעוררות ליבות על אמונה, בטחון וקשר עמוק עם הקדוש ברוך הוא בחיי היומיום.</p>
-      </div>
-      <div class="teaching-card reveal reveal-delay-2">
-        <span class="card-icon">✍️</span>
-        <h3 class="card-title">ספרים ומאמרים</h3>
-        <p class="card-body">ספרים רבים שיצאו לאור בנושאי הלכה, מחשבה ואגדה — ומשמשים כמדריך רוחני לאלפים.</p>
-      </div>
-    </div>
-  </section>
+  </div><!-- /scroll-container -->
 
-  <!-- CTA -->
-  <section id="cta">
-    <div class="sep">
-      <div class="sep-line"></div><div class="sep-dot"></div><div class="sep-line"></div>
-    </div>
-    <p class="section-label reveal">003 / הצטרף</p>
-    <h2 class="cta-heading reveal reveal-delay-1">רוצה לשמוע שיעורים?</h2>
-    <p class="cta-sub reveal reveal-delay-2">הצטרף לרשימת התפוצה וקבל עדכונים על שיעורים, הרצאות ואירועים</p>
-    <a href="mailto:info@ravmeir.co.il" class="btn-gold reveal reveal-delay-3">
-      <span>צור קשר</span>
-    </a>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>© 2026 הרב מאיר אליהו · כל הזכויות שמורות</p>
-  </footer>
-
-  <script>
-    // ─── LOADER ──────────────────────────────────────────────
-    const loader    = document.getElementById('loader');
-    const loaderBar = document.getElementById('loader-bar');
-    const video     = document.getElementById('hero-video');
-
-    let progress = 0;
-    const tick = setInterval(() => {
-      progress = Math.min(progress + Math.random() * 8, 90);
-      loaderBar.style.width = progress + '%';
-    }, 120);
-
-    function finishLoader() {
-      clearInterval(tick);
-      loaderBar.style.width = '100%';
-      setTimeout(() => loader.classList.add('hidden'), 400);
-    }
-
-    if (video.readyState >= 3) { finishLoader(); }
-    else {
-      video.addEventListener('canplay', finishLoader, { once: true });
-      setTimeout(finishLoader, 3000); // fallback
-    }
-
-    // ─── PARTICLES ───────────────────────────────────────────
-    const canvas = document.getElementById('particles-canvas');
-    const ctx    = canvas.getContext('2d');
-    let W, H;
-
-    function resize() {
-      W = canvas.width  = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    const PARTICLE_COUNT = 55;
-    const particles = Array.from({ length: PARTICLE_COUNT }, () => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      r: Math.random() * 1.8 + 0.4,
-      vx: (Math.random() - 0.5) * 0.18,
-      vy: -Math.random() * 0.25 - 0.08,
-      alpha: Math.random() * 0.35 + 0.05,
-      fadeDir: Math.random() > 0.5 ? 1 : -1,
-    }));
-
-    function drawParticles() {
-      ctx.clearRect(0, 0, W, H);
-      for (const p of particles) {
-        p.x  += p.vx;
-        p.y  += p.vy;
-        p.alpha += p.fadeDir * 0.003;
-        if (p.alpha > 0.4 || p.alpha < 0.03) p.fadeDir *= -1;
-        if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
-        if (p.x < -10 || p.x > W + 10) p.x = Math.random() * W;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(201, 168, 76, ${p.alpha})`;
-        ctx.fill();
-      }
-      requestAnimationFrame(drawParticles);
-    }
-    drawParticles();
-
-    // ─── SCROLL REVEAL ───────────────────────────────────────
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.15 });
-
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-    // ─── COUNTER ANIMATION ───────────────────────────────────
-    function animateCounter(el) {
-      const target = parseInt(el.dataset.target, 10);
-      const duration = 2000;
-      const start = performance.now();
-      function frame(now) {
-        const t = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - t, 3);
-        el.textContent = Math.floor(eased * target);
-        if (t < 1) requestAnimationFrame(frame);
-        else el.textContent = target;
-      }
-      requestAnimationFrame(frame);
-    }
-
-    const counterObs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          animateCounter(e.target);
-          counterObs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.5 });
-
-    document.querySelectorAll('.stat-number[data-target]').forEach(el => counterObs.observe(el));
-
-    // ─── PARALLAX ────────────────────────────────────────────
-    let lastScroll = 0;
-    function onScroll() {
-      const sy = window.scrollY;
-      // subtle parallax on hero video
-      if (sy < window.innerHeight * 1.5) {
-        video.style.transform = `translateY(${sy * 0.25}px)`;
-      }
-      lastScroll = sy;
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
