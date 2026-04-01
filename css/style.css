@@ -376,32 +376,68 @@ body {
 
 /* ── MOBILE ───────────────────────────────────────── */
 @media (max-width: 768px) {
-  .site-header { padding: 18px 24px; }
+  .site-header { padding: 18px 20px; }
   .nav-links { display: none; }
 
-  .hero-heading { font-size: clamp(2.8rem, 12vw, 5rem); }
+  .hero-heading {
+    font-size: clamp(3rem, 14vw, 5.5rem);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .hero-tagline { font-size: 0.85rem; letter-spacing: 0.2em; }
 
-  #scroll-container { height: 550vh; }
+  #scroll-container { height: 600vh; }
 
+  /* Content sections: full-width, centered, with readable backdrop */
   .align-right,
   .align-left {
-    padding: 0 6vw;
+    padding: 0 0;
+    left: 0; right: 0;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .align-right .section-inner,
   .align-left .section-inner {
-    max-width: 100%;
-    background: rgba(8,12,24,0.75);
-    backdrop-filter: blur(12px);
-    padding: 28px 20px;
-    border: 1px solid rgba(201,168,76,0.1);
+    max-width: 88vw;
+    width: 88vw;
+    background: rgba(4, 7, 18, 0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 32px 24px;
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 2px;
   }
 
-  .section-stats { padding: 0 4vw; }
-  .stats-grid { flex-direction: column; }
-  .stat { padding: 28px 20px; }
+  .section-heading {
+    font-size: clamp(1.6rem, 7vw, 2.4rem);
+    margin-bottom: 14px;
+  }
+  .section-body {
+    font-size: 0.9rem;
+    line-height: 1.75;
+  }
 
+  /* Stats */
+  .section-stats {
+    padding: 0 5vw;
+    width: 100%;
+  }
+  .stats-grid {
+    flex-direction: column;
+    gap: 0;
+  }
+  .stat { padding: 28px 20px; }
+  .stat-number { font-size: clamp(2.5rem, 10vw, 3.5rem); }
+
+  /* CTA */
+  .section-cta { padding: 0 6vw; width: 100%; }
+  .cta-button { padding: 18px 40px; font-size: 1rem; }
+
+  /* Marquee */
   .marquee-text { font-size: 18vw; }
 
-  .section-cta { padding: 0 6vw; }
+  /* Scroll indicator */
+  .scroll-indicator { bottom: 28px; }
 }

@@ -208,21 +208,25 @@ function initCounters() {
   document.querySelectorAll('.stat-number[data-value]').forEach(el => {
     const target   = parseFloat(el.dataset.value);
     const decimals = parseInt(el.dataset.decimals || '0', 10);
-    gsap.from(el, {
-      textContent: 0,
+    const obj      = { val: 0 };
+    el.textContent = '0';
+
+    gsap.to(obj, {
+      val: target,
       duration: 2,
-      ease: 'power1.out',
-      snap: { textContent: decimals === 0 ? 1 : 0.01 },
+      ease: 'power2.out',
       scrollTrigger: {
         trigger: el.closest('.scroll-section'),
         start: 'top 80%',
-        toggleActions: 'play none none reverse',
-        containerAnimation: undefined,
+        toggleActions: 'play none none reset',
       },
       onUpdate() {
         el.textContent = decimals === 0
-          ? Math.round(this.targets()[0]._gsap.textContent)
-          : parseFloat(this.targets()[0]._gsap.textContent).toFixed(decimals);
+          ? Math.round(obj.val).toString()
+          : obj.val.toFixed(decimals);
+      },
+      onComplete() {
+        el.textContent = decimals === 0 ? Math.round(target).toString() : target.toFixed(decimals);
       },
     });
   });
