@@ -191,7 +191,7 @@ body {
   gap: 24px;
 }
 
-/* entrance animation — triggered by JS */
+/* entrance animation — JS adds .will-animate, observer adds .in-view */
 .product-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -199,10 +199,13 @@ body {
   transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
   position: relative;
   overflow: hidden;
+}
+/* only hidden when JS explicitly sets will-animate */
+.product-card.will-animate {
   opacity: 0;
   transform: translateY(44px);
 }
-.product-card.in-view {
+.product-card.will-animate.in-view {
   opacity: 1;
   transform: translateY(0);
   transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16,1,0.3,1),
@@ -340,10 +343,12 @@ body {
   align-items: center;
   transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
   position: relative; overflow: hidden;
+}
+.set-card.will-animate {
   opacity: 0;
   transform: translateY(32px);
 }
-.set-card.in-view {
+.set-card.will-animate.in-view {
   opacity: 1;
   transform: translateY(0);
   transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16,1,0.3,1),
