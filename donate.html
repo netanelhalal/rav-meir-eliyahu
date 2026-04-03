@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>תרומה — הרב מאיר אליהו</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <!-- ── HEADER ─────────────────────────────────────── -->
+  <header class="site-header">
+    <a href="index.html" class="nav-logo">הרב מאיר אליהו</a>
+    <ul class="nav-links">
+      <li><a href="index.html">בית</a></li>
+      <li><a href="shop.html">ספרים</a></li>
+      <li><a href="donate.html" class="active">תרומה</a></li>
+      <li><a href="index.html#section-cta">צור קשר</a></li>
+    </ul>
+  </header>
+
+  <!-- ── PAGE HERO ───────────────────────────────────── -->
+  <div class="page-hero">
+    <span class="page-hero-label">זכות הרבים</span>
+    <h1 class="page-hero-title">תרמו ל<span>הפצת התורה</span></h1>
+    <p class="page-hero-sub">כל תרומה מסייעת להפיץ את אור התורה לאלפי שומעים</p>
+    <div class="page-hero-divider"></div>
+  </div>
+
+  <!-- ── DONATE FORM ─────────────────────────────────── -->
+  <main class="donate-wrap">
+
+    <!-- Toggle: חד פעמי / הוראת קבע -->
+    <div class="donate-toggle">
+      <button class="donate-toggle-btn active" id="btn-onetime" onclick="setType('onetime')">
+        תרומה חד פעמית
+      </button>
+      <button class="donate-toggle-btn" id="btn-recurring" onclick="setType('recurring')">
+        הוראת קבע חודשית
+      </button>
+    </div>
+
+    <!-- סכומים מהירים -->
+    <div class="amounts-grid">
+      <button class="amount-btn" onclick="selectAmount(36)">
+        36<span class="amount-label">₪ — ל״ו</span>
+      </button>
+      <button class="amount-btn" onclick="selectAmount(72)">
+        72<span class="amount-label">₪ — ע״ב</span>
+      </button>
+      <button class="amount-btn selected" onclick="selectAmount(180)">
+        180<span class="amount-label">₪ — קדוש</span>
+      </button>
+      <button class="amount-btn" onclick="selectAmount(360)">
+        360<span class="amount-label">₪ — שלם</span>
+      </button>
+      <button class="amount-btn" onclick="selectAmount(500)">
+        500<span class="amount-label">₪</span>
+      </button>
+      <button class="amount-btn" onclick="selectAmount(1000)">
+        1,000<span class="amount-label">₪</span>
+      </button>
+      <button class="amount-btn" onclick="selectAmount(1800)">
+        1,800<span class="amount-label">₪ — חי</span>
+      </button>
+      <button class="amount-btn" id="btn-custom" onclick="focusCustom()">
+        אחר<span class="amount-label">הזן סכום</span>
+      </button>
+    </div>
+
+    <!-- סכום מותאם אישית -->
+    <div class="custom-amount-wrap">
+      <span class="currency-symbol">₪</span>
+      <input type="number" id="custom-amount" placeholder="הזן סכום אחר..."
+             min="10" step="1" oninput="onCustomInput()" />
+    </div>
+
+    <!-- סיבת התרומה (רק בהוראת קבע) -->
+    <div id="recurring-note" style="display:none; margin-bottom:24px;">
+      <div style="
+        padding:16px 20px;
+        border:1px solid rgba(201,168,76,0.2);
+        background:rgba(201,168,76,0.04);
+        font-size:0.88rem; color:rgba(240,232,208,0.7);
+        line-height:1.7;
+      ">
+        💛 <strong style="color:#f0d07a;">הוראת קבע</strong> — תרומה חודשית קבועה שתסייע להמשך הפצת התורה.
+        ניתן לבטל בכל עת.
+      </div>
+    </div>
+
+    <!-- פרטי תורם -->
+    <form class="donate-form" id="donate-form" onsubmit="handleDonate(event)">
+
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label" for="donor-firstname">שם פרטי</label>
+          <input class="field-input" id="donor-firstname" type="text" placeholder="ישראל" required />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="donor-lastname">שם משפחה</label>
+          <input class="field-input" id="donor-lastname" type="text" placeholder="ישראלי" required />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="donor-email">דוא״ל</label>
+        <input class="field-input" id="donor-email" type="email" placeholder="israel@gmail.com" required />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="donor-phone">טלפון</label>
+        <input class="field-input" id="donor-phone" type="tel" placeholder="050-0000000" required />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="donor-city">עיר</label>
+        <input class="field-input" id="donor-city" type="text" placeholder="ירושלים" />
+      </div>
+
+      <!-- הקדשה -->
+      <div class="field-group">
+        <label class="field-label" for="donor-dedication">הקדשה (רשות)</label>
+        <input class="field-input" id="donor-dedication" type="text"
+               placeholder="לעילוי נשמת / לרפואת / לכבוד..." />
+      </div>
+
+      <!-- הסכמות -->
+      <label class="consent-row">
+        <input type="checkbox" id="consent-email" required />
+        <span>אני מסכים/ה לקבל עדכונים ושיעורים בדוא״ל מהרב מאיר אליהו</span>
+      </label>
+
+      <label class="consent-row">
+        <input type="checkbox" id="consent-sms" />
+        <span>אני מסכים/ה לקבל עדכונים ב-SMS</span>
+      </label>
+
+      <!-- כפתור תרומה -->
+      <button type="submit" class="btn-donate">
+        <span id="donate-btn-text">לתרומה של 180 ₪</span>
+      </button>
+
+    </form>
+
+    <!-- Trust indicators -->
+    <div class="donate-trust">
+      <div class="trust-item">
+        <span class="trust-icon">🔒</span>
+        <span>תשלום מאובטח</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon">🧾</span>
+        <span>קבלה באימייל</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon">✡️</span>
+        <span>לעילוי נשמות</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon">↩️</span>
+        <span>ביטול הו״ק בכל עת</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ──────────────────────────────────────── -->
+  <footer class="site-footer">
+    <p>© 2026 הרב מאיר אליהו · כל הזכויות שמורות · <a href="shop.html">חנות ספרים</a></p>
+  </footer>
+
+  <script>
+    let selectedAmount = 180;
+    let donateType = 'onetime';
+
+    // ── Type toggle ──────────────────────────────────
+    function setType(type) {
+      donateType = type;
+      document.getElementById('btn-onetime').classList.toggle('active', type === 'onetime');
+      document.getElementById('btn-recurring').classList.toggle('active', type === 'recurring');
+      document.getElementById('recurring-note').style.display = type === 'recurring' ? 'block' : 'none';
+      updateDonateBtn();
+    }
+
+    // ── Amount selection ─────────────────────────────
+    function selectAmount(amount) {
+      selectedAmount = amount;
+      document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+      const btns = document.querySelectorAll('.amount-btn');
+      btns.forEach(b => {
+        if (parseInt(b.textContent) === amount || b.textContent.startsWith(amount.toLocaleString())) {
+          b.classList.add('selected');
+        }
+      });
+      document.getElementById('custom-amount').value = '';
+      updateDonateBtn();
+    }
+
+    function focusCustom() {
+      document.getElementById('custom-amount').focus();
+      document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+      document.getElementById('btn-custom').classList.add('selected');
+    }
+
+    function onCustomInput() {
+      const val = parseInt(document.getElementById('custom-amount').value);
+      if (val > 0) {
+        selectedAmount = val;
+        document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
+        document.getElementById('btn-custom').classList.add('selected');
+        updateDonateBtn();
+      }
+    }
+
+    function updateDonateBtn() {
+      const typeLabel = donateType === 'recurring' ? 'הוראת קבע חודשית' : 'תרומה';
+      const formatted = selectedAmount.toLocaleString('he-IL');
+      document.getElementById('donate-btn-text').textContent =
+        `${typeLabel} של ${formatted} ₪`;
+    }
+
+    // ── Submit (placeholder) ─────────────────────────
+    function handleDonate(e) {
+      e.preventDefault();
+      const data = {
+        type: donateType,
+        amount: selectedAmount,
+        firstName: document.getElementById('donor-firstname').value,
+        lastName:  document.getElementById('donor-lastname').value,
+        email:     document.getElementById('donor-email').value,
+        phone:     document.getElementById('donor-phone').value,
+        city:      document.getElementById('donor-city').value,
+        dedication:document.getElementById('donor-dedication').value,
+        consentEmail: document.getElementById('consent-email').checked,
+        consentSms:   document.getElementById('consent-sms').checked,
+      };
+      console.log('Donate payload:', data);
+      // TODO: שלח ל-Meshulam API
+      alert(`תודה! ממשיכים לעמוד התשלום עבור ${data.amount.toLocaleString('he-IL')} ₪`);
+    }
+
+    // init
+    updateDonateBtn();
+  </script>
+</body>
+</html>

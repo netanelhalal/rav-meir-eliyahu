@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>חנות ספרים — הרב מאיר אליהו</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <!-- ── HEADER ─────────────────────────────────────── -->
+  <header class="site-header">
+    <a href="index.html" class="nav-logo">הרב מאיר אליהו</a>
+    <ul class="nav-links">
+      <li><a href="index.html">בית</a></li>
+      <li><a href="shop.html" class="active">ספרים</a></li>
+      <li><a href="donate.html">תרומה</a></li>
+      <li><a href="index.html#section-cta">צור קשר</a></li>
+    </ul>
+    <div class="nav-cart" id="cart-btn">
+      <span>🛒</span>
+      <span>סל</span>
+      <span class="cart-count" id="cart-count">0</span>
+    </div>
+  </header>
+
+  <!-- ── PAGE HERO ───────────────────────────────────── -->
+  <div class="page-hero">
+    <span class="page-hero-label">חנות ספרים</span>
+    <h1 class="page-hero-title">ספרי <span>הרב מאיר</span> אליהו</h1>
+    <p class="page-hero-sub">ספרי יסוד בקבלה, הלכה ומחשבת ישראל</p>
+    <div class="page-hero-divider"></div>
+  </div>
+
+  <!-- ── MAIN CONTENT ────────────────────────────────── -->
+  <main class="page-section">
+
+    <!-- Filter tabs -->
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">כל הספרים</button>
+      <button class="filter-tab" data-filter="merkava">מעשה מרכבה</button>
+      <button class="filter-tab" data-filter="argaman">מרכבות ארגמן</button>
+      <button class="filter-tab" data-filter="sets">סטים מיוחדים</button>
+      <button class="filter-tab" data-filter="other">נוספים</button>
+    </div>
+
+    <!-- ── ספרים בודדים ─────────────────────────────── -->
+    <div class="products-grid" id="products-grid">
+
+      <!-- מעשה מרכבה -->
+      <div class="product-card" data-category="merkava">
+        <div class="product-img-wrap">
+          <div class="product-img-placeholder">
+            <span class="book-icon">📖</span>
+            <span class="book-title-preview">חמות פרעה</span>
+          </div>
+          <span class="product-badge">מעשה מרכבה</span>
+        </div>
+        <div class="product-info">
+          <span class="product-series">מעשה מרכבה</span>
+          <h3 class="product-name">חמות פרעה — כרך א׳</h3>
+          <p class="product-desc">שיעורים עמוקים בסודות התורה ורזי הקבלה</p>
+          <div class="product-footer">
+            <div class="product-price">150 <span class="currency">₪</span></div>
+            <button class="btn-buy" onclick="addToCart('חמות פרעה א', 150)"><span>הוסף לסל</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="merkava">
+        <div class="product-img-wrap">
+          <div class="product-img-placeholder">
+            <span class="book-icon">📖</span>
+            <span class="book-title-preview">חמות פרעה ב</span>
+          </div>
+          <span class="product-badge">מעשה מרכבה</span>
+        </div>
+        <div class="product-info">
+          <span class="product-series">מעשה מרכבה</span>
+          <h3 class="product-name">חמות פרעה — כרך ב׳</h3>
+          <p class="product-desc">המשך עיון בסודות עמוקים של תורת הנסתר</p>
+          <div class="product-footer">
+            <div class="product-price">150 <span class="currency">₪</span></div>
+            <button class="btn-buy" onclick="addToCart('חמות פרעה ב', 150)"><span>הוסף לסל</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="merkava">
+        <div class="product-img-wrap">
+          <div class="product-img-placeholder">
+            <span class="book-icon">📖</span>
+            <span class="book-title-preview">חמות פרעה ג</span>
+          </div>
+          <span class="product-badge">מעשה מרכבה</span>
+        </div>
+        <div class="product-info">
+          <span class="product-series">מעשה מרכבה</span>
+          <h3 class="product-name">חמות פרעה — כרך ג׳</h3>
+          <p class="product-desc">שלמות הסדרה — כרך מסכם ומעמיק</p>
+          <div class="product-footer">
+            <div class="product-price">150 <span class="currency">₪</span></div>
+            <button class="btn-buy" onclick="addToCart('חמות פרעה ג', 150)"><span>הוסף לסל</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="merkava">
+        <div class="product-img-wrap">
+          <div class="product-img-placeholder">
+            <span class="book-icon">📖</span>
+            <span class="book-title-preview">ראשית המרכבה</span>
+          </div>
+          <span class="product-badge">מעשה מרכבה</span>
+        </div>
+        <div class="product-info">
+          <span class="product-series">מעשה מרכבה</span>
+          <h3 class="product-name">ראשית המרכבה — כרך א׳</h3>
+          <p class="product-desc">שערי הפתיחה לעולם הקבלה האמיתית</p>
+          <div class="product-footer">
+            <div class="product-price">150 <span class="currency">₪</span></div>
+            <button class="btn-buy" onclick="addToCart('ראשית המרכבה א', 150)"><span>הוסף לסל</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="merkava">
+        <div class="product-img-wrap">
+          <div class="product-img-placeholder">
+            <span class="book-icon">📖</span>
+            <span class="book-title-preview">ראשית המרכבה ב</span>
+          </div>
+          <span class="product-badge">מעשה מרכבה</span>
+        </div>
+        <div class="product-info">
+          <span class="product-series">מעשה מרכבה</span>
+          <h3 class="product-name">ראשית המרכבה — כרך ב׳</h3>
+          <p class="product-desc">העמקה והרחבה בסודות המרכבה הקדושה</p>
+          <div class="product-footer">
+            <div class="product-price">150 <span class="currency">₪</span></div>
+            <button class="btn-buy" onclick="addToCart('ראשית המרכבה ב', 150)"><span>הוסף לסל</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- מרכבות ארגמן -->
+      <div class="product-card" data-category="argaman">
+        <div class="product-img-wrap">
+          <div class="product-img-placeholder">
+            <span class="book-icon">📗</span>
+            <span class="book-title-preview">מרכבות ארגמן א</span>
+          </div>
+          <span class="product-badge">מרכבות ארגמן</span>
+        </div>
+        <div class="product-info">
+          <span class="product-series">מרכבות ארגמן</span>
+          <h3 class="product-name">מרכבות ארגמן — כרך א׳</h3>
+          <p class="product-desc">פתיחה לסדרת המרכבות — שיעורים מרוממים</p>
+          <div class="product-footer">
+            <div class="product-price">150 <span class="currency">₪</span></div>
+            <button class="btn-buy" onclick="addToCart('מרכבות ארגמן א', 150)"><span>הוסף לסל</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="argaman">
+        <div class="product-img-wrap">
+          <div class="product-img-placeholder">
+            <span class="book-icon">📗</span>
+            <span class="book-title-preview">מרכבות ארגמן ב</span>
+          </div>
+          <span class="product-badge">מרכבות ארגמן</span>
+        </div>
+        <div class="product-info">
+          <span class="product-series">מרכבות ארגמן</span>
+          <h3 class="product-name">מרכבות ארגמן — כרך ב׳</h3>
+          <p class="product-desc">המשך הסדרה — עיון מעמיק ומרומם</p>
+          <div class="product-footer">
+            <div class="product-price">150 <span class="currency">₪</span></div>
+            <button class="btn-buy" onclick="addToCart('מרכבות ארגמן ב', 150)"><span>הוסף לסל</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- נוספים -->
+      <div class="product-card" data-category="other">
+        <div class="product-img-wrap">
+          <div class="product-img-placeholder">
+            <span class="book-icon">💾</span>
+            <span class="book-title-preview">1000+ שיעורים</span>
+          </div>
+          <span class="product-badge">דיגיטלי</span>
+        </div>
+        <div class="product-info">
+          <span class="product-series">מדיה</span>
+          <h3 class="product-name">כרטיס USB — 1,000+ שיעורים</h3>
+          <p class="product-desc">אוסף שיעורים מקיף בכרטיס USB נוח ונשלח לבית</p>
+          <div class="product-footer">
+            <div class="product-price">550 <span class="currency">₪</span></div>
+            <button class="btn-buy" onclick="addToCart('USB 1000 שיעורים', 550)"><span>הוסף לסל</span></button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /products-grid -->
+
+    <!-- ── סטים ─────────────────────────────────────── -->
+    <div class="section-divider" data-category-section="sets">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">סטים מיוחדים</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:16px;" id="sets-section">
+
+      <div class="set-card" data-category="sets">
+        <div class="set-info">
+          <span class="set-label">חיסכון מיוחד</span>
+          <h3 class="set-name">סט מלא — מעשה מרכבה</h3>
+          <p class="set-desc">כל כרכי הסדרה: חמות פרעה (3 כרכים) + ראשית המרכבה (2 כרכים)</p>
+          <div class="set-volumes">
+            <span class="set-vol-tag">חמות פרעה א</span>
+            <span class="set-vol-tag">חמות פרעה ב</span>
+            <span class="set-vol-tag">חמות פרעה ג</span>
+            <span class="set-vol-tag">ראשית המרכבה א</span>
+            <span class="set-vol-tag">ראשית המרכבה ב</span>
+          </div>
+        </div>
+        <div class="set-action">
+          <div>
+            <div class="set-original-price">750 ₪</div>
+            <div class="set-price">650 <span class="currency">₪</span></div>
+          </div>
+          <button class="btn-buy-set" onclick="addToCart('סט מעשה מרכבה', 650)"><span>הזמן סט</span></button>
+        </div>
+      </div>
+
+      <div class="set-card" data-category="sets">
+        <div class="set-info">
+          <span class="set-label">הסדרה המלאה</span>
+          <h3 class="set-name">סט מלא — מרכבות ארגמן</h3>
+          <p class="set-desc">כל כרכי מרכבות ארגמן — מ-א׳ עד י״א — במחיר מיוחד</p>
+          <div class="set-volumes">
+            <span class="set-vol-tag">כרך א׳</span>
+            <span class="set-vol-tag">כרך ב׳</span>
+            <span class="set-vol-tag">כרך ג׳</span>
+            <span class="set-vol-tag">כרך ד׳</span>
+            <span class="set-vol-tag">ועוד...</span>
+          </div>
+        </div>
+        <div class="set-action">
+          <div>
+            <div class="set-original-price">1,650 ₪</div>
+            <div class="set-price">1,350 <span class="currency">₪</span></div>
+          </div>
+          <button class="btn-buy-set" onclick="addToCart('סט מרכבות ארגמן', 1350)"><span>הזמן סט</span></button>
+        </div>
+      </div>
+
+      <div class="set-card" data-category="sets">
+        <div class="set-info">
+          <span class="set-label">הספרייה המלאה</span>
+          <h3 class="set-name">כל הספרים — אוסף מלא</h3>
+          <p class="set-desc">כל ספרי הרב מאיר אליהו — הצעה הטובה ביותר לאוספים</p>
+          <div class="set-volumes">
+            <span class="set-vol-tag">מעשה מרכבה</span>
+            <span class="set-vol-tag">מרכבות ארגמן</span>
+            <span class="set-vol-tag">USB שיעורים</span>
+          </div>
+        </div>
+        <div class="set-action">
+          <div>
+            <div class="set-original-price">2,500 ₪</div>
+            <div class="set-price">1,990 <span class="currency">₪</span></div>
+          </div>
+          <button class="btn-buy-set" onclick="addToCart('ספרייה מלאה', 1990)"><span>הזמן הכל</span></button>
+        </div>
+      </div>
+
+    </div><!-- /sets -->
+
+  </main>
+
+  <!-- ── FOOTER ──────────────────────────────────────── -->
+  <footer class="site-footer">
+    <p>© 2026 הרב מאיר אליהו · כל הזכויות שמורות · <a href="donate.html">תרומות</a></p>
+  </footer>
+
+  <!-- ── CART TOAST ─────────────────────────────────── -->
+  <div id="cart-toast" style="
+    position:fixed; bottom:32px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:rgba(13,20,40,0.95); border:1px solid rgba(201,168,76,0.3);
+    color:#f0e8d0; padding:14px 28px; font-family:'Heebo',sans-serif;
+    font-size:0.9rem; letter-spacing:0.08em; z-index:9999;
+    opacity:0; pointer-events:none; backdrop-filter:blur(12px);
+    transition:opacity 0.3s ease, transform 0.3s ease;
+  ">✓ <span id="toast-text"></span></div>
+
+  <script>
+    // ── Filter tabs ──────────────────────────────────
+    const tabs = document.querySelectorAll('.filter-tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.dataset.filter;
+        document.querySelectorAll('.product-card').forEach(card => {
+          const show = filter === 'all' || card.dataset.category === filter;
+          card.style.display = show ? '' : 'none';
+        });
+        const setsSection = document.getElementById('sets-section');
+        const setsDivider = document.querySelector('[data-category-section="sets"]');
+        const showSets = filter === 'all' || filter === 'sets';
+        setsSection.style.display = showSets ? '' : 'none';
+        setsDivider.style.display = showSets ? '' : 'none';
+      });
+    });
+
+    // ── Cart ─────────────────────────────────────────
+    let cart = JSON.parse(localStorage.getItem('ravmeir_cart') || '[]');
+    updateCartCount();
+
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      localStorage.setItem('ravmeir_cart', JSON.stringify(cart));
+      updateCartCount();
+      showToast(`"${name}" נוסף לסל`);
+    }
+
+    function updateCartCount() {
+      document.getElementById('cart-count').textContent = cart.length;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('cart-toast');
+      document.getElementById('toast-text').textContent = msg;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateX(-50%) translateY(0)';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(20px)';
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
