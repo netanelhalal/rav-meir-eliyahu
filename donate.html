@@ -9,7 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/pages.css" />
 </head>
-<body>
+<body class="donate-page">
+
+  <!-- background orbs -->
+  <div class="donate-orb donate-orb-1"></div>
+  <div class="donate-orb donate-orb-2"></div>
+  <div class="donate-orb donate-orb-3"></div>
 
   <!-- ── HEADER ─────────────────────────────────────── -->
   <header class="site-header">
@@ -28,6 +33,22 @@
     <h1 class="page-hero-title">תרמו ל<span>הפצת התורה</span></h1>
     <p class="page-hero-sub">כל תרומה מסייעת להפיץ את אור התורה לאלפי שומעים</p>
     <div class="page-hero-divider"></div>
+  </div>
+
+  <!-- ── IMPACT STATS ───────────────────────────────── -->
+  <div class="donate-impact" id="impact-bar">
+    <div class="impact-stat">
+      <span class="impact-num" id="ic-listeners">0</span>
+      <span class="impact-label">מאזינים חודשיים</span>
+    </div>
+    <div class="impact-stat">
+      <span class="impact-num" id="ic-lessons">0</span>
+      <span class="impact-label">שיעורים בשנה</span>
+    </div>
+    <div class="impact-stat">
+      <span class="impact-num" id="ic-donors">0</span>
+      <span class="impact-label">תורמים שותפים</span>
+    </div>
   </div>
 
   <!-- ── DONATE FORM ─────────────────────────────────── -->
@@ -78,13 +99,13 @@
              min="10" step="1" oninput="onCustomInput()" />
     </div>
 
-    <!-- סיבת התרומה (רק בהוראת קבע) -->
+    <!-- הוראת קבע note -->
     <div id="recurring-note" style="display:none; margin-bottom:24px;">
       <div style="
         padding:16px 20px;
-        border:1px solid rgba(201,168,76,0.2);
-        background:rgba(201,168,76,0.04);
-        font-size:0.88rem; color:rgba(240,232,208,0.7);
+        border:1px solid rgba(212,120,58,0.25);
+        background:linear-gradient(135deg,rgba(212,120,58,0.06),rgba(201,168,76,0.04));
+        font-size:0.88rem; color:rgba(240,232,208,0.75);
         line-height:1.7;
       ">
         💛 <strong style="color:#f0d07a;">הוראת קבע</strong> — תרומה חודשית קבועה שתסייע להמשך הפצת התורה.
@@ -121,22 +142,29 @@
         <input class="field-input" id="donor-city" type="text" placeholder="ירושלים" />
       </div>
 
-      <!-- הקדשה -->
-      <div class="field-group">
-        <label class="field-label" for="donor-dedication">הקדשה (רשות)</label>
-        <input class="field-input" id="donor-dedication" type="text"
-               placeholder="לעילוי נשמת / לרפואת / לכבוד..." />
+      <!-- הקדשה — highlighted section -->
+      <div class="dedication-highlight">
+        <div class="field-group">
+          <label class="field-label" for="donor-dedication">✨ הקדשה (רשות)</label>
+          <input class="field-input" id="donor-dedication" type="text"
+                 placeholder="לעילוי נשמת / לרפואת / לכבוד..."
+                 style="background:rgba(26,18,50,0.5);" />
+        </div>
       </div>
 
       <!-- הסכמות -->
       <label class="consent-row">
         <input type="checkbox" id="consent-email" required />
-        <span>אני מסכים/ה לקבל עדכונים ושיעורים בדוא״ל מהרב מאיר אליהו</span>
+        <span style="font-size:0.82rem;color:rgba(240,232,208,0.65);line-height:1.5;">
+          אני מסכים/ה לקבל עדכונים ושיעורים בדוא״ל מהרב מאיר אליהו
+        </span>
       </label>
 
       <label class="consent-row">
         <input type="checkbox" id="consent-sms" />
-        <span>אני מסכים/ה לקבל עדכונים ב-SMS</span>
+        <span style="font-size:0.82rem;color:rgba(240,232,208,0.65);line-height:1.5;">
+          אני מסכים/ה לקבל עדכונים ב-SMS
+        </span>
       </label>
 
       <!-- כפתור תרומה -->
@@ -158,7 +186,7 @@
       </div>
       <div class="trust-item">
         <span class="trust-icon">✡️</span>
-        <span>לעילוי נשמות</span>
+        <span>לזכות ולעילוי נשמות</span>
       </div>
       <div class="trust-item">
         <span class="trust-icon">↩️</span>
@@ -177,6 +205,53 @@
     let selectedAmount = 180;
     let donateType = 'onetime';
 
+    // ── Animated impact counters ─────────────────────
+    function animateCounter(el, target, suffix) {
+      let start = 0;
+      const duration = 1800;
+      const step = 16;
+      const increment = target / (duration / step);
+      const timer = setInterval(() => {
+        start = Math.min(start + increment, target);
+        el.textContent = Math.round(start).toLocaleString('he-IL') + suffix;
+        if (start >= target) clearInterval(timer);
+      }, step);
+    }
+
+    const impactObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(document.getElementById('ic-listeners'), 200000, 'K+');
+          animateCounter(document.getElementById('ic-lessons'),   500,    '+');
+          animateCounter(document.getElementById('ic-donors'),    3200,   '+');
+          impactObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    impactObserver.observe(document.getElementById('impact-bar'));
+
+    // Override with better format
+    function animateCounter(el, target, suffix) {
+      const obj = { val: 0 };
+      const duration = 1800;
+      const start = Date.now();
+      function tick() {
+        const elapsed = Date.now() - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const val = Math.round(eased * target);
+        if (suffix === 'K+') {
+          el.textContent = val >= 1000
+            ? Math.round(val / 1000) + 'K+'
+            : val + '+';
+        } else {
+          el.textContent = val.toLocaleString('he-IL') + suffix;
+        }
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
     // ── Type toggle ──────────────────────────────────
     function setType(type) {
       donateType = type;
@@ -190,11 +265,9 @@
     function selectAmount(amount) {
       selectedAmount = amount;
       document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
-      const btns = document.querySelectorAll('.amount-btn');
-      btns.forEach(b => {
-        if (parseInt(b.textContent) === amount || b.textContent.startsWith(amount.toLocaleString())) {
-          b.classList.add('selected');
-        }
+      document.querySelectorAll('.amount-btn').forEach(b => {
+        const num = parseInt(b.textContent.replace(/,/g, ''));
+        if (num === amount) b.classList.add('selected');
       });
       document.getElementById('custom-amount').value = '';
       updateDonateBtn();
@@ -220,7 +293,7 @@
       const typeLabel = donateType === 'recurring' ? 'הוראת קבע חודשית' : 'תרומה';
       const formatted = selectedAmount.toLocaleString('he-IL');
       document.getElementById('donate-btn-text').textContent =
-        `${typeLabel} של ${formatted} ₪`;
+        `${typeLabel} של ${formatted} ₪ ←`;
     }
 
     // ── Submit (placeholder) ─────────────────────────
@@ -229,12 +302,12 @@
       const data = {
         type: donateType,
         amount: selectedAmount,
-        firstName: document.getElementById('donor-firstname').value,
-        lastName:  document.getElementById('donor-lastname').value,
-        email:     document.getElementById('donor-email').value,
-        phone:     document.getElementById('donor-phone').value,
-        city:      document.getElementById('donor-city').value,
-        dedication:document.getElementById('donor-dedication').value,
+        firstName:   document.getElementById('donor-firstname').value,
+        lastName:    document.getElementById('donor-lastname').value,
+        email:       document.getElementById('donor-email').value,
+        phone:       document.getElementById('donor-phone').value,
+        city:        document.getElementById('donor-city').value,
+        dedication:  document.getElementById('donor-dedication').value,
         consentEmail: document.getElementById('consent-email').checked,
         consentSms:   document.getElementById('consent-sms').checked,
       };
