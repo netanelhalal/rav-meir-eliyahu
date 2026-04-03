@@ -21,15 +21,32 @@
   </div>
 
   <!-- ── FIXED HEADER ──────────────────────────────── -->
+  <!-- ── MOBILE NAV OVERLAY ───────────────────────── -->
+  <div class="mobile-nav-overlay" id="mobile-nav">
+    <a href="#section-about" onclick="closeNav()">אודות</a>
+    <div class="mobile-nav-divider"></div>
+    <a href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener" onclick="closeNav()">שיעורים ביוטיוב</a>
+    <div class="mobile-nav-divider"></div>
+    <a href="shop.html" onclick="closeNav()">חנות ספרים</a>
+    <div class="mobile-nav-divider"></div>
+    <a href="donate.html" onclick="closeNav()">תרומה</a>
+    <div class="mobile-nav-divider"></div>
+    <a href="#section-cta" onclick="closeNav()">צור קשר</a>
+  </div>
+
   <header class="site-header">
     <nav>
       <div class="nav-logo">הרב מאיר אליהו</div>
       <ul class="nav-links">
         <li><a href="#section-about">אודות</a></li>
+        <li><a href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">שיעורים</a></li>
         <li><a href="shop.html">ספרים</a></li>
         <li><a href="donate.html">תרומה</a></li>
         <li><a href="#section-cta">צור קשר</a></li>
       </ul>
+      <button class="nav-hamburger" id="hamburger" aria-label="תפריט" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+      </button>
     </nav>
   </header>
 
@@ -98,6 +115,11 @@
           מאות שיעורים בהלכה, פרשת השבוע ומחשבת ישראל.<br/>
           ברמה עמוקה ובשפה נגישה — לכולם, בכל מקום.
         </p>
+        <a href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener"
+           class="section-link-btn">
+          <span>לערוץ היוטיוב</span>
+          <span class="arrow">←</span>
+        </a>
       </div>
     </section>
 
@@ -133,6 +155,10 @@
           ספרים רבים בנושאי הלכה, מחשבה ואגדה —<br/>
           מדריך רוחני לאלפי קוראים ברחבי העולם.
         </p>
+        <a href="shop.html" class="section-link-btn">
+          <span>לחנות הספרים</span>
+          <span class="arrow">←</span>
+        </a>
       </div>
     </section>
 
@@ -153,9 +179,202 @@
 
   </div><!-- /scroll-container -->
 
+  <!-- ═══════════════════════════════════════════════════
+       BELOW SCROLL — normal-flow sections
+  ════════════════════════════════════════════════════ -->
+  <div class="site-body">
+
+    <!-- ── LESSONS REEL ──────────────────────────────── -->
+    <section class="lessons-section">
+      <span class="s-eyebrow">ערוץ היוטיוב</span>
+      <h2 class="s-title">שיעורים אחרונים — <span>צפו עכשיו</span></h2>
+
+      <div class="reel-outer">
+        <div class="reel-track" id="reel-track">
+
+          <!-- 6 cards × duplicated below for seamless loop -->
+          <a class="lesson-card" href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">
+            <div class="lesson-thumb">
+              <div class="play-ring"><div class="play-triangle"></div></div>
+              <span class="lesson-thumb-label">פרשת השבוע</span>
+            </div>
+            <div class="lesson-info">
+              <div class="lesson-cat">שיעור שבועי</div>
+              <div class="lesson-title">פרשת השבוע — עיון בעמקי הפרשה</div>
+              <div class="lesson-duration">⏱ 45 דק׳</div>
+            </div>
+          </a>
+
+          <a class="lesson-card" href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">
+            <div class="lesson-thumb">
+              <div class="play-ring"><div class="play-triangle"></div></div>
+              <span class="lesson-thumb-label">קבלה</span>
+            </div>
+            <div class="lesson-info">
+              <div class="lesson-cat">תורת הנסתר</div>
+              <div class="lesson-title">ספר הזוהר — שיעור מקיף ומרומם</div>
+              <div class="lesson-duration">⏱ 52 דק׳</div>
+            </div>
+          </a>
+
+          <a class="lesson-card" href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">
+            <div class="lesson-thumb">
+              <div class="play-ring"><div class="play-triangle"></div></div>
+              <span class="lesson-thumb-label">הלכה</span>
+            </div>
+            <div class="lesson-info">
+              <div class="lesson-cat">שיעור יומי</div>
+              <div class="lesson-title">הלכה למעשה — שאלות ותשובות</div>
+              <div class="lesson-duration">⏱ 38 דק׳</div>
+            </div>
+          </a>
+
+          <a class="lesson-card" href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">
+            <div class="lesson-thumb">
+              <div class="play-ring"><div class="play-triangle"></div></div>
+              <span class="lesson-thumb-label">אמונה</span>
+            </div>
+            <div class="lesson-info">
+              <div class="lesson-cat">מחשבת ישראל</div>
+              <div class="lesson-title">אמונה ובטחון — כוח הנשמה הישראלית</div>
+              <div class="lesson-duration">⏱ 61 דק׳</div>
+            </div>
+          </a>
+
+          <a class="lesson-card" href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">
+            <div class="lesson-thumb">
+              <div class="play-ring"><div class="play-triangle"></div></div>
+              <span class="lesson-thumb-label">שבת</span>
+            </div>
+            <div class="lesson-info">
+              <div class="lesson-cat">שבת קודש</div>
+              <div class="lesson-title">שבת — סוד המנוחה וקדושת הזמן</div>
+              <div class="lesson-duration">⏱ 44 דק׳</div>
+            </div>
+          </a>
+
+          <a class="lesson-card" href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">
+            <div class="lesson-thumb">
+              <div class="play-ring"><div class="play-triangle"></div></div>
+              <span class="lesson-thumb-label">מועדים</span>
+            </div>
+            <div class="lesson-info">
+              <div class="lesson-cat">ימים טובים</div>
+              <div class="lesson-title">ראש השנה — מהות הדין והרחמים</div>
+              <div class="lesson-duration">⏱ 57 דק׳</div>
+            </div>
+          </a>
+
+          <!-- Duplicate for seamless infinite loop -->
+          <a class="lesson-card" href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">
+            <div class="lesson-thumb"><div class="play-ring"><div class="play-triangle"></div></div><span class="lesson-thumb-label">פרשת השבוע</span></div>
+            <div class="lesson-info"><div class="lesson-cat">שיעור שבועי</div><div class="lesson-title">פרשת השבוע — עיון בעמקי הפרשה</div><div class="lesson-duration">⏱ 45 דק׳</div></div>
+          </a>
+          <a class="lesson-card" href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">
+            <div class="lesson-thumb"><div class="play-ring"><div class="play-triangle"></div></div><span class="lesson-thumb-label">קבלה</span></div>
+            <div class="lesson-info"><div class="lesson-cat">תורת הנסתר</div><div class="lesson-title">ספר הזוהר — שיעור מקיף ומרומם</div><div class="lesson-duration">⏱ 52 דק׳</div></div>
+          </a>
+          <a class="lesson-card" href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">
+            <div class="lesson-thumb"><div class="play-ring"><div class="play-triangle"></div></div><span class="lesson-thumb-label">הלכה</span></div>
+            <div class="lesson-info"><div class="lesson-cat">שיעור יומי</div><div class="lesson-title">הלכה למעשה — שאלות ותשובות</div><div class="lesson-duration">⏱ 38 דק׳</div></div>
+          </a>
+          <a class="lesson-card" href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">
+            <div class="lesson-thumb"><div class="play-ring"><div class="play-triangle"></div></div><span class="lesson-thumb-label">אמונה</span></div>
+            <div class="lesson-info"><div class="lesson-cat">מחשבת ישראל</div><div class="lesson-title">אמונה ובטחון — כוח הנשמה הישראלית</div><div class="lesson-duration">⏱ 61 דק׳</div></div>
+          </a>
+          <a class="lesson-card" href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">
+            <div class="lesson-thumb"><div class="play-ring"><div class="play-triangle"></div></div><span class="lesson-thumb-label">שבת</span></div>
+            <div class="lesson-info"><div class="lesson-cat">שבת קודש</div><div class="lesson-title">שבת — סוד המנוחה וקדושת הזמן</div><div class="lesson-duration">⏱ 44 דק׳</div></div>
+          </a>
+          <a class="lesson-card" href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener">
+            <div class="lesson-thumb"><div class="play-ring"><div class="play-triangle"></div></div><span class="lesson-thumb-label">מועדים</span></div>
+            <div class="lesson-info"><div class="lesson-cat">ימים טובים</div><div class="lesson-title">ראש השנה — מהות הדין והרחמים</div><div class="lesson-duration">⏱ 57 דק׳</div></div>
+          </a>
+
+        </div><!-- /reel-track -->
+      </div><!-- /reel-outer -->
+
+      <div style="text-align:center; margin-top:40px;">
+        <a href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener"
+           class="section-link-btn" style="display:inline-flex;">
+          <span>לכל השיעורים ביוטיוב</span>
+          <span class="arrow">←</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ── BOOKS PROMO ─────────────────────────────── -->
+    <section class="books-promo-section">
+      <span class="s-eyebrow">חנות ספרים</span>
+      <h2 class="s-title">ספרי הרב — <span>לרכישה</span></h2>
+
+      <div class="books-promo-grid">
+        <a href="shop.html" class="promo-book">
+          <img src="https://rabbimeireliyahu.org/wp-content/uploads/2025/11/מעשה-מרכבה-ג-2-350x350.jpg"
+               alt="מרכבות פרעה" loading="lazy" />
+          <div class="promo-book-name">מרכבות פרעה — מעשה מרכבה</div>
+        </a>
+        <a href="shop.html" class="promo-book">
+          <img src="https://rabbimeireliyahu.org/wp-content/uploads/2025/11/מרכבות-ארגמן-חלק-ג׳-350x350.jpg"
+               alt="מרכבות ארגמן" loading="lazy" />
+          <div class="promo-book-name">מרכבות ארגמן — שו״ת</div>
+        </a>
+        <a href="shop.html" class="promo-book">
+          <img src="https://rabbimeireliyahu.org/wp-content/uploads/2025/10/אוצרות-המקדש-350x350.jpg"
+               alt="אוצרות המקדש" loading="lazy" />
+          <div class="promo-book-name">אוצרות המקדש</div>
+        </a>
+      </div>
+
+      <div class="books-promo-cta">
+        <a href="shop.html" class="promo-link">לכל הספרים ←</a>
+      </div>
+    </section>
+
+    <!-- ── SOCIAL BAR ──────────────────────────────── -->
+    <div class="social-bar">
+      <a href="https://www.youtube.com/@ravmeireliyahu" target="_blank" rel="noopener" class="social-link">
+        <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+        YouTube
+      </a>
+      <a href="https://wa.me/972523897818" target="_blank" rel="noopener" class="social-link">
+        <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5l-.9-2.1c-.2-.5-.4-.5-.7-.5H8c-.2 0-.5.1-.7.3C7 7.8 6.3 8.5 6.3 9.9s1 2.8 1.1 3c.1.2 2 3.1 4.8 4.3 2.8 1.2 2.8.8 3.3.8s1.5-.6 1.7-1.2c.2-.6.2-1.1.1-1.2-.1-.2-.2-.2-.5-.3zm-5.5 7.6a9.9 9.9 0 0 1-5.1-1.4l-.4-.2-3.5.9.9-3.4-.2-.4A9.9 9.9 0 0 1 2.1 12c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10z"/></svg>
+        WhatsApp
+      </a>
+      <a href="mailto:merkavutargaman@gmail.com" class="social-link">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        דוא״ל
+      </a>
+    </div>
+
+  </div><!-- /site-body -->
+
+  <!-- ── FLOATING WHATSAPP ──────────────────────────── -->
+  <a href="https://wa.me/972523897818" target="_blank" rel="noopener"
+     class="float-whatsapp" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5l-.9-2.1c-.2-.5-.4-.5-.7-.5H8c-.2 0-.5.1-.7.3C7 7.8 6.3 8.5 6.3 9.9s1 2.8 1.1 3c.1.2 2 3.1 4.8 4.3 2.8 1.2 2.8.8 3.3.8s1.5-.6 1.7-1.2c.2-.6.2-1.1.1-1.2-.1-.2-.2-.2-.5-.3zm-5.5 7.6a9.9 9.9 0 0 1-5.1-1.4l-.4-.2-3.5.9.9-3.4-.2-.4A9.9 9.9 0 0 1 2.1 12c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10z"/></svg>
+  </a>
+
   <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
   <script src="js/app.js"></script>
+
+  <script>
+    // ── Hamburger ─────────────────────────────────
+    function toggleNav() {
+      const ham = document.getElementById('hamburger');
+      const nav = document.getElementById('mobile-nav');
+      ham.classList.toggle('open');
+      nav.classList.toggle('open');
+      document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+    }
+    function closeNav() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobile-nav').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeNav(); });
+  </script>
 </body>
 </html>
