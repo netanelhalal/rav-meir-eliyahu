@@ -1,358 +1,1090 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>תרומה — הרב מאיר אליהו</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/pages.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:       #c9a84c;
+      --gold-light: #f0d07a;
+      --amber:      #d4783a;
+      --amber-light:#f0944a;
+      --bg:         #0c0818;
+      --bg-card:    #1a1232;
+      --border:     rgba(201,168,76,0.18);
+      --text:       #f2ead8;
+      --muted:      #9d8fa8;
+      --font:       'Heebo', sans-serif;
+      --purple:     #7b3fa0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      direction: rtl;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ══ CANVAS BACKGROUND ═══════════════════════════ */
+    #particle-canvas {
+      position: fixed;
+      inset: 0; z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ══ STICKY DONATE CTA BAR ═══════════════════════ */
+    .sticky-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 28px;
+      background: rgba(12,8,24,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .sticky-logo {
+      font-size: 1rem; font-weight: 700;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-shadow: 0 0 20px rgba(201,168,76,0.4);
+    }
+    .sticky-nav { display: flex; align-items: center; gap: 24px; }
+    .sticky-nav a {
+      color: rgba(240,232,208,0.55);
+      text-decoration: none;
+      font-size: 0.84rem;
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
+    .sticky-nav a:hover { color: var(--gold-light); }
+    .sticky-nav a.active { color: var(--gold); }
+    .sticky-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 24px;
+      background: linear-gradient(135deg, var(--gold), var(--amber));
+      color: #0c0818;
+      font-family: var(--font); font-size: 0.88rem; font-weight: 700;
+      letter-spacing: 0.12em; border: none; cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      text-decoration: none;
+    }
+    .sticky-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* mobile hamburger */
+    .sticky-ham {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .sticky-ham span {
+      display: block; width: 22px; height: 1.5px;
+      background: var(--gold);
+      transition: transform 0.3s ease, opacity 0.2s ease;
+    }
+    .sticky-ham.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .sticky-ham.open span:nth-child(2) { opacity: 0; }
+    .sticky-ham.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mob-overlay {
+      position: fixed; inset: 0; z-index: 90;
+      background: rgba(8,4,20,0.97);
+      backdrop-filter: blur(24px);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 40px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .mob-overlay.open { opacity: 1; pointer-events: all; }
+    .mob-overlay a {
+      font-size: 1.8rem; font-weight: 700; letter-spacing: 0.1em;
+      color: rgba(240,232,208,0.65); text-decoration: none;
+      transition: color 0.25s ease;
+    }
+    .mob-overlay a:hover { color: var(--gold-light); }
+
+    /* ══ MAIN WRAPPER ════════════════════════════════ */
+    .main-wrap {
+      position: relative; z-index: 1;
+      padding-top: 64px;
+    }
+
+    /* ══ HERO ════════════════════════════════════════ */
+    .donate-hero {
+      text-align: center;
+      padding: 72px 24px 52px;
+      position: relative;
+    }
+    .donate-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 80% at 50% 0%, rgba(180,100,20,0.1) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 50% 0%, rgba(120,60,200,0.08) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* 3D rotating menorah/star SVG */
+    .hero-3d-icon {
+      display: inline-block;
+      font-size: 3.5rem;
+      margin-bottom: 16px;
+      animation: spin3d 8s ease-in-out infinite;
+      filter: drop-shadow(0 0 24px rgba(201,168,76,0.5));
+      transform-style: preserve-3d;
+    }
+    @keyframes spin3d {
+      0%   { transform: rotateY(0deg) scale(1); }
+      25%  { transform: rotateY(15deg) scale(1.05); }
+      50%  { transform: rotateY(0deg) scale(1); }
+      75%  { transform: rotateY(-15deg) scale(1.05); }
+      100% { transform: rotateY(0deg) scale(1); }
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem; letter-spacing: 0.4em;
+      color: var(--amber-light); text-transform: uppercase; margin-bottom: 14px;
+    }
+    .hero-title {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 900; letter-spacing: -0.03em; color: #fff;
+      line-height: 1.15;
+      text-shadow: 0 0 60px rgba(120,60,200,0.25);
+      margin-bottom: 14px;
+    }
+    .hero-title span { color: var(--gold-light); }
+    .hero-sub {
+      font-size: 1rem; font-weight: 300; color: var(--muted);
+      letter-spacing: 0.06em; max-width: 520px; margin: 0 auto;
+      line-height: 1.7;
+    }
+    .hero-divider {
+      width: 50px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 24px auto 0;
+      box-shadow: 0 0 12px rgba(201,168,76,0.5);
+    }
+
+    /* ══ IMPACT COUNTER BAR ══════════════════════════ */
+    .impact-bar {
+      display: flex; justify-content: center;
+      max-width: 700px; margin: 0 auto 52px;
+      border: 1px solid var(--border);
+      background: rgba(26,18,50,0.6);
+      backdrop-filter: blur(12px);
+    }
+    .impact-cell {
+      flex: 1; text-align: center; padding: 20px 12px;
+      border-left: 1px solid var(--border);
+      position: relative;
+    }
+    .impact-cell:last-child { border-left: none; }
+    .impact-num {
+      display: block;
+      font-size: 1.9rem; font-weight: 900; line-height: 1;
+      color: var(--gold-light);
+      text-shadow: 0 0 20px rgba(201,168,76,0.35);
+    }
+    .impact-lbl {
+      display: block; font-size: 0.7rem; color: var(--muted);
+      letter-spacing: 0.1em; margin-top: 6px;
+    }
+
+    /* ══ TOGGLE ══════════════════════════════════════ */
+    .section-wrap {
+      max-width: 760px; margin: 0 auto; padding: 0 20px 100px;
+    }
+    .toggle-row {
+      display: flex;
+      border: 1px solid var(--border);
+      background: rgba(26,18,50,0.5);
+      margin-bottom: 36px;
+      overflow: hidden;
+    }
+    .toggle-btn {
+      flex: 1; padding: 16px;
+      background: transparent; border: none;
+      color: var(--muted);
+      font-family: var(--font); font-size: 0.95rem; font-weight: 500;
+      letter-spacing: 0.06em; cursor: pointer;
+      transition: all 0.28s ease; position: relative;
+    }
+    .toggle-btn.active { background: rgba(201,168,76,0.1); color: var(--gold-light); }
+    .toggle-btn.active::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      box-shadow: 0 0 8px rgba(201,168,76,0.6);
+    }
+
+    /* ══ AMOUNT CARDS GRID ═══════════════════════════ */
+    .amounts-section { margin-bottom: 8px; }
+    .amounts-label {
+      font-size: 0.78rem; color: var(--gold); letter-spacing: 0.22em;
+      text-transform: uppercase; margin-bottom: 16px; display: block;
+    }
+    .amounts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .amount-card {
+      position: relative;
+      background: rgba(26,18,50,0.7);
+      border: 1px solid rgba(201,168,76,0.14);
+      padding: 20px 16px 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      transform-style: preserve-3d;
+      overflow: hidden;
+    }
+    .amount-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.06), rgba(212,120,58,0.04));
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .amount-card:hover { border-color: rgba(201,168,76,0.5); transform: translateY(-4px); }
+    .amount-card:hover::before { opacity: 1; }
+    .amount-card.selected {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.1);
+      box-shadow: 0 0 32px rgba(201,168,76,0.18), inset 0 0 20px rgba(201,168,76,0.04);
+      transform: translateY(-4px);
+    }
+    .amount-card.selected::before { opacity: 1; }
+
+    /* popular badge */
+    .card-badge {
+      position: absolute; top: -1px; right: -1px;
+      padding: 4px 10px;
+      background: linear-gradient(135deg, var(--gold), var(--amber));
+      color: #0c0818;
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em;
+    }
+
+    .card-label {
+      font-size: 0.65rem; letter-spacing: 0.28em; color: var(--amber-light);
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    .card-price {
+      font-size: 1.8rem; font-weight: 900; line-height: 1;
+      color: var(--gold-light);
+    }
+    .card-price .curr { font-size: 0.95rem; font-weight: 400; color: var(--gold); }
+    .card-sub {
+      font-size: 0.7rem; color: var(--muted); margin-top: 4px; margin-bottom: 14px;
+    }
+    .card-donate-btn {
+      width: 100%;
+      padding: 10px 0;
+      background: transparent;
+      border: 1px solid rgba(201,168,76,0.4);
+      color: var(--gold);
+      font-family: var(--font); font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.12em; cursor: pointer;
+      position: relative; overflow: hidden;
+      transition: color 0.28s ease;
+    }
+    .card-donate-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--gold), var(--amber));
+      transform: translateX(101%);
+      transition: transform 0.32s cubic-bezier(0.16,1,0.3,1);
+    }
+    .card-donate-btn:hover::before { transform: translateX(0); }
+    .card-donate-btn:hover { color: #0c0818; border-color: var(--gold); }
+    .card-donate-btn span { position: relative; z-index: 1; }
+    .amount-card.selected .card-donate-btn {
+      background: linear-gradient(135deg, var(--gold), var(--amber));
+      color: #0c0818; border-color: transparent;
+    }
+    .amount-card.selected .card-donate-btn::before { display: none; }
+
+    /* ══ CUSTOM AMOUNT ═══════════════════════════════ */
+    .custom-row {
+      position: relative; margin-bottom: 36px;
+    }
+    .custom-row input {
+      width: 100%;
+      padding: 16px 20px 16px 50px;
+      background: rgba(26,18,50,0.7);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font); font-size: 1.1rem;
+      direction: rtl; outline: none;
+      transition: border-color 0.28s, box-shadow 0.28s;
+    }
+    .custom-row input:focus {
+      border-color: rgba(201,168,76,0.6);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.07);
+    }
+    .custom-row input::placeholder { color: var(--muted); }
+    .custom-row .sym {
+      position: absolute; left: 16px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold); font-weight: 700; pointer-events: none;
+    }
+
+    /* ══ RECURRING NOTE ══════════════════════════════ */
+    .recurring-note {
+      display: none;
+      padding: 14px 18px;
+      border: 1px solid rgba(212,120,58,0.28);
+      background: linear-gradient(135deg, rgba(212,120,58,0.07), rgba(201,168,76,0.04));
+      font-size: 0.88rem; color: rgba(240,232,208,0.7);
+      line-height: 1.65; margin-bottom: 28px;
+    }
+
+    /* ══ FORM GLASSMORPHISM ═══════════════════════════ */
+    .form-glass {
+      background: rgba(26,18,50,0.55);
+      border: 1px solid rgba(201,168,76,0.14);
+      backdrop-filter: blur(20px);
+      padding: 28px;
+      margin-bottom: 8px;
+      transition: border-color 0.3s;
+    }
+    .form-glass:hover { border-color: rgba(201,168,76,0.25); }
+    .form-title {
+      font-size: 0.72rem; letter-spacing: 0.3em; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 20px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field label {
+      font-size: 0.76rem; font-weight: 500;
+      letter-spacing: 0.12em; color: var(--gold);
+    }
+    .field input, .field textarea {
+      padding: 13px 14px;
+      background: rgba(12,8,24,0.6);
+      border: 1px solid rgba(201,168,76,0.14);
+      color: var(--text);
+      font-family: var(--font); font-size: 0.92rem;
+      direction: rtl; outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .field input:focus, .field textarea:focus {
+      border-color: rgba(201,168,76,0.55);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.05);
+    }
+    .field input::placeholder, .field textarea::placeholder { color: var(--muted); }
+    .field textarea { resize: none; height: 80px; }
+
+    .dedication-glass {
+      background: linear-gradient(135deg, rgba(120,60,200,0.07), rgba(201,168,76,0.04));
+      border-color: rgba(201,168,76,0.22) !important;
+    }
+    .dedication-glass .form-title { color: var(--amber-light); }
+
+    .consent {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid rgba(201,168,76,0.1);
+      background: rgba(201,168,76,0.02);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .consent:hover { border-color: rgba(201,168,76,0.28); }
+    .consent input { width: 15px; height: 15px; margin-top: 3px; accent-color: var(--gold); flex-shrink: 0; }
+    .consent span { font-size: 0.8rem; color: rgba(240,232,208,0.6); line-height: 1.5; }
+
+    /* ══ DONATE BUTTON ═══════════════════════════════ */
+    .donate-btn-wrap { margin-top: 10px; position: relative; }
+    .btn-donate-main {
+      width: 100%;
+      padding: 22px;
+      background: linear-gradient(135deg, #c9a84c 0%, #d4783a 100%);
+      border: none; color: #0c0818;
+      font-family: var(--font); font-size: 1.05rem; font-weight: 900;
+      letter-spacing: 0.22em; cursor: pointer;
+      position: relative; overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 8px 32px rgba(201,168,76,0.3);
+    }
+    .btn-donate-main:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 48px rgba(201,168,76,0.45);
+    }
+    .btn-donate-main:active { transform: scale(0.99); }
+    .btn-donate-main::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .btn-text { position: relative; z-index: 1; }
+    /* ripple */
+    .ripple-el {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple-anim 0.6s linear;
+      background: rgba(255,255,255,0.2);
+      pointer-events: none;
+    }
+    @keyframes ripple-anim {
+      to { transform: scale(4); opacity: 0; }
+    }
+    /* pulse glow */
+    @keyframes btn-glow {
+      0%,100% { box-shadow: 0 8px 32px rgba(201,168,76,0.3); }
+      50%      { box-shadow: 0 8px 52px rgba(201,168,76,0.55); }
+    }
+    .btn-donate-main { animation: btn-glow 2.8s ease-in-out infinite; }
+
+    /* ══ TRUST ROW ═══════════════════════════════════ */
+    .trust-row {
+      display: flex; justify-content: center; gap: 18px;
+      margin-top: 22px; flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.76rem; color: var(--muted);
+    }
+
+    /* ══ LIVE DONORS FEED ════════════════════════════ */
+    .donors-section {
+      max-width: 760px; margin: 64px auto 0; padding: 0 20px 120px;
+    }
+    .donors-eyebrow {
+      text-align: center; display: block;
+      font-size: 0.7rem; letter-spacing: 0.35em; color: var(--amber-light);
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .donors-title {
+      text-align: center;
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      font-weight: 900; color: #fff; margin-bottom: 4px;
+    }
+    .donors-count-live {
+      text-align: center;
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      font-weight: 900; color: var(--gold-light);
+      text-shadow: 0 0 30px rgba(201,168,76,0.3);
+      display: block; margin-bottom: 40px;
+    }
+    .donors-count-live span { font-size: 1.5rem; color: var(--gold); }
+
+    .donors-feed {
+      display: flex; flex-direction: column; gap: 0;
+      position: relative;
+      max-height: 460px; overflow: hidden;
+    }
+    .donors-feed::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 80px;
+      background: linear-gradient(to top, var(--bg), transparent);
+      pointer-events: none;
+    }
+
+    .donor-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(201,168,76,0.07);
+      animation: donor-enter 0.5s cubic-bezier(0.16,1,0.3,1) both;
+      background: rgba(26,18,50,0.3);
+      transition: background 0.25s;
+    }
+    .donor-row:hover { background: rgba(201,168,76,0.04); }
+    @keyframes donor-enter {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .donor-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--amber));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 700; color: #fff;
+      flex-shrink: 0;
+    }
+    .donor-info { flex: 1; min-width: 0; }
+    .donor-name { font-size: 0.9rem; font-weight: 700; color: #fff; }
+    .donor-msg  { font-size: 0.78rem; color: var(--muted); margin-top: 2px; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .donor-amount {
+      font-size: 1.05rem; font-weight: 900;
+      color: var(--gold-light); flex-shrink: 0;
+      text-shadow: 0 0 12px rgba(201,168,76,0.2);
+    }
+    .donor-time { font-size: 0.68rem; color: rgba(157,143,168,0.5); flex-shrink: 0; }
+
+    /* ══ FLOATING WHATSAPP ═══════════════════════════ */
+    .float-wa {
+      position: fixed; bottom: 24px; left: 24px; z-index: 500;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: #25d366;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 4px 24px rgba(37,211,102,0.5);
+      animation: wa-p 3s ease-in-out infinite;
+      transition: transform 0.2s;
+    }
+    .float-wa:hover { transform: scale(1.1); }
+    .float-wa svg { width: 27px; height: 27px; fill: #fff; }
+    @keyframes wa-p {
+      0%,100% { box-shadow: 0 4px 24px rgba(37,211,102,0.5); }
+      50%      { box-shadow: 0 4px 40px rgba(37,211,102,0.75); }
+    }
+
+    /* ══ FOOTER ══════════════════════════════════════ */
+    .donate-footer {
+      border-top: 1px solid rgba(201,168,76,0.1);
+      padding: 28px 20px;
+      text-align: center;
+      background: rgba(12,8,24,0.7);
+      position: relative; z-index: 1;
+    }
+    .donate-footer p { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; }
+    .donate-footer a { color: var(--gold); text-decoration: none; }
+
+    /* ══ MOBILE ══════════════════════════════════════ */
+    @media (max-width: 700px) {
+      .sticky-nav { display: none; }
+      .sticky-ham { display: flex; }
+      .sticky-cta { padding: 9px 16px; font-size: 0.8rem; letter-spacing: 0.08em; }
+
+      .donate-hero { padding: 56px 20px 40px; }
+      .hero-title { font-size: clamp(1.8rem, 8vw, 2.8rem); }
+
+      .impact-bar { flex-wrap: wrap; margin: 0 20px 40px; }
+      .impact-cell { min-width: 45%; border-bottom: 1px solid var(--border); }
+      .impact-num { font-size: 1.5rem; }
+
+      .amounts-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
+      .card-price { font-size: 1.5rem; }
+
+      .form-row { grid-template-columns: 1fr; }
+      .form-glass { padding: 20px 18px; }
+
+      .trust-row { gap: 10px; }
+      .donors-section { margin-top: 40px; }
+
+      .float-wa { left: 14px; bottom: 16px; width: 46px; height: 46px; }
+    }
+    @media (max-width: 400px) {
+      .amounts-grid { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
 </head>
-<body class="donate-page">
+<body>
 
-  <!-- background orbs -->
-  <div class="donate-orb donate-orb-1"></div>
-  <div class="donate-orb donate-orb-2"></div>
-  <div class="donate-orb donate-orb-3"></div>
+  <!-- ══ CANVAS PARTICLES ══════════════════════════ -->
+  <canvas id="particle-canvas"></canvas>
 
-  <!-- ── MOBILE NAV ───────────────────────────────── -->
-  <div class="page-mobile-nav" id="page-mobile-nav">
-    <a href="index.html" onclick="closePageNav()">בית</a>
-    <div class="page-mobile-nav-div"></div>
-    <a href="shop.html" onclick="closePageNav()">ספרים</a>
-    <div class="page-mobile-nav-div"></div>
-    <a href="donate.html" class="active" onclick="closePageNav()">תרומה</a>
-    <div class="page-mobile-nav-div"></div>
-    <a href="https://www.youtube.com/@ravmeireliyahu" target="_blank" onclick="closePageNav()">שיעורים</a>
+  <!-- ══ MOBILE NAV ════════════════════════════════ -->
+  <div class="mob-overlay" id="mob-nav">
+    <a href="index.html" onclick="closeMob()">בית</a>
+    <a href="shop.html" onclick="closeMob()">ספרים</a>
+    <a href="donate.html" onclick="closeMob()">תרומה</a>
+    <a href="https://www.youtube.com/@ravmeireliyahu" target="_blank" onclick="closeMob()">שיעורים</a>
   </div>
 
-  <!-- ── HEADER ─────────────────────────────────────── -->
-  <header class="site-header">
-    <a href="index.html" class="nav-logo">הרב מאיר אליהו</a>
-    <ul class="nav-links">
-      <li><a href="index.html">בית</a></li>
-      <li><a href="shop.html">ספרים</a></li>
-      <li><a href="donate.html" class="active">תרומה</a></li>
-      <li><a href="index.html#section-cta">צור קשר</a></li>
-    </ul>
-    <button class="page-hamburger" id="page-ham" aria-label="תפריט" onclick="togglePageNav()">
-      <span></span><span></span><span></span>
-    </button>
+  <!-- ══ STICKY BAR ════════════════════════════════ -->
+  <header class="sticky-bar">
+    <a href="index.html" class="sticky-logo">הרב מאיר אליהו</a>
+    <nav class="sticky-nav">
+      <a href="index.html">בית</a>
+      <a href="shop.html">ספרים</a>
+      <a href="donate.html" class="active">תרומה</a>
+      <a href="index.html#section-cta">צור קשר</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="#donate-form" class="sticky-cta">🔥 לתרומה עכשיו</a>
+      <button class="sticky-ham" id="mob-btn" onclick="toggleMob()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </header>
 
-  <!-- ── FLOATING WHATSAPP ──────────────────────────── -->
-  <a href="https://wa.me/972523897818" target="_blank" rel="noopener"
-     class="float-whatsapp" aria-label="WhatsApp">
+  <!-- ══ MAIN ══════════════════════════════════════ -->
+  <div class="main-wrap">
+
+    <!-- HERO -->
+    <section class="donate-hero" id="donate-hero">
+      <div class="hero-3d-icon" id="hero3d">🕎</div>
+      <p class="hero-eyebrow">זכות הרבים</p>
+      <h1 class="hero-title">תרמו ל<span>הפצת</span> התורה</h1>
+      <p class="hero-sub">כל תרומה מסייעת להפיץ את אור התורה לאלפי שומעים ברחבי העולם</p>
+      <div class="hero-divider"></div>
+    </section>
+
+    <!-- IMPACT BAR -->
+    <div class="impact-bar" id="impact-bar" style="position:relative;z-index:1;max-width:700px;margin:0 auto 52px;">
+      <div class="impact-cell">
+        <span class="impact-num" data-target="200000" data-suffix="K+">0</span>
+        <span class="impact-lbl">מאזינים חודשיים</span>
+      </div>
+      <div class="impact-cell">
+        <span class="impact-num" data-target="500" data-suffix="+">0</span>
+        <span class="impact-lbl">שיעורים בשנה</span>
+      </div>
+      <div class="impact-cell">
+        <span class="impact-num" data-target="3200" data-suffix="+">0</span>
+        <span class="impact-lbl">תורמים שותפים</span>
+      </div>
+    </div>
+
+    <!-- FORM SECTION -->
+    <section class="section-wrap" id="donate-form">
+
+      <!-- toggle -->
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="btn-onetime" onclick="setType('onetime')">⚡ תרומה חד פעמית</button>
+        <button class="toggle-btn" id="btn-recur" onclick="setType('recurring')">🔁 הוראת קבע חודשית</button>
+      </div>
+
+      <!-- recurring note -->
+      <div class="recurring-note" id="recur-note">
+        💛 <strong style="color:var(--gold-light);">הוראת קבע</strong> — תרומה חודשית קבועה. ניתן לבטל בכל עת.
+      </div>
+
+      <!-- amount cards -->
+      <div class="amounts-section">
+        <span class="amounts-label">✦ בחרו את חלקכם ✦</span>
+        <div class="amounts-grid" id="amounts-grid">
+
+          <div class="amount-card" data-amount="36" onclick="pickCard(this)">
+            <div class="card-label">ל״ו — חיים</div>
+            <div class="card-price"><span class="curr">₪</span>36</div>
+            <div class="card-sub" id="sub-36">לתרומה</div>
+            <button class="card-donate-btn" onclick="event.stopPropagation();pickCard(this.closest('.amount-card'));scrollForm()"><span>לתרומה ←</span></button>
+          </div>
+
+          <div class="amount-card selected" data-amount="180" onclick="pickCard(this)">
+            <div class="card-badge">✡ פופולרי</div>
+            <div class="card-label">קדוש</div>
+            <div class="card-price"><span class="curr">₪</span>180</div>
+            <div class="card-sub" id="sub-180">לתרומה</div>
+            <button class="card-donate-btn" onclick="event.stopPropagation();pickCard(this.closest('.amount-card'));scrollForm()"><span>לתרומה ←</span></button>
+          </div>
+
+          <div class="amount-card" data-amount="360" onclick="pickCard(this)">
+            <div class="card-label">שלם</div>
+            <div class="card-price"><span class="curr">₪</span>360</div>
+            <div class="card-sub" id="sub-360">לתרומה</div>
+            <button class="card-donate-btn" onclick="event.stopPropagation();pickCard(this.closest('.amount-card'));scrollForm()"><span>לתרומה ←</span></button>
+          </div>
+
+          <div class="amount-card" data-amount="500" onclick="pickCard(this)">
+            <div class="card-label">תמיכה</div>
+            <div class="card-price"><span class="curr">₪</span>500</div>
+            <div class="card-sub" id="sub-500">לתרומה</div>
+            <button class="card-donate-btn" onclick="event.stopPropagation();pickCard(this.closest('.amount-card'));scrollForm()"><span>לתרומה ←</span></button>
+          </div>
+
+          <div class="amount-card" data-amount="1000" onclick="pickCard(this)">
+            <div class="card-label">תיקון</div>
+            <div class="card-price"><span class="curr">₪</span>1,000</div>
+            <div class="card-sub" id="sub-1000">לתרומה</div>
+            <button class="card-donate-btn" onclick="event.stopPropagation();pickCard(this.closest('.amount-card'));scrollForm()"><span>לתרומה ←</span></button>
+          </div>
+
+          <div class="amount-card" data-amount="1800" onclick="pickCard(this)">
+            <div class="card-label">חי — נשמה</div>
+            <div class="card-price"><span class="curr">₪</span>1,800</div>
+            <div class="card-sub" id="sub-1800">לתרומה</div>
+            <button class="card-donate-btn" onclick="event.stopPropagation();pickCard(this.closest('.amount-card'));scrollForm()"><span>לתרומה ←</span></button>
+          </div>
+
+        </div>
+
+        <!-- custom -->
+        <div class="custom-row">
+          <span class="sym">₪</span>
+          <input type="number" id="custom-input" placeholder="💛 סכום אחר — תרמו כמה שתרצו"
+                 min="10" oninput="onCustom()" />
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <form id="main-form" onsubmit="donateSend(event)">
+        <div class="form-glass">
+          <div class="form-title">✦ פרטי התורם</div>
+          <div class="form-row" style="margin-bottom:14px;">
+            <div class="field">
+              <label for="fn">שם פרטי</label>
+              <input id="fn" type="text" placeholder="ישראל" required />
+            </div>
+            <div class="field">
+              <label for="ln">שם משפחה</label>
+              <input id="ln" type="text" placeholder="ישראלי" required />
+            </div>
+          </div>
+          <div class="form-row" style="margin-bottom:14px;">
+            <div class="field">
+              <label for="em">דוא״ל</label>
+              <input id="em" type="email" placeholder="israel@gmail.com" required />
+            </div>
+            <div class="field">
+              <label for="ph">טלפון</label>
+              <input id="ph" type="tel" placeholder="050-0000000" required />
+            </div>
+          </div>
+          <div class="field">
+            <label for="city">עיר</label>
+            <input id="city" type="text" placeholder="ירושלים" />
+          </div>
+        </div>
+
+        <div class="form-glass dedication-glass" style="margin-bottom:14px;">
+          <div class="form-title">✨ הקדשה (רשות)</div>
+          <div class="field">
+            <textarea id="ded" placeholder="לעילוי נשמת / לרפואת / לכבוד..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-glass" style="display:flex;flex-direction:column;gap:10px;padding:20px 20px;">
+          <label class="consent">
+            <input type="checkbox" id="c-email" required />
+            <span>אני מסכים/ה לקבל עדכונים בדוא״ל מהרב מאיר אליהו</span>
+          </label>
+          <label class="consent">
+            <input type="checkbox" id="c-sms" />
+            <span>אני מסכים/ה לקבל עדכונים ב-SMS</span>
+          </label>
+        </div>
+
+        <div class="donate-btn-wrap">
+          <button type="submit" class="btn-donate-main" id="main-donate-btn">
+            <span class="btn-text" id="btn-label">לתרומה של 180 ₪ ←</span>
+          </button>
+        </div>
+
+        <div class="trust-row">
+          <div class="trust-item">🔒 תשלום מאובטח SSL</div>
+          <div class="trust-item">🧾 קבלה באימייל</div>
+          <div class="trust-item">✡️ לזכות ולעילוי</div>
+          <div class="trust-item">↩️ ביטול הו״ק בכל עת</div>
+        </div>
+      </form>
+    </section>
+
+    <!-- ══ LIVE DONORS FEED ══════════════════════════ -->
+    <section class="donors-section">
+      <span class="donors-eyebrow">• תורמים אחרונים •</span>
+      <h2 class="donors-title">אנשים שהצטרפו</h2>
+      <span class="donors-count-live" id="live-count">0<span> תורמים</span></span>
+
+      <div class="donors-feed" id="donors-feed">
+        <!-- filled by JS -->
+      </div>
+    </section>
+
+  </div><!-- /main-wrap -->
+
+  <!-- ══ FOOTER ════════════════════════════════════ -->
+  <footer class="donate-footer">
+    <p>© 2026 הרב מאיר אליהו · <a href="shop.html">חנות ספרים</a> · <a href="index.html">בית</a></p>
+  </footer>
+
+  <!-- WhatsApp -->
+  <a href="https://wa.me/972523897818" target="_blank" rel="noopener" class="float-wa" aria-label="WhatsApp">
     <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5l-.9-2.1c-.2-.5-.4-.5-.7-.5H8c-.2 0-.5.1-.7.3C7 7.8 6.3 8.5 6.3 9.9s1 2.8 1.1 3c.1.2 2 3.1 4.8 4.3 2.8 1.2 2.8.8 3.3.8s1.5-.6 1.7-1.2c.2-.6.2-1.1.1-1.2-.1-.2-.2-.2-.5-.3zm-5.5 7.6a9.9 9.9 0 0 1-5.1-1.4l-.4-.2-3.5.9.9-3.4-.2-.4A9.9 9.9 0 0 1 2.1 12c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10z"/></svg>
   </a>
 
-  <!-- ── PAGE HERO ───────────────────────────────────── -->
-  <div class="page-hero">
-    <span class="page-hero-label">זכות הרבים</span>
-    <h1 class="page-hero-title">תרמו ל<span>הפצת התורה</span></h1>
-    <p class="page-hero-sub">כל תרומה מסייעת להפיץ את אור התורה לאלפי שומעים</p>
-    <div class="page-hero-divider"></div>
-  </div>
-
-  <!-- ── IMPACT STATS ───────────────────────────────── -->
-  <div class="donate-impact" id="impact-bar">
-    <div class="impact-stat">
-      <span class="impact-num" id="ic-listeners">0</span>
-      <span class="impact-label">מאזינים חודשיים</span>
-    </div>
-    <div class="impact-stat">
-      <span class="impact-num" id="ic-lessons">0</span>
-      <span class="impact-label">שיעורים בשנה</span>
-    </div>
-    <div class="impact-stat">
-      <span class="impact-num" id="ic-donors">0</span>
-      <span class="impact-label">תורמים שותפים</span>
-    </div>
-  </div>
-
-  <!-- ── DONATE FORM ─────────────────────────────────── -->
-  <main class="donate-wrap">
-
-    <!-- Toggle: חד פעמי / הוראת קבע -->
-    <div class="donate-toggle">
-      <button class="donate-toggle-btn active" id="btn-onetime" onclick="setType('onetime')">
-        תרומה חד פעמית
-      </button>
-      <button class="donate-toggle-btn" id="btn-recurring" onclick="setType('recurring')">
-        הוראת קבע חודשית
-      </button>
-    </div>
-
-    <!-- סכומים מהירים -->
-    <div class="amounts-grid">
-      <button class="amount-btn" onclick="selectAmount(36)">
-        36<span class="amount-label">₪ — ל״ו</span>
-      </button>
-      <button class="amount-btn" onclick="selectAmount(72)">
-        72<span class="amount-label">₪ — ע״ב</span>
-      </button>
-      <button class="amount-btn selected" onclick="selectAmount(180)">
-        180<span class="amount-label">₪ — קדוש</span>
-      </button>
-      <button class="amount-btn" onclick="selectAmount(360)">
-        360<span class="amount-label">₪ — שלם</span>
-      </button>
-      <button class="amount-btn" onclick="selectAmount(500)">
-        500<span class="amount-label">₪</span>
-      </button>
-      <button class="amount-btn" onclick="selectAmount(1000)">
-        1,000<span class="amount-label">₪</span>
-      </button>
-      <button class="amount-btn" onclick="selectAmount(1800)">
-        1,800<span class="amount-label">₪ — חי</span>
-      </button>
-      <button class="amount-btn" id="btn-custom" onclick="focusCustom()">
-        אחר<span class="amount-label">הזן סכום</span>
-      </button>
-    </div>
-
-    <!-- סכום מותאם אישית -->
-    <div class="custom-amount-wrap">
-      <span class="currency-symbol">₪</span>
-      <input type="number" id="custom-amount" placeholder="הזן סכום אחר..."
-             min="10" step="1" oninput="onCustomInput()" />
-    </div>
-
-    <!-- הוראת קבע note -->
-    <div id="recurring-note" style="display:none; margin-bottom:24px;">
-      <div style="
-        padding:16px 20px;
-        border:1px solid rgba(212,120,58,0.25);
-        background:linear-gradient(135deg,rgba(212,120,58,0.06),rgba(201,168,76,0.04));
-        font-size:0.88rem; color:rgba(240,232,208,0.75);
-        line-height:1.7;
-      ">
-        💛 <strong style="color:#f0d07a;">הוראת קבע</strong> — תרומה חודשית קבועה שתסייע להמשך הפצת התורה.
-        ניתן לבטל בכל עת.
-      </div>
-    </div>
-
-    <!-- פרטי תורם -->
-    <form class="donate-form" id="donate-form" onsubmit="handleDonate(event)">
-
-      <div class="form-row">
-        <div class="field-group">
-          <label class="field-label" for="donor-firstname">שם פרטי</label>
-          <input class="field-input" id="donor-firstname" type="text" placeholder="ישראל" required />
-        </div>
-        <div class="field-group">
-          <label class="field-label" for="donor-lastname">שם משפחה</label>
-          <input class="field-input" id="donor-lastname" type="text" placeholder="ישראלי" required />
-        </div>
-      </div>
-
-      <div class="field-group">
-        <label class="field-label" for="donor-email">דוא״ל</label>
-        <input class="field-input" id="donor-email" type="email" placeholder="israel@gmail.com" required />
-      </div>
-
-      <div class="field-group">
-        <label class="field-label" for="donor-phone">טלפון</label>
-        <input class="field-input" id="donor-phone" type="tel" placeholder="050-0000000" required />
-      </div>
-
-      <div class="field-group">
-        <label class="field-label" for="donor-city">עיר</label>
-        <input class="field-input" id="donor-city" type="text" placeholder="ירושלים" />
-      </div>
-
-      <!-- הקדשה — highlighted section -->
-      <div class="dedication-highlight">
-        <div class="field-group">
-          <label class="field-label" for="donor-dedication">✨ הקדשה (רשות)</label>
-          <input class="field-input" id="donor-dedication" type="text"
-                 placeholder="לעילוי נשמת / לרפואת / לכבוד..."
-                 style="background:rgba(26,18,50,0.5);" />
-        </div>
-      </div>
-
-      <!-- הסכמות -->
-      <label class="consent-row">
-        <input type="checkbox" id="consent-email" required />
-        <span style="font-size:0.82rem;color:rgba(240,232,208,0.65);line-height:1.5;">
-          אני מסכים/ה לקבל עדכונים ושיעורים בדוא״ל מהרב מאיר אליהו
-        </span>
-      </label>
-
-      <label class="consent-row">
-        <input type="checkbox" id="consent-sms" />
-        <span style="font-size:0.82rem;color:rgba(240,232,208,0.65);line-height:1.5;">
-          אני מסכים/ה לקבל עדכונים ב-SMS
-        </span>
-      </label>
-
-      <!-- כפתור תרומה -->
-      <button type="submit" class="btn-donate">
-        <span id="donate-btn-text">לתרומה של 180 ₪</span>
-      </button>
-
-    </form>
-
-    <!-- Trust indicators -->
-    <div class="donate-trust">
-      <div class="trust-item">
-        <span class="trust-icon">🔒</span>
-        <span>תשלום מאובטח</span>
-      </div>
-      <div class="trust-item">
-        <span class="trust-icon">🧾</span>
-        <span>קבלה באימייל</span>
-      </div>
-      <div class="trust-item">
-        <span class="trust-icon">✡️</span>
-        <span>לזכות ולעילוי נשמות</span>
-      </div>
-      <div class="trust-item">
-        <span class="trust-icon">↩️</span>
-        <span>ביטול הו״ק בכל עת</span>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- ── FOOTER ──────────────────────────────────────── -->
-  <footer class="site-footer">
-    <p>© 2026 הרב מאיר אליהו · כל הזכויות שמורות · <a href="shop.html">חנות ספרים</a></p>
-  </footer>
-
   <script>
-    // ── Page hamburger ─────────────────────────────
-    function togglePageNav() {
-      const ham = document.getElementById('page-ham');
-      const nav = document.getElementById('page-mobile-nav');
-      ham.classList.toggle('open');
-      nav.classList.toggle('open');
-      document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+  // ══ CANVAS PARTICLES ════════════════════════════
+  (function(){
+    const cv = document.getElementById('particle-canvas');
+    const ctx = cv.getContext('2d');
+    let W, H, particles = [];
+    const N = 80;
+
+    function resize() {
+      W = cv.width  = window.innerWidth;
+      H = cv.height = window.innerHeight;
     }
-    function closePageNav() {
-      document.getElementById('page-ham').classList.remove('open');
-      document.getElementById('page-mobile-nav').classList.remove('open');
-      document.body.style.overflow = '';
-    }
-    document.addEventListener('keydown', e => { if(e.key==='Escape') closePageNav(); });
+    resize();
+    window.addEventListener('resize', resize);
 
-    let selectedAmount = 180;
-    let donateType = 'onetime';
+    function rand(a,b){ return a + Math.random()*(b-a); }
 
-    // ── Animated impact counters ─────────────────────
-    function animateCounter(el, target, suffix) {
-      let start = 0;
-      const duration = 1800;
-      const step = 16;
-      const increment = target / (duration / step);
-      const timer = setInterval(() => {
-        start = Math.min(start + increment, target);
-        el.textContent = Math.round(start).toLocaleString('he-IL') + suffix;
-        if (start >= target) clearInterval(timer);
-      }, step);
-    }
-
-    const impactObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCounter(document.getElementById('ic-listeners'), 200000, 'K+');
-          animateCounter(document.getElementById('ic-lessons'),   500,    '+');
-          animateCounter(document.getElementById('ic-donors'),    3200,   '+');
-          impactObserver.disconnect();
-        }
-      });
-    }, { threshold: 0.3 });
-    impactObserver.observe(document.getElementById('impact-bar'));
-
-    // Override with better format
-    function animateCounter(el, target, suffix) {
-      const obj = { val: 0 };
-      const duration = 1800;
-      const start = Date.now();
-      function tick() {
-        const elapsed = Date.now() - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const val = Math.round(eased * target);
-        if (suffix === 'K+') {
-          el.textContent = val >= 1000
-            ? Math.round(val / 1000) + 'K+'
-            : val + '+';
-        } else {
-          el.textContent = val.toLocaleString('he-IL') + suffix;
-        }
-        if (progress < 1) requestAnimationFrame(tick);
+    class Particle {
+      constructor() { this.reset(true); }
+      reset(init) {
+        this.x  = rand(0, W);
+        this.y  = init ? rand(0, H) : H + 10;
+        this.r  = rand(1, 3.2);
+        this.vy = rand(0.3, 1.1);
+        this.vx = rand(-0.3, 0.3);
+        this.life = 0;
+        this.maxLife = rand(120, 260);
+        // colors: gold / amber / purple
+        const palette = [
+          'rgba(201,168,76,',
+          'rgba(240,208,122,',
+          'rgba(212,120,58,',
+          'rgba(140,80,200,',
+        ];
+        this.color = palette[Math.floor(Math.random()*palette.length)];
       }
-      requestAnimationFrame(tick);
-    }
-
-    // ── Type toggle ──────────────────────────────────
-    function setType(type) {
-      donateType = type;
-      document.getElementById('btn-onetime').classList.toggle('active', type === 'onetime');
-      document.getElementById('btn-recurring').classList.toggle('active', type === 'recurring');
-      document.getElementById('recurring-note').style.display = type === 'recurring' ? 'block' : 'none';
-      updateDonateBtn();
-    }
-
-    // ── Amount selection ─────────────────────────────
-    function selectAmount(amount) {
-      selectedAmount = amount;
-      document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
-      document.querySelectorAll('.amount-btn').forEach(b => {
-        const num = parseInt(b.textContent.replace(/,/g, ''));
-        if (num === amount) b.classList.add('selected');
-      });
-      document.getElementById('custom-amount').value = '';
-      updateDonateBtn();
-    }
-
-    function focusCustom() {
-      document.getElementById('custom-amount').focus();
-      document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
-      document.getElementById('btn-custom').classList.add('selected');
-    }
-
-    function onCustomInput() {
-      const val = parseInt(document.getElementById('custom-amount').value);
-      if (val > 0) {
-        selectedAmount = val;
-        document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('selected'));
-        document.getElementById('btn-custom').classList.add('selected');
-        updateDonateBtn();
+      update() {
+        this.x  += this.vx;
+        this.y  -= this.vy;
+        this.life++;
+        if(this.y < -10 || this.life > this.maxLife) this.reset(false);
+      }
+      draw() {
+        const t = this.life / this.maxLife;
+        const alpha = t < 0.2 ? t/0.2 : t > 0.8 ? (1-t)/0.2 : 1;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+        ctx.fillStyle = this.color + (alpha*0.55) + ')';
+        ctx.fill();
+        // glow
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r*2.5, 0, Math.PI*2);
+        ctx.fillStyle = this.color + (alpha*0.08) + ')';
+        ctx.fill();
       }
     }
 
-    function updateDonateBtn() {
-      const typeLabel = donateType === 'recurring' ? 'הוראת קבע חודשית' : 'תרומה';
-      const formatted = selectedAmount.toLocaleString('he-IL');
-      document.getElementById('donate-btn-text').textContent =
-        `${typeLabel} של ${formatted} ₪ ←`;
-    }
+    for(let i=0;i<N;i++) particles.push(new Particle());
 
-    // ── Submit (placeholder) ─────────────────────────
-    function handleDonate(e) {
-      e.preventDefault();
-      const data = {
-        type: donateType,
-        amount: selectedAmount,
-        firstName:   document.getElementById('donor-firstname').value,
-        lastName:    document.getElementById('donor-lastname').value,
-        email:       document.getElementById('donor-email').value,
-        phone:       document.getElementById('donor-phone').value,
-        city:        document.getElementById('donor-city').value,
-        dedication:  document.getElementById('donor-dedication').value,
-        consentEmail: document.getElementById('consent-email').checked,
-        consentSms:   document.getElementById('consent-sms').checked,
-      };
-      console.log('Donate payload:', data);
-      // TODO: שלח ל-Meshulam API
-      alert(`תודה! ממשיכים לעמוד התשלום עבור ${data.amount.toLocaleString('he-IL')} ₪`);
+    function loop() {
+      ctx.clearRect(0,0,W,H);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(loop);
     }
+    loop();
 
-    // init
-    updateDonateBtn();
+    // Mouse parallax on hero icon
+    let mx=0, my=0;
+    document.addEventListener('mousemove', e => {
+      mx = (e.clientX/window.innerWidth  - 0.5) * 2;
+      my = (e.clientY/window.innerHeight - 0.5) * 2;
+      const icon = document.getElementById('hero3d');
+      if(icon) icon.style.transform = `rotateY(${mx*18}deg) rotateX(${-my*10}deg) scale(1.05)`;
+    });
+  })();
+
+  // ══ MOBILE NAV ══════════════════════════════════
+  function toggleMob() {
+    const b = document.getElementById('mob-btn');
+    const n = document.getElementById('mob-nav');
+    b.classList.toggle('open');
+    n.classList.toggle('open');
+    document.body.style.overflow = n.classList.contains('open') ? 'hidden' : '';
+  }
+  function closeMob() {
+    document.getElementById('mob-btn').classList.remove('open');
+    document.getElementById('mob-nav').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if(e.key==='Escape'){closeMob();} });
+
+  // ══ IMPACT COUNTERS ══════════════════════════════
+  const icObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(!entry.isIntersecting) return;
+      entry.target.querySelectorAll('[data-target]').forEach(el => {
+        const target = +el.dataset.target;
+        const suffix = el.dataset.suffix || '';
+        const start = Date.now(), dur = 1800;
+        function tick() {
+          const p = Math.min((Date.now()-start)/dur, 1);
+          const e2 = 1 - Math.pow(1-p, 3);
+          const v = Math.round(e2*target);
+          el.textContent = suffix==='K+' ? (v>=1000 ? Math.round(v/1000)+'K+' : v+'+') : v.toLocaleString('he-IL')+suffix;
+          if(p<1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+      icObs.unobserve(entry.target);
+    });
+  }, { threshold: 0.4 });
+  icObs.observe(document.getElementById('impact-bar'));
+
+  // ══ AMOUNT CARDS ════════════════════════════════
+  let selectedAmount = 180;
+  let donateType = 'onetime';
+
+  function pickCard(card) {
+    document.querySelectorAll('.amount-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedAmount = +card.dataset.amount;
+    document.getElementById('custom-input').value = '';
+    updateBtn();
+  }
+
+  function onCustom() {
+    const v = +document.getElementById('custom-input').value;
+    if(v > 0) {
+      selectedAmount = v;
+      document.querySelectorAll('.amount-card').forEach(c => c.classList.remove('selected'));
+      updateBtn();
+    }
+  }
+
+  function setType(t) {
+    donateType = t;
+    document.getElementById('btn-onetime').classList.toggle('active', t==='onetime');
+    document.getElementById('btn-recur').classList.toggle('active', t==='recurring');
+    document.getElementById('recur-note').style.display = t==='recurring' ? 'block' : 'none';
+    // update card subs
+    document.querySelectorAll('.amount-card').forEach(card => {
+      const sub = card.querySelector('.card-sub');
+      if(sub) sub.textContent = t==='recurring' ? 'לחודש' : 'לתרומה';
+    });
+    updateBtn();
+  }
+
+  function updateBtn() {
+    const typeLabel = donateType==='recurring' ? 'הו״ק חודשית' : 'תרומה';
+    const fmt = selectedAmount.toLocaleString('he-IL');
+    document.getElementById('btn-label').textContent = `${typeLabel} של ${fmt} ₪ ←`;
+  }
+
+  function scrollForm() {
+    document.getElementById('main-form').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  // Ripple on donate button
+  document.getElementById('main-donate-btn').addEventListener('click', function(e){
+    const btn = this;
+    const r = btn.getBoundingClientRect();
+    const d = Math.max(r.width, r.height);
+    const el = document.createElement('span');
+    el.className = 'ripple-el';
+    el.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;
+    btn.appendChild(el);
+    setTimeout(() => el.remove(), 700);
+  });
+
+  // ══ FORM SUBMIT ══════════════════════════════════
+  function donateSend(e) {
+    e.preventDefault();
+    const data = {
+      type: donateType, amount: selectedAmount,
+      first: document.getElementById('fn').value,
+      last:  document.getElementById('ln').value,
+      email: document.getElementById('em').value,
+      phone: document.getElementById('ph').value,
+      city:  document.getElementById('city').value,
+      ded:   document.getElementById('ded').value,
+    };
+    console.log('Donate:', data);
+    // TODO: connect Meshulam API
+    // Simulate adding to live feed
+    addDonor(data.first + ' ' + data.last, data.amount, 'תרומה חדשה');
+    alert(`תודה רבה! ממשיכים לעמוד התשלום — ${data.amount.toLocaleString('he-IL')} ₪`);
+  }
+
+  // ══ LIVE DONORS FEED ════════════════════════════
+  const donorsData = [
+    { name:'דוד לוי',        amount:180,  msg:'לעילוי נשמת אמי',        time:'לפני 2 דק׳' },
+    { name:'שרה כהן',        amount:360,  msg:'לרפואת בעלי',             time:'לפני 5 דק׳' },
+    { name:'יוסף מזרחי',     amount:1800, msg:'בזכות הרב שליט"א',       time:'לפני 8 דק׳' },
+    { name:'רחל בן דוד',     amount:500,  msg:'תרומה לזכות המשפחה',      time:'לפני 12 דק׳' },
+    { name:'אברהם פרץ',      amount:72,   msg:'לעילוי נשמת אבי',        time:'לפני 18 דק׳' },
+    { name:'מרים שמעון',     amount:1000, msg:'הו״ק חודשית — בשמחה',    time:'לפני 22 דק׳' },
+    { name:'יצחק אברהמי',    amount:180,  msg:'לזכות ילדיי',             time:'לפני 35 דק׳' },
+    { name:'לאה גולדשטיין',  amount:360,  msg:'תודה לרב על הכל',        time:'לפני 44 דק׳' },
+    { name:'משה בורוכוב',    amount:500,  msg:'לרפואת אמי שתחיה',       time:'לפני 51 דק׳' },
+    { name:'נחמה אלבז',      amount:1800, msg:'בנדבת הלב',               time:'לפני שעה' },
+    { name:'שלמה כץ',        amount:72,   msg:'לכבוד הרב',              time:'לפני שעה וחצי' },
+    { name:'חנה ביטון',      amount:180,  msg:'בזכות כלל ישראל',        time:'לפני שעתיים' },
+  ];
+
+  let donorCount = 3200;
+  const liveCountEl = document.getElementById('live-count');
+
+  function animateLiveCount() {
+    const start = Date.now(), dur = 2000, from = 0, to = donorCount;
+    function tick() {
+      const p = Math.min((Date.now()-start)/dur, 1);
+      const v = Math.round((1-Math.pow(1-p,3))*to);
+      liveCountEl.innerHTML = v.toLocaleString('he-IL') + '<span> תורמים</span>';
+      if(p<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const lcObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) { animateLiveCount(); lcObs.unobserve(entry.target); }
+    });
+  }, { threshold: 0.3 });
+  lcObs.observe(liveCountEl);
+
+  function getInitials(name) {
+    return name.trim().split(' ').map(w=>w[0]).slice(0,2).join('');
+  }
+
+  function buildRow(d) {
+    const colors = ['#7b3fa0','#c9a84c','#d4783a','#3a6fa0','#a04060'];
+    const color  = colors[Math.floor(Math.random()*colors.length)];
+    const row = document.createElement('div');
+    row.className = 'donor-row';
+    row.innerHTML = `
+      <div class="donor-avatar" style="background:${color}">${getInitials(d.name)}</div>
+      <div class="donor-info">
+        <div class="donor-name">${d.name}</div>
+        <div class="donor-msg">${d.msg}</div>
+      </div>
+      <div class="donor-amount">${(+d.amount).toLocaleString('he-IL')} ₪</div>
+      <div class="donor-time">${d.time}</div>
+    `;
+    return row;
+  }
+
+  function addDonor(name, amount, msg) {
+    const feed = document.getElementById('donors-feed');
+    const row = buildRow({ name, amount, msg, time: 'עכשיו' });
+    row.style.animationDuration = '0.5s';
+    feed.insertBefore(row, feed.firstChild);
+    donorCount++;
+  }
+
+  // Populate initial donors
+  const feed = document.getElementById('donors-feed');
+  donorsData.forEach(d => feed.appendChild(buildRow(d)));
+
+  // Simulate live donors every 12–20 seconds
+  const liveDonors = [
+    { name:'אליהו שפירא',  amount:180,  msg:'בזכות התורה הקדושה'  },
+    { name:'דינה יחיאל',   amount:360,  msg:'לרפואת אמא שלי'      },
+    { name:'זכריה מלכא',   amount:1000, msg:'בהוראת קבע — בשמחה'  },
+    { name:'טובה אוחיון',  amount:72,   msg:'לכבוד הרב שליט"א'    },
+    { name:'יהודה נחמיאס', amount:500,  msg:'לעילוי נשמת אבא'     },
+  ];
+  let liveIdx = 0;
+  function showLiveDonor() {
+    const d = liveDonors[liveIdx % liveDonors.length];
+    addDonor(d.name, d.amount, d.msg);
+    liveIdx++;
+    setTimeout(showLiveDonor, 12000 + Math.random()*8000);
+  }
+  setTimeout(showLiveDonor, 8000);
+
+  // 3D tilt on amount cards
+  document.querySelectorAll('.amount-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width  - 0.5) * 12;
+      const y = ((e.clientY - r.top)  / r.height - 0.5) * -10;
+      card.style.transform = `perspective(600px) rotateY(${x}deg) rotateX(${y}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = card.classList.contains('selected') ? 'translateY(-4px)' : '';
+    });
+  });
+
+  // init
+  updateBtn();
   </script>
 </body>
 </html>
